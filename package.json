@@ -1,0 +1,39 @@
+{
+  "name": "70-tuition",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postinstall": "prisma generate"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "overrides": {
+    "postcss": "^8.5.10"
+  },
+  "dependencies": {
+    "next": "15.5.20",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "@prisma/client": "6.3.1",
+    "next-auth": "5.0.0-beta.32",
+    "@auth/prisma-adapter": "^2.7.4",
+    "bcryptjs": "^2.4.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/bcryptjs": "^2.4.6",
+    "prisma": "6.3.1",
+    "tsx": "^4.19.2",
+    "eslint": "^9.18.0",
+    "eslint-config-next": "15.5.20"
+  }
+}

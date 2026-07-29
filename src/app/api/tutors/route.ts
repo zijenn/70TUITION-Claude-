@@ -34,6 +34,8 @@ export async function GET(req: Request) {
     avail: p.avail,
     mode: p.mode,
     bio: p.bio,
+    photoUrl: p.photoUrl,
+    galleryUrls: p.galleryUrls,
     likes: p.baseLikes + (counts.get(p.id) ?? 0),
     joined: formatJoined(p.createdAt),
   }));

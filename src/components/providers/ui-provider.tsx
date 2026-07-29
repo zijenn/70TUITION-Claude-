@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import type { QuickMatchCriteria, TargetType } from "@/types";
@@ -31,6 +31,11 @@ type UIContextValue = {
   likesLoaded: boolean;
   getLikeState: (targetType: TargetType, targetId: string, baseCount: number) => LikeState;
   toggleLike: (targetType: TargetType, targetId: string, baseCount: number) => Promise<void>;
+  shortlistCount: number;
+
+  basketOpen: boolean;
+  openBasket: () => void;
+  closeBasket: () => void;
 };
 
 const UIContext = createContext<UIContextValue | null>(null);
@@ -133,6 +138,19 @@ export function UIProvider({ children }: { children: ReactNode }) {
     [status, getLikeState, showToast]
   );
 
+  const shortlistCount = useMemo(() => {
+    const keys = new Set(initialLikedKeys);
+    for (const [key, state] of Object.entries(likeOverrides)) {
+      if (state.liked) keys.add(key);
+      else keys.delete(key);
+    }
+    return keys.size;
+  }, [initialLikedKeys, likeOverrides]);
+
+  const [basketOpen, setBasketOpen] = useState(false);
+  const openBasket = useCallback(() => setBasketOpen(true), []);
+  const closeBasket = useCallback(() => setBasketOpen(false), []);
+
   return (
     <UIContext.Provider
       value={{
@@ -148,6 +166,10 @@ export function UIProvider({ children }: { children: ReactNode }) {
         likesLoaded,
         getLikeState,
         toggleLike,
+        shortlistCount,
+        basketOpen,
+        openBasket,
+        closeBasket,
       }}
     >
       {children}

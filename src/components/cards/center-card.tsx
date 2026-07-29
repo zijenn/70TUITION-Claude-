@@ -2,6 +2,7 @@
 
 import { colorFor, initials } from "@/lib/avatar";
 import { useUI } from "@/components/providers/ui-provider";
+import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
 import type { Center } from "@/types";
 
 export function CenterCard({ center }: { center: Center }) {
@@ -14,19 +15,23 @@ export function CenterCard({ center }: { center: Center }) {
         {initials(center.name)}
       </div>
       <h4>{center.name}</h4>
-      <div className="sub-line">{center.descriptor}</div>
-      <div className="chip-row">
-        {center.levels.map((l) => (
-          <span className="chip level" key={l}>
-            {l}
-          </span>
-        ))}
-        {center.subjects.map((s) => (
-          <span className="chip" key={s}>
-            {s}
-          </span>
-        ))}
-        <span className="chip region">{center.region}</span>
+      <div className="info-rows">
+        <div className="info-row lead">
+          <GraduationCapIcon />
+          {center.descriptor}
+        </div>
+        <div className="info-row">
+          <LevelsIcon />
+          {center.levels.join(", ")}
+        </div>
+        <div className="info-row">
+          <BookIcon />
+          {center.subjects.join(", ")}
+        </div>
+        <div className="info-row">
+          <PinIcon />
+          {center.region}
+        </div>
       </div>
       <div className="oneliner">{center.line}</div>
       <div className="card-foot">

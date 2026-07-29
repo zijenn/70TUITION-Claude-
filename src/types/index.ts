@@ -13,6 +13,8 @@ export type Tutor = {
   avail: string;
   mode: string;
   bio: string;
+  photoUrl: string | null;
+  galleryUrls: string[];
   likes: number;
   joined: string;
 };
@@ -61,6 +63,16 @@ export type ConversationSummary = {
   lastMessage: string;
   lastMessageAt: string;
   unread: boolean;
+};
+
+export type ShortlistItem = {
+  kind: "tutor" | "student" | "center";
+  id: string;
+  title: string;
+  subline: string;
+  avatarSeed: string;
+  photoUrl: string | null;
+  likedAt: string;
 };
 
 export type MessageDto = {

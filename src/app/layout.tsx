@@ -6,6 +6,7 @@ import { AuthSessionProvider } from "@/components/providers/session-provider";
 import { UIProvider } from "@/components/providers/ui-provider";
 import { Header } from "@/components/nav/header";
 import { ModalHost } from "@/components/modals/modal-host";
+import { BasketDrawer } from "@/components/basket/basket-drawer";
 import { Toast } from "@/components/toast";
 import { AutoLoginTrigger } from "@/components/auto-login-trigger";
 
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <main>{children}</main>
             <footer>70 TUITION · A place for learning to take place · No fees, ever</footer>
             <ModalHost />
+            <BasketDrawer />
             <Toast />
           </UIProvider>
         </AuthSessionProvider>

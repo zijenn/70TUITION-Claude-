@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 
-export function RevealBlock({ children }: { children: ReactNode }) {
+export function RevealBlock({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -23,7 +23,7 @@ export function RevealBlock({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <div ref={ref} className={`reveal-block${visible ? " in" : ""}`}>
+    <div ref={ref} className={`reveal-block${visible ? " in" : ""} ${className}`}>
       {children}
     </div>
   );

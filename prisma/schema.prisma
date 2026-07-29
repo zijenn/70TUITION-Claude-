@@ -88,6 +88,9 @@ model TutorProfile {
   mode     String
   bio      String @db.Text
 
+  photoUrl    String?
+  galleryUrls String[] @default([])
+
   baseLikes Int @default(0)
 
   createdAt DateTime @default(now())

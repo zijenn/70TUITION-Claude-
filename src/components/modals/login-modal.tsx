@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { signIn } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
+import { GoogleIcon } from "@/components/icons";
 
 export function LoginModalContent() {
   const { closeModal, showToast } = useUI();
@@ -57,6 +58,7 @@ export function LoginModalContent() {
       <h3 className="serif">{mode === "login" ? "Log in to 70 Tuition" : "Create your account"}</h3>
       <p className="sub">You&apos;ll need an account to message or shortlist a match.</p>
       <button type="button" className="google-btn" onClick={handleGoogle}>
+        <GoogleIcon />
         Continue with Google
       </button>
       <div className="divider">OR</div>

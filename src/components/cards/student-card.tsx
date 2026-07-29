@@ -3,6 +3,7 @@
 import { colorFor, initials } from "@/lib/avatar";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
+import { GraduationCapIcon, ClockIcon, CalendarIcon, PinIcon } from "@/components/icons";
 import type { Student } from "@/types";
 
 export function StudentCard({ student }: { student: Student }) {
@@ -17,15 +18,25 @@ export function StudentCard({ student }: { student: Student }) {
         {initials(student.subject)}
       </div>
       <h4>{student.subject}</h4>
-      <div className="sub-line">{student.school}</div>
-      <div className="chip-row">
-        <span className="chip region">{student.region}</span>
-        <span className="chip">{student.freq}</span>
-        <span className="chip">{student.duration}</span>
+      <div className="info-rows">
+        <div className="info-row lead">
+          <GraduationCapIcon />
+          {student.school}
+        </div>
+        <div className="info-row">
+          <ClockIcon />
+          {student.timing}
+        </div>
+        <div className="info-row">
+          <CalendarIcon />
+          {student.freq} · {student.duration}
+        </div>
+        <div className="info-row">
+          <PinIcon />
+          {student.region}
+        </div>
       </div>
-      <div className="oneliner">
-        {student.timing} · {student.genderPref}
-      </div>
+      <div className="oneliner">{student.genderPref}</div>
       <div className="card-foot">
         <span className="rate-tag">${student.rate}/hr</span>
         <button

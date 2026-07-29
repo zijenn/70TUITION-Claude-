@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
+import { BasketIcon } from "@/components/icons";
 
 const TABS = [
   { href: "/tutors", label: "Tutors" },
@@ -14,7 +15,7 @@ const TABS = [
 export function Header() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
-  const { openModal, showToast } = useUI();
+  const { openModal, showToast, shortlistCount, openBasket } = useUI();
 
   async function handleAuthClick() {
     if (status === "authenticated") {
@@ -43,9 +44,17 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <button className="login-btn" onClick={handleAuthClick}>
-          {status === "authenticated" ? `Log out (${session?.user?.name?.split(" ")[0] ?? "Account"})` : "Log in"}
-        </button>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          {status === "authenticated" && (
+            <button className="basket-btn" onClick={openBasket} aria-label="Open shortlist">
+              <BasketIcon />
+              {shortlistCount > 0 && <span className="basket-count">{shortlistCount}</span>}
+            </button>
+          )}
+          <button className="login-btn" onClick={handleAuthClick}>
+            {status === "authenticated" ? `Log out (${session?.user?.name?.split(" ")[0] ?? "Account"})` : "Log in"}
+          </button>
+        </div>
       </div>
     </header>
   );

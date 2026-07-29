@@ -26,6 +26,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     avail: p.avail,
     mode: p.mode,
     bio: p.bio,
+    photoUrl: p.photoUrl,
+    galleryUrls: p.galleryUrls,
     likes,
     joined: formatJoined(p.createdAt),
   };

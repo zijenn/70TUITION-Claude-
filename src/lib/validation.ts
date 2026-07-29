@@ -20,6 +20,8 @@ export const tutorProfileSchema = z.object({
   avail: z.string().trim().min(1).max(150),
   mode: z.enum(["Online", "Physical", "Both"]),
   bio: z.string().trim().min(1).max(3000),
+  photoUrl: z.string().url().max(500).nullable().optional(),
+  galleryUrls: z.array(z.string().url().max(500)).max(5).optional(),
 });
 
 export const studentProfileSchema = z.object({

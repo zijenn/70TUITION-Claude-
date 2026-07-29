@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
-import { colorFor, initials } from "@/lib/avatar";
+import { Avatar } from "@/components/avatar";
+import { colorFor } from "@/lib/avatar";
 import type { Center, Student, Tutor } from "@/types";
 
 type Kind = "tutor" | "student" | "center";
@@ -89,9 +90,7 @@ export function ProfileModalContent({ kind, id }: { kind: Kind; id: string }) {
         ×
       </button>
       <div className="modal-head">
-        <div className="avatar" style={{ background: colorFor(avatarSeed) }}>
-          {initials(avatarSeed)}
-        </div>
+        <Avatar seed={avatarSeed} photoUrl={kind === "tutor" ? (item as Tutor).photoUrl : null} size={64} />
         <div>
           <h3>{nameOrTitle}</h3>
           {kind === "tutor" && (
@@ -196,11 +195,23 @@ export function ProfileModalContent({ kind, id }: { kind: Kind; id: string }) {
         </div>
       )}
 
-      {kind !== "student" && (
+      {kind === "tutor" && (item as Tutor).galleryUrls.length > 0 && (
         <div className="modal-section">
           <span className="label">Portfolio</span>
           <div className="portfolio-row">
-            {(kind === "tutor" ? [1, 2, 3] : [1, 2, 3, 4]).map((n) => (
+            {(item as Tutor).galleryUrls.map((url) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img key={url} src={url} alt="" className="portfolio-ph portfolio-img" />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {kind === "center" && (
+        <div className="modal-section">
+          <span className="label">Portfolio</span>
+          <div className="portfolio-row">
+            {[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
                 className="portfolio-ph"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
+import { ImageUploadSlot } from "@/components/image-upload-slot";
 import { LEVELS, REGIONS } from "@/lib/constants";
 
 type FormState = {
@@ -19,6 +20,8 @@ type FormState = {
   avail: string;
   mode: "Online" | "Physical" | "Both";
   bio: string;
+  photoUrl: string | null;
+  galleryUrls: (string | null)[];
 };
 
 const EMPTY: FormState = {
@@ -34,6 +37,8 @@ const EMPTY: FormState = {
   avail: "",
   mode: "Both",
   bio: "",
+  photoUrl: null,
+  galleryUrls: [null, null, null, null, null],
 };
 
 export function TutorForm() {
@@ -64,6 +69,8 @@ export function TutorForm() {
             avail: p.avail,
             mode: p.mode,
             bio: p.bio,
+            photoUrl: p.photoUrl ?? null,
+            galleryUrls: [0, 1, 2, 3, 4].map((i) => p.galleryUrls?.[i] ?? null),
           });
           setIsEdit(true);
         }
@@ -117,6 +124,8 @@ export function TutorForm() {
           avail: form.avail,
           mode: form.mode,
           bio: form.bio,
+          photoUrl: form.photoUrl,
+          galleryUrls: form.galleryUrls.filter((u): u is string => Boolean(u)),
         }),
       });
       if (!res.ok) {
@@ -141,6 +150,39 @@ export function TutorForm() {
 
   return (
     <form className="profile-form" onSubmit={handleSubmit}>
+      <div className="field">
+        <label>Profile picture</label>
+        <div className="upload-row">
+          <ImageUploadSlot
+            shape="circle"
+            label="profile picture"
+            value={form.photoUrl}
+            onChange={(url) => setForm((f) => ({ ...f, photoUrl: url }))}
+          />
+        </div>
+      </div>
+
+      <div className="field">
+        <label>Gallery (up to 5) — testimonials, certs, or anything else</label>
+        <div className="upload-row">
+          {form.galleryUrls.map((url, i) => (
+            <ImageUploadSlot
+              key={i}
+              shape="square"
+              label={`gallery photo ${i + 1}`}
+              value={url}
+              onChange={(newUrl) =>
+                setForm((f) => {
+                  const next = [...f.galleryUrls];
+                  next[i] = newUrl;
+                  return { ...f, galleryUrls: next };
+                })
+              }
+            />
+          ))}
+        </div>
+      </div>
+
       <div className="field-row">
         <div className="field">
           <label>Name</label>

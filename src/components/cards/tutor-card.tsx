@@ -1,8 +1,9 @@
 "use client";
 
-import { colorFor, initials } from "@/lib/avatar";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
+import { Avatar } from "@/components/avatar";
+import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
 import type { Tutor } from "@/types";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
@@ -13,23 +14,25 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
   return (
     <div className="card" onClick={() => openModal({ type: "profile", kind: "tutor", id: tutor.id })}>
       {score > 2 && <div className="tab-corner">Strong match</div>}
-      <div className="avatar" style={{ background: colorFor(tutor.name) }}>
-        {initials(tutor.name)}
-      </div>
+      <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} />
       <h4>{tutor.name}</h4>
-      <div className="sub-line">{tutor.edu}</div>
-      <div className="chip-row">
-        {tutor.levels.map((l) => (
-          <span className="chip level" key={l}>
-            {l}
-          </span>
-        ))}
-        {tutor.subjects.map((s) => (
-          <span className="chip" key={s}>
-            {s}
-          </span>
-        ))}
-        <span className="chip region">{tutor.region}</span>
+      <div className="info-rows">
+        <div className="info-row lead">
+          <GraduationCapIcon />
+          {tutor.edu}
+        </div>
+        <div className="info-row">
+          <LevelsIcon />
+          {tutor.levels.join(", ")}
+        </div>
+        <div className="info-row">
+          <BookIcon />
+          {tutor.subjects.join(", ")}
+        </div>
+        <div className="info-row">
+          <PinIcon />
+          {tutor.region}
+        </div>
       </div>
       <div className="oneliner">{tutor.line}</div>
       <div className="card-foot">

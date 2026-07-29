@@ -3,13 +3,24 @@
 import { use, useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { useSession } from "next-auth/react";
+import { useUI } from "@/components/providers/ui-provider";
+import { Avatar } from "@/components/avatar";
 import type { MessageDto } from "@/types";
+
+type Counterpart = {
+  id: string;
+  name: string;
+  photoUrl: string | null;
+  profileKind: "tutor" | "student" | "center" | null;
+  profileId: string | null;
+};
 
 export default function ThreadPage({ params }: { params: Promise<{ userId: string }> }) {
   const { userId } = use(params);
   const { data: session } = useSession();
+  const { openModal } = useUI();
 
-  const [counterpartName, setCounterpartName] = useState("");
+  const [counterpart, setCounterpart] = useState<Counterpart | null>(null);
   const [messages, setMessages] = useState<MessageDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [draft, setDraft] = useState("");
@@ -21,7 +32,7 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         if (!data) return;
-        setCounterpartName(data.counterpart?.name ?? "Conversation");
+        setCounterpart(data.counterpart ?? null);
         setMessages(data.messages ?? []);
       })
       .finally(() => setLoading(false));
@@ -57,11 +68,28 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
 
   const myId = session?.user?.id;
 
+  const canOpenProfile = counterpart?.profileKind && counterpart?.profileId;
+
   return (
     <section>
       <div className="listing-head">
         <span className="eyebrow">Conversation</span>
-        <h2>{loading ? "…" : counterpartName}</h2>
+        {loading ? (
+          <h2>…</h2>
+        ) : canOpenProfile ? (
+          <button
+            className="thread-counterpart"
+            onClick={() => openModal({ type: "profile", kind: counterpart!.profileKind!, id: counterpart!.profileId! })}
+          >
+            <Avatar seed={counterpart!.name} photoUrl={counterpart!.photoUrl} size={40} />
+            <h2>{counterpart!.name}</h2>
+          </button>
+        ) : (
+          <div className="thread-counterpart">
+            <Avatar seed={counterpart?.name ?? "?"} photoUrl={counterpart?.photoUrl ?? null} size={40} />
+            <h2>{counterpart?.name ?? "Conversation"}</h2>
+          </div>
+        )}
       </div>
       <div className="thread">
         {messages.map((m) => (

@@ -5,13 +5,16 @@ import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
 import { ImageUploadSlot } from "@/components/image-upload-slot";
-import { LEVELS, REGIONS } from "@/lib/constants";
+import { LEVELS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
+
+const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
 type FormState = {
   name: string;
   edu: string;
   levels: string[];
-  subjects: string;
+  subjects: string[];
+  otherSubjects: string;
   region: string;
   line: string;
   rate: string;
@@ -28,7 +31,8 @@ const EMPTY: FormState = {
   name: "",
   edu: "",
   levels: [],
-  subjects: "",
+  subjects: [],
+  otherSubjects: "",
   region: REGIONS[0],
   line: "",
   rate: "",
@@ -56,11 +60,14 @@ export function TutorForm() {
       .then((data) => {
         if (data.profile) {
           const p = data.profile;
+          const knownSubjects = p.subjects.filter((s: string) => ALL_SUBJECTS.has(s));
+          const otherSubjects = p.subjects.filter((s: string) => !ALL_SUBJECTS.has(s));
           setForm({
             name: p.name,
             edu: p.edu,
             levels: p.levels,
-            subjects: p.subjects.join(", "),
+            subjects: knownSubjects,
+            otherSubjects: otherSubjects.join(", "),
             region: p.region,
             line: p.line,
             rate: String(p.rate),
@@ -85,6 +92,13 @@ export function TutorForm() {
     }));
   }
 
+  function toggleSubject(subject: string) {
+    setForm((f) => ({
+      ...f,
+      subjects: f.subjects.includes(subject) ? f.subjects.filter((s) => s !== subject) : [...f.subjects, subject],
+    }));
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
@@ -92,12 +106,13 @@ export function TutorForm() {
       setError("Pick at least one level you teach.");
       return;
     }
-    const subjects = form.subjects
+    const otherSubjects = form.otherSubjects
       .split(",")
       .map((s) => s.trim())
       .filter(Boolean);
+    const subjects = [...new Set([...form.subjects, ...otherSubjects])];
     if (subjects.length === 0) {
-      setError("List at least one subject.");
+      setError("Pick at least one subject.");
       return;
     }
     const rate = parseInt(form.rate, 10);
@@ -212,13 +227,33 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>Subjects (comma separated)</label>
-        <input
-          value={form.subjects}
-          onChange={(e) => setForm({ ...form, subjects: e.target.value })}
-          placeholder="Math, Economics"
-          required
-        />
+        <label>Subjects you teach</label>
+        {SUBJECT_GROUPS.map((g) => (
+          <div key={g.group} className="subject-group">
+            <div className="subject-group-label">{g.group}</div>
+            <div className="chip-row">
+              {g.subjects.map((s) => (
+                <label key={s} className="chip" style={{ cursor: "pointer" }}>
+                  <input
+                    type="checkbox"
+                    style={{ width: "auto", marginRight: 6 }}
+                    checked={form.subjects.includes(s)}
+                    onChange={() => toggleSubject(s)}
+                  />
+                  {s}
+                </label>
+              ))}
+            </div>
+          </div>
+        ))}
+        <div className="field" style={{ marginTop: 10, marginBottom: 0 }}>
+          <label>Other subjects (comma separated, optional)</label>
+          <input
+            value={form.otherSubjects}
+            onChange={(e) => setForm({ ...form, otherSubjects: e.target.value })}
+            placeholder="French, Guitar, Art portfolio prep…"
+          />
+        </div>
       </div>
 
       <div className="field-row">
@@ -268,7 +303,13 @@ export function TutorForm() {
         </div>
         <div className="field">
           <label>Gender</label>
-          <input value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })} required />
+          <select value={form.gender} onChange={(e) => setForm({ ...form, gender: e.target.value })} required>
+            <option value="" disabled>
+              Select gender
+            </option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
         </div>
       </div>
 

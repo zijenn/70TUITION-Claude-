@@ -1,7 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { TutorCard } from "@/components/cards/tutor-card";
 import { useUI } from "@/components/providers/ui-provider";
@@ -9,22 +9,17 @@ import { REGIONS } from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
 import type { Tutor } from "@/types";
 
-function TutorsPageInner() {
-  const searchParams = useSearchParams();
+export default function TutorsPage() {
   const router = useRouter();
-  const { status } = useSession();
-  const { openModal, quickMatchCriteria } = useUI();
+  const { data: session, status } = useSession();
+  const { openModal } = useUI();
 
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState<SortBy>(searchParams.get("sort") === "match" ? "match" : "likes");
+  const [sortBy, setSortBy] = useState<SortBy>("likes");
   const [region, setRegion] = useState("");
   const [subject, setSubject] = useState("");
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (searchParams.get("sort") === "match") setSortBy("match");
-  }, [searchParams]);
 
   useEffect(() => {
     fetch("/api/tutors")
@@ -43,7 +38,8 @@ function TutorsPageInner() {
       .finally(() => setLoading(false));
   }, [region, subject]);
 
-  const sorted = useMemo(() => sortItems(tutors, sortBy, quickMatchCriteria), [tutors, sortBy, quickMatchCriteria]);
+  const sorted = useMemo(() => sortItems(tutors, sortBy), [tutors, sortBy]);
+  const hasOwnProfile = tutors.some((t) => t.userId === session?.user?.id);
 
   function handlePostClick() {
     if (status === "authenticated") router.push("/tutors/new");
@@ -60,7 +56,6 @@ function TutorsPageInner() {
       <div className="toolbar">
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
           <option value="likes">Sort: Most liked</option>
-          <option value="match">Sort: Best match</option>
           <option value="rate-low">Sort: Rate, low to high</option>
           <option value="rate-high">Sort: Rate, high to low</option>
         </select>
@@ -82,7 +77,7 @@ function TutorsPageInner() {
         </select>
         <div className="spacer"></div>
         <button className="post-btn" onClick={handlePostClick}>
-          + Post yourself as a tutor
+          {hasOwnProfile ? "✎ Edit my tutor profile" : "+ Post yourself as a tutor"}
         </button>
       </div>
       <div className="carousel">
@@ -96,13 +91,5 @@ function TutorsPageInner() {
         ))}
       </div>
     </section>
-  );
-}
-
-export default function TutorsPage() {
-  return (
-    <Suspense fallback={null}>
-      <TutorsPageInner />
-    </Suspense>
   );
 }

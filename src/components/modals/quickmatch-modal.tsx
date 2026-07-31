@@ -32,8 +32,8 @@ export function QuickMatchModalContent() {
   function runQuickMatch() {
     setQuickMatchCriteria({ level, subject, region });
     closeModal();
-    router.push("/tutors?sort=match");
-    showToast("Sorted tutors by best match to your criteria.");
+    router.push("/tutors");
+    showToast("Look for the “Strong match” tag on tutors that fit your criteria.");
   }
 
   return (

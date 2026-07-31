@@ -45,6 +45,14 @@ export function ClockIcon() {
   );
 }
 
+export function ChatIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 5.5h16v11H9.5L5 20v-3.5H4Z" />
+    </svg>
+  );
+}
+
 export function BasketIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">

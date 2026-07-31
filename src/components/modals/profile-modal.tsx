@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
+import { PortfolioCarousel } from "@/components/portfolio-carousel";
 import { colorFor } from "@/lib/avatar";
 import type { Center, Student, Tutor } from "@/types";
 
@@ -90,7 +91,7 @@ export function ProfileModalContent({ kind, id }: { kind: Kind; id: string }) {
         ×
       </button>
       <div className="modal-head">
-        <Avatar seed={avatarSeed} photoUrl={kind === "tutor" ? (item as Tutor).photoUrl : null} size={64} />
+        <Avatar seed={avatarSeed} photoUrl={kind === "tutor" ? (item as Tutor).photoUrl : null} size={256} />
         <div>
           <h3>{nameOrTitle}</h3>
           {kind === "tutor" && (
@@ -198,36 +199,50 @@ export function ProfileModalContent({ kind, id }: { kind: Kind; id: string }) {
       {kind === "tutor" && (item as Tutor).galleryUrls.length > 0 && (
         <div className="modal-section">
           <span className="label">Portfolio</span>
-          <div className="portfolio-row">
-            {(item as Tutor).galleryUrls.map((url) => (
+          <PortfolioCarousel
+            slides={(item as Tutor).galleryUrls.map((url) => (
               // eslint-disable-next-line @next/next/no-img-element
-              <img key={url} src={url} alt="" className="portfolio-ph portfolio-img" />
+              <img key={url} src={url} alt="" className="portfolio-slide-img" />
             ))}
-          </div>
+          />
         </div>
       )}
 
       {kind === "center" && (
         <div className="modal-section">
           <span className="label">Portfolio</span>
-          <div className="portfolio-row">
-            {[1, 2, 3, 4].map((n) => (
+          <PortfolioCarousel
+            slides={[1, 2, 3, 4].map((n) => (
               <div
                 key={n}
-                className="portfolio-ph"
+                className="portfolio-slide-img"
                 style={{
                   background: `linear-gradient(135deg, ${colorFor(avatarSeed + n)}22, ${colorFor(avatarSeed + n)}55)`,
                 }}
               />
             ))}
-          </div>
+          />
         </div>
       )}
 
       {isOwnProfile ? (
-        <p className="sub" style={{ marginTop: 24 }}>
-          This is your own profile.
-        </p>
+        kind === "tutor" || kind === "student" ? (
+          <div className="modal-actions">
+            <button
+              className="btn-primary"
+              onClick={() => {
+                closeModal();
+                router.push(kind === "tutor" ? "/tutors/new" : "/students/new");
+              }}
+            >
+              Edit my profile
+            </button>
+          </div>
+        ) : (
+          <p className="sub" style={{ marginTop: 24 }}>
+            This is your own profile.
+          </p>
+        )
       ) : (
         <div className="modal-actions">
           <button className="btn-primary" onClick={handleChat}>

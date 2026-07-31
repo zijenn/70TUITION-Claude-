@@ -1,8 +1,8 @@
 "use client";
 
-import { colorFor, initials } from "@/lib/avatar";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
+import { Avatar } from "@/components/avatar";
 import { GraduationCapIcon, ClockIcon, CalendarIcon, PinIcon } from "@/components/icons";
 import type { Student } from "@/types";
 
@@ -14,10 +14,10 @@ export function StudentCard({ student }: { student: Student }) {
   return (
     <div className="card" onClick={() => openModal({ type: "profile", kind: "student", id: student.id })}>
       {score > 2 && <div className="tab-corner">Strong match</div>}
-      <div className="avatar" style={{ background: colorFor(student.subject) }}>
-        {initials(student.subject)}
+      <div className="card-photo-head">
+        <Avatar seed={student.subject} size={208} />
+        <h4>{student.subject}</h4>
       </div>
-      <h4>{student.subject}</h4>
       <div className="info-rows">
         <div className="info-row lead">
           <GraduationCapIcon />

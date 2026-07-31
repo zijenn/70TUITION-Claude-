@@ -24,17 +24,12 @@ export function matchScore(item: Matchable, criteria: QuickMatchCriteria | null)
   return score;
 }
 
-export type SortBy = "likes" | "match" | "rate-low" | "rate-high";
+export type SortBy = "likes" | "rate-low" | "rate-high";
 
-export function sortItems<T extends Matchable>(
-  list: T[],
-  sortBy: SortBy,
-  criteria: QuickMatchCriteria | null
-): T[] {
+export function sortItems<T extends Matchable>(list: T[], sortBy: SortBy): T[] {
   const arr = [...list];
   if (sortBy === "likes") arr.sort((a, b) => b.likes - a.likes);
   else if (sortBy === "rate-low") arr.sort((a, b) => a.rate - b.rate);
   else if (sortBy === "rate-high") arr.sort((a, b) => b.rate - a.rate);
-  else if (sortBy === "match") arr.sort((a, b) => matchScore(b, criteria) - matchScore(a, criteria));
   return arr;
 }

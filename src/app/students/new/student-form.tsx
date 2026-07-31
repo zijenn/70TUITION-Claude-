@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
-import { REGIONS } from "@/lib/constants";
+import { REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
+
+const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
 type FormState = {
   subject: string;
@@ -34,6 +36,7 @@ export function StudentForm() {
   const router = useRouter();
   const { showToast } = useUI();
   const [form, setForm] = useState<FormState>(EMPTY);
+  const [subjectIsOther, setSubjectIsOther] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -56,6 +59,7 @@ export function StudentForm() {
             school: p.school,
             bio: p.bio,
           });
+          setSubjectIsOther(p.subject !== "" && !ALL_SUBJECTS.has(p.subject));
           setIsEdit(true);
         }
       })
@@ -103,12 +107,43 @@ export function StudentForm() {
       <div className="field-row">
         <div className="field">
           <label>Subject</label>
-          <input
-            value={form.subject}
-            onChange={(e) => setForm({ ...form, subject: e.target.value })}
-            placeholder="H2 Chemistry"
+          <select
+            value={subjectIsOther ? "__other__" : form.subject}
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v === "__other__") {
+                setSubjectIsOther(true);
+                setForm((f) => ({ ...f, subject: ALL_SUBJECTS.has(f.subject) ? "" : f.subject }));
+              } else {
+                setSubjectIsOther(false);
+                setForm((f) => ({ ...f, subject: v }));
+              }
+            }}
             required
-          />
+          >
+            <option value="" disabled>
+              Select a subject
+            </option>
+            {SUBJECT_GROUPS.map((g) => (
+              <optgroup key={g.group} label={g.group}>
+                {g.subjects.map((s) => (
+                  <option key={s} value={s}>
+                    {s}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+            <option value="__other__">Other…</option>
+          </select>
+          {subjectIsOther && (
+            <input
+              style={{ marginTop: 8 }}
+              value={form.subject}
+              onChange={(e) => setForm({ ...form, subject: e.target.value })}
+              placeholder="Type your subject"
+              required
+            />
+          )}
         </div>
         <div className="field">
           <label>School</label>

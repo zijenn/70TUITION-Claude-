@@ -16,7 +16,7 @@ export const tutorProfileSchema = z.object({
   line: z.string().trim().min(1).max(140),
   rate: z.number().int().min(1).max(1000),
   ft: z.boolean(),
-  gender: z.string().trim().min(1).max(30),
+  gender: z.enum(["Male", "Female"]),
   avail: z.string().trim().min(1).max(150),
   mode: z.enum(["Online", "Physical", "Both"]),
   bio: z.string().trim().min(1).max(3000),

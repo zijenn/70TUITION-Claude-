@@ -1,7 +1,7 @@
 "use client";
 
-import { colorFor, initials } from "@/lib/avatar";
 import { useUI } from "@/components/providers/ui-provider";
+import { Avatar } from "@/components/avatar";
 import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
 import type { Center } from "@/types";
 
@@ -11,10 +11,10 @@ export function CenterCard({ center }: { center: Center }) {
 
   return (
     <div className="card" onClick={() => openModal({ type: "profile", kind: "center", id: center.id })}>
-      <div className="avatar" style={{ background: colorFor(center.name) }}>
-        {initials(center.name)}
+      <div className="card-photo-head">
+        <Avatar seed={center.name} size={208} />
+        <h4>{center.name}</h4>
       </div>
-      <h4>{center.name}</h4>
       <div className="info-rows">
         <div className="info-row lead">
           <GraduationCapIcon />

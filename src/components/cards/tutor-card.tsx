@@ -14,8 +14,10 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
   return (
     <div className="card" onClick={() => openModal({ type: "profile", kind: "tutor", id: tutor.id })}>
       {score > 2 && <div className="tab-corner">Strong match</div>}
-      <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} />
-      <h4>{tutor.name}</h4>
+      <div className="card-photo-head">
+        <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} size={208} />
+        <h4>{tutor.name}</h4>
+      </div>
       <div className="info-rows">
         <div className="info-row lead">
           <GraduationCapIcon />

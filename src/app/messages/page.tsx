@@ -20,7 +20,7 @@ export default function MessagesPage() {
       <div className="listing-head">
         <span className="eyebrow">Inbox</span>
         <h2>Messages</h2>
-        <p>Conversations with tutors, students and centers.</p>
+        <p>Conversations with tutors and students.</p>
       </div>
       <div className="conversation-list">
         {!loading && conversations.length === 0 && (

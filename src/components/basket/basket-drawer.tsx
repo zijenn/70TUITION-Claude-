@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import type { ShortlistItem } from "@/types";
 
 export function BasketDrawer() {
+  const router = useRouter();
   const { basketOpen, closeBasket, openModal } = useUI();
   const [items, setItems] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -45,7 +47,8 @@ export function BasketDrawer() {
                 className="basket-item"
                 onClick={() => {
                   closeBasket();
-                  openModal({ type: "profile", kind: item.kind, id: item.id });
+                  if (item.kind === "tutor") router.push(`/tutors/${item.id}`);
+                  else openModal({ type: "profile", id: item.id });
                 }}
               >
                 <Avatar seed={item.avatarSeed} photoUrl={item.photoUrl} size={44} />

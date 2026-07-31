@@ -19,6 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     levels: p.levels,
     subjects: p.subjects,
     region: p.region,
+    postalCode: p.postalCode,
     line: p.line,
     rate: p.rate,
     ft: p.ft,

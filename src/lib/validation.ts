@@ -13,6 +13,13 @@ export const tutorProfileSchema = z.object({
   levels: z.array(z.enum(LEVELS as [string, ...string[]])).min(1),
   subjects: z.array(z.string().trim().min(1)).min(1).max(10),
   region: z.enum(REGIONS as [string, ...string[]]),
+  postalCode: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Enter a valid 6-digit Singapore postal code")
+    .nullable()
+    .optional()
+    .or(z.literal("")),
   line: z.string().trim().min(1).max(140),
   rate: z.number().int().min(1).max(1000),
   ft: z.boolean(),
@@ -37,7 +44,7 @@ export const studentProfileSchema = z.object({
 });
 
 export const likeToggleSchema = z.object({
-  targetType: z.enum(["TUTOR", "STUDENT", "CENTER"]),
+  targetType: z.enum(["TUTOR", "STUDENT"]),
   targetId: z.string().min(1),
 });
 

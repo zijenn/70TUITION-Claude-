@@ -34,7 +34,7 @@ h3,
   font-family: var(--font-newsreader), serif;
 }
 .mono {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
 }
 a {
   color: inherit;
@@ -90,9 +90,10 @@ nav.tabs {
   gap: 2px;
 }
 .tab-btn {
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   background: none;
   border: none;
@@ -109,9 +110,10 @@ nav.tabs {
   font-weight: 600;
 }
 .login-btn {
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
   background: var(--btn-bg);
   color: #fff;
   border: none;
@@ -199,7 +201,7 @@ html:has(.intro-scroller) {
   gap: 22px;
 }
 .intro-hero .stamp {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -225,7 +227,7 @@ html:has(.intro-scroller) {
   margin: 0;
 }
 .scroll-cue {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 11px;
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 0.1em;
@@ -277,7 +279,7 @@ html:has(.intro-scroller) {
   margin: 0;
 }
 .reveal-block .num {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   color: var(--gold);
   font-size: 13px;
   letter-spacing: 0.14em;
@@ -304,7 +306,7 @@ html:has(.intro-scroller) {
   font-size: 15px;
 }
 .btn-primary {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -325,7 +327,7 @@ html:has(.intro-scroller) {
   cursor: not-allowed;
 }
 .btn-ghost {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -348,7 +350,7 @@ html:has(.intro-scroller) {
   padding: 48px 0 8px;
 }
 .listing-head .eyebrow {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   color: var(--gold);
   letter-spacing: 0.14em;
@@ -376,7 +378,7 @@ html:has(.intro-scroller) {
 }
 .toolbar select,
 .toolbar input[type="text"] {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   border: 1px solid var(--line);
   background: var(--paper);
@@ -388,9 +390,10 @@ html:has(.intro-scroller) {
   flex: 1;
 }
 .toolbar .post-btn {
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.01em;
   background: var(--btn-bg);
   color: #fff;
   border: none;
@@ -462,7 +465,7 @@ html:has(.intro-scroller) {
   right: 22px;
   background: var(--gold);
   color: #fff;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10px;
   padding: 3px 8px;
   letter-spacing: 0.05em;
@@ -504,7 +507,7 @@ html:has(.intro-scroller) {
   font-weight: 500;
 }
 .card .sub-line {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 11px;
   color: var(--ink-soft);
   margin-bottom: 10px;
@@ -523,9 +526,9 @@ html:has(.intro-scroller) {
   margin-bottom: 10px;
 }
 .chip {
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 10.5px;
-  padding: 3px 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  padding: 4px 9px;
   border: 1px solid var(--line);
   border-radius: 20px;
   color: var(--ink-soft);
@@ -549,7 +552,7 @@ html:has(.intro-scroller) {
   margin-top: 6px;
 }
 .like-btn {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   background: none;
   border: none;
@@ -570,8 +573,9 @@ html:has(.intro-scroller) {
   color: #b5352f;
 }
 .rate-tag {
-  font-family: var(--font-ibm-plex-mono), monospace;
-  font-size: 12px;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 15px;
   color: var(--ink);
 }
 
@@ -609,7 +613,7 @@ html:has(.intro-scroller) {
   font-size: 22px;
   cursor: pointer;
   color: var(--ink-soft);
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
 }
 .modal-head {
   display: flex;
@@ -633,7 +637,7 @@ html:has(.intro-scroller) {
   margin-bottom: 18px;
 }
 .modal-section .label {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -653,7 +657,7 @@ html:has(.intro-scroller) {
   gap: 12px 20px;
 }
 .detail-grid .item .k {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10px;
   color: var(--ink-soft);
   text-transform: uppercase;
@@ -677,6 +681,14 @@ html:has(.intro-scroller) {
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--paper-dim);
+}
+.portfolio-carousel.large {
+  width: 100%;
+  max-width: 640px;
+}
+.portfolio-viewport.large {
+  width: 100%;
+  height: 520px;
 }
 .portfolio-slide-img {
   width: 100%;
@@ -794,7 +806,7 @@ html:has(.intro-scroller) {
   color: var(--ink-soft);
   font-size: 11px;
   margin: 14px 0;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
 }
 .divider::before,
 .divider::after {
@@ -806,7 +818,7 @@ html:has(.intro-scroller) {
 .form-error {
   color: #b5352f;
   font-size: 12.5px;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   margin: -4px 0 12px;
   text-align: left;
 }
@@ -830,7 +842,7 @@ html:has(.intro-scroller) {
   width: 100%;
   padding: 11px;
   margin-bottom: 10px;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 13px;
   border: 1px solid var(--line);
   border-radius: 2px;
@@ -847,7 +859,7 @@ html:has(.intro-scroller) {
   color: var(--paper);
   padding: 12px 22px;
   border-radius: var(--radius);
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12.5px;
   opacity: 0;
   transition: 0.25s;
@@ -865,7 +877,7 @@ footer {
   text-align: center;
   color: var(--ink-soft);
   font-size: 12px;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* ---------- POST-YOURSELF FORM PAGE ---------- */
@@ -873,7 +885,7 @@ footer {
   padding: 48px 0 8px;
 }
 .form-page-head .eyebrow {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 12px;
   color: var(--gold);
   letter-spacing: 0.14em;
@@ -897,7 +909,7 @@ footer {
 }
 .profile-form .field label {
   display: block;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -940,7 +952,7 @@ footer {
   margin-bottom: 12px;
 }
 .subject-group-label {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10.5px;
   letter-spacing: 0.06em;
   color: var(--gold);
@@ -977,7 +989,7 @@ footer {
   border-radius: 8px;
   background: var(--gold);
   color: #fff;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10px;
   line-height: 16px;
   text-align: center;
@@ -1032,7 +1044,7 @@ footer {
   font-size: 22px;
   cursor: pointer;
   color: var(--ink-soft);
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   line-height: 1;
   padding: 0;
 }
@@ -1065,7 +1077,7 @@ footer {
   font-weight: 500;
 }
 .basket-item-sub {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 11px;
   color: var(--ink-soft);
   margin-top: 2px;
@@ -1146,7 +1158,7 @@ footer {
   width: 84px;
   margin-top: 5px;
   line-height: 1.3;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* ---------- MESSAGES ---------- */
@@ -1202,7 +1214,7 @@ button.thread-counterpart:hover h2 {
   text-overflow: ellipsis;
 }
 .conversation-row .when {
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 11px;
   color: var(--ink-soft);
 }
@@ -1231,7 +1243,7 @@ button.thread-counterpart:hover h2 {
 }
 .bubble .when {
   display: block;
-  font-family: var(--font-ibm-plex-mono), monospace;
+  font-family: var(--font-inter), sans-serif;
   font-size: 10px;
   opacity: 0.7;
   margin-top: 4px;
@@ -1253,6 +1265,34 @@ button.thread-counterpart:hover h2 {
   font-family: var(--font-inter), sans-serif;
   font-size: 14px;
   background: var(--paper);
+}
+
+/* ---------- DEDICATED TUTOR PROFILE PAGE ---------- */
+.tutor-page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 40px 0 100px;
+}
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  text-decoration: none;
+}
+.back-link:hover {
+  color: var(--gold);
+}
+.tutor-page-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin: 28px 0 32px;
+}
+.tutor-page-head h2 {
+  margin: 18px 0 4px;
+  font-size: 30px;
 }
 
 ::selection {

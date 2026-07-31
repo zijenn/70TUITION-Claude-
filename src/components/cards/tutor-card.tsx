@@ -1,18 +1,24 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
+import { postalDistrictLabel } from "@/lib/singapore-postal";
 import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
 import type { Tutor } from "@/types";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
-  const { openModal, getLikeState, toggleLike, quickMatchCriteria } = useUI();
+  const router = useRouter();
+  const { getLikeState, toggleLike, quickMatchCriteria } = useUI();
   const like = getLikeState("TUTOR", tutor.id, tutor.likes);
   const score = matchScore(tutor, quickMatchCriteria);
 
+  const locationLabel =
+    tutor.mode === "Online" ? "Online" : postalDistrictLabel(tutor.postalCode) ?? tutor.region;
+
   return (
-    <div className="card" onClick={() => openModal({ type: "profile", kind: "tutor", id: tutor.id })}>
+    <div className="card" onClick={() => router.push(`/tutors/${tutor.id}`)}>
       {score > 2 && <div className="tab-corner">Strong match</div>}
       <div className="card-photo-head">
         <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} size={208} />
@@ -33,7 +39,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
         </div>
         <div className="info-row">
           <PinIcon />
-          {tutor.region}
+          {locationLabel}
         </div>
       </div>
       <div className="oneliner">{tutor.line}</div>

@@ -2,6 +2,7 @@
 
 import { use, useEffect, useRef, useState } from "react";
 import type { FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
@@ -11,7 +12,7 @@ type Counterpart = {
   id: string;
   name: string;
   photoUrl: string | null;
-  profileKind: "tutor" | "student" | "center" | null;
+  profileKind: "tutor" | "student" | null;
   profileId: string | null;
 };
 
@@ -19,6 +20,7 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
   const { userId } = use(params);
   const { data: session } = useSession();
   const { openModal } = useUI();
+  const router = useRouter();
 
   const [counterpart, setCounterpart] = useState<Counterpart | null>(null);
   const [messages, setMessages] = useState<MessageDto[]>([]);
@@ -79,7 +81,10 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
         ) : canOpenProfile ? (
           <button
             className="thread-counterpart"
-            onClick={() => openModal({ type: "profile", kind: counterpart!.profileKind!, id: counterpart!.profileId! })}
+            onClick={() => {
+              if (counterpart!.profileKind === "tutor") router.push(`/tutors/${counterpart!.profileId}`);
+              else openModal({ type: "profile", id: counterpart!.profileId! });
+            }}
           >
             <Avatar seed={counterpart!.name} photoUrl={counterpart!.photoUrl} size={40} />
             <h2>{counterpart!.name}</h2>

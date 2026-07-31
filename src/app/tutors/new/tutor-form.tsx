@@ -16,6 +16,7 @@ type FormState = {
   subjects: string[];
   otherSubjects: string;
   region: string;
+  postalCode: string;
   line: string;
   rate: string;
   ft: boolean;
@@ -34,6 +35,7 @@ const EMPTY: FormState = {
   subjects: [],
   otherSubjects: "",
   region: REGIONS[0],
+  postalCode: "",
   line: "",
   rate: "",
   ft: false,
@@ -69,6 +71,7 @@ export function TutorForm() {
             subjects: knownSubjects,
             otherSubjects: otherSubjects.join(", "),
             region: p.region,
+            postalCode: p.postalCode ?? "",
             line: p.line,
             rate: String(p.rate),
             ft: p.ft,
@@ -120,6 +123,10 @@ export function TutorForm() {
       setError("Enter a valid hourly rate.");
       return;
     }
+    if (form.mode !== "Online" && form.postalCode && !/^\d{6}$/.test(form.postalCode)) {
+      setError("Postal code must be 6 digits.");
+      return;
+    }
 
     setSaving(true);
     try {
@@ -131,7 +138,8 @@ export function TutorForm() {
           edu: form.edu,
           levels: form.levels,
           subjects,
-          region: form.region,
+          region: form.mode === "Online" ? "Online" : form.region,
+          postalCode: form.mode === "Online" ? "" : form.postalCode,
           line: form.line,
           rate,
           ft: form.ft,
@@ -256,29 +264,44 @@ export function TutorForm() {
         </div>
       </div>
 
-      <div className="field-row">
-        <div className="field">
-          <label>Region</label>
-          <select value={form.region} onChange={(e) => setForm({ ...form, region: e.target.value })}>
-            {REGIONS.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="field">
-          <label>Mode</label>
-          <select
-            value={form.mode}
-            onChange={(e) => setForm({ ...form, mode: e.target.value as FormState["mode"] })}
-          >
-            <option value="Online">Online</option>
-            <option value="Physical">Physical</option>
-            <option value="Both">Both</option>
-          </select>
-        </div>
+      <div className="field">
+        <label>Mode</label>
+        <select
+          value={form.mode}
+          onChange={(e) => setForm({ ...form, mode: e.target.value as FormState["mode"] })}
+        >
+          <option value="Online">Online</option>
+          <option value="Physical">Physical</option>
+          <option value="Both">Both</option>
+        </select>
       </div>
+
+      {form.mode !== "Online" && (
+        <div className="field-row">
+          <div className="field">
+            <label>Region</label>
+            <select
+              value={form.region === "Online" ? REGIONS[1] : form.region}
+              onChange={(e) => setForm({ ...form, region: e.target.value })}
+            >
+              {REGIONS.filter((r) => r !== "Online").map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="field">
+            <label>Postal code (optional) — shows a more specific location on your card</label>
+            <input
+              value={form.postalCode}
+              onChange={(e) => setForm({ ...form, postalCode: e.target.value.replace(/\D/g, "").slice(0, 6) })}
+              placeholder="e.g. 238859"
+              inputMode="numeric"
+            />
+          </div>
+        </div>
+      )}
 
       <div className="field">
         <label>One-line pitch</label>

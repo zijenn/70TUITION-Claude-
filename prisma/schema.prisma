@@ -23,7 +23,6 @@ model User {
 
   tutorProfile   TutorProfile?
   studentProfile StudentProfile?
-  center         Center?
   likes          Like[]
 
   sentMessages     Message[] @relation("MessageSender")
@@ -80,6 +79,7 @@ model TutorProfile {
   levels   String[]
   subjects String[]
   region   String
+  postalCode String?
   line     String
   rate     Int
   ft       Boolean
@@ -118,29 +118,9 @@ model StudentProfile {
   updatedAt DateTime @updatedAt
 }
 
-model Center {
-  id     String @id @default(cuid())
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  name       String
-  levels     String[]
-  subjects   String[]
-  region     String
-  line       String
-  descriptor String // e.g. "Founded by ex-MOE educators"
-  bio        String @db.Text
-
-  baseLikes Int @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
 enum TargetType {
   TUTOR
   STUDENT
-  CENTER
 }
 
 model Like {

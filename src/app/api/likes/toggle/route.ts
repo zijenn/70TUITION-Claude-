@@ -3,14 +3,11 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { likeToggleSchema } from "@/lib/validation";
 
-async function getBaseLikes(targetType: "TUTOR" | "STUDENT" | "CENTER", targetId: string) {
+async function getBaseLikes(targetType: "TUTOR" | "STUDENT", targetId: string) {
   if (targetType === "TUTOR") {
     return prisma.tutorProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
   }
-  if (targetType === "STUDENT") {
-    return prisma.studentProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
-  }
-  return prisma.center.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
+  return prisma.studentProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
 }
 
 export async function POST(req: Request) {

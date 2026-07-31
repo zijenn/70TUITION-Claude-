@@ -3,14 +3,14 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
 
-export function PortfolioCarousel({ slides }: { slides: ReactNode[] }) {
+export function PortfolioCarousel({ slides, large = false }: { slides: ReactNode[]; large?: boolean }) {
   const [index, setIndex] = useState(0);
   if (slides.length === 0) return null;
   const clamped = Math.min(index, slides.length - 1);
 
   return (
-    <div className="portfolio-carousel">
-      <div className="portfolio-viewport">{slides[clamped]}</div>
+    <div className={`portfolio-carousel${large ? " large" : ""}`}>
+      <div className={`portfolio-viewport${large ? " large" : ""}`}>{slides[clamped]}</div>
       {slides.length > 1 && (
         <>
           <button

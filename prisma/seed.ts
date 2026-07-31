@@ -179,45 +179,6 @@ const students = [
   },
 ];
 
-const centers = [
-  {
-    email: "learningloft@demo.70tuition.local",
-    name: "The Learning Loft",
-    levels: ["Primary", "Secondary", "JC"],
-    subjects: ["Math", "Science", "English"],
-    region: "Central",
-    line: "Small classes, big whiteboards, real conversations.",
-    baseLikes: 41,
-    joined: new Date("2020-02-01"),
-    bio: "The Learning Loft runs small-group classes capped at six students, on the idea that a whiteboard conversation beats a lecture every time. Founded by two ex-MOE teachers, we focus on Primary through JC Math, Science and English, with monthly progress reports sent home to parents.",
-    descriptor: "Founded by ex-MOE educators",
-  },
-  {
-    email: "northpointminds@demo.70tuition.local",
-    name: "Northpoint Minds",
-    levels: ["Primary", "Secondary"],
-    subjects: ["Math", "Science"],
-    region: "North",
-    line: "Where formulas finally make sense.",
-    baseLikes: 19,
-    joined: new Date("2022-09-01"),
-    bio: "A neighbourhood tuition centre focused purely on Math and Science for Primary and Secondary students. We keep class sizes small and run a diagnostic test before enrolment so lessons are pitched at the right level from day one.",
-    descriptor: "MOE-registered tuition centre",
-  },
-  {
-    email: "harbourview@demo.70tuition.local",
-    name: "Harbourview Tuition",
-    levels: ["Secondary", "JC"],
-    subjects: ["Economics", "GP", "Chemistry"],
-    region: "East",
-    line: "Serious about grades, relaxed about everything else.",
-    baseLikes: 33,
-    joined: new Date("2019-07-01"),
-    bio: "Harbourview specialises in the subjects students dread most — Economics, GP and Chemistry at the Secondary and JC level. Our tutors are all subject specialists with at least five years of teaching experience, and we run free revision workshops before major exams.",
-    descriptor: "MOE-registered tuition centre",
-  },
-];
-
 async function main() {
   for (const t of tutors) {
     const user = await demoUser(t.email, t.name);
@@ -261,26 +222,6 @@ async function main() {
         school: s.school,
         bio: s.bio,
         baseLikes: s.baseLikes,
-      },
-    });
-  }
-
-  for (const c of centers) {
-    const user = await demoUser(c.email, c.name);
-    await prisma.center.upsert({
-      where: { userId: user.id },
-      update: {},
-      create: {
-        userId: user.id,
-        name: c.name,
-        levels: c.levels,
-        subjects: c.subjects,
-        region: c.region,
-        line: c.line,
-        descriptor: c.descriptor,
-        bio: c.bio,
-        baseLikes: c.baseLikes,
-        createdAt: c.joined,
       },
     });
   }

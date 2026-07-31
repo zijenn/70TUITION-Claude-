@@ -10,7 +10,7 @@ export type ModalState =
   | { type: "login" }
   | { type: "quickmatch" }
   | { type: "post"; kind: "tutor" | "student" }
-  | { type: "profile"; kind: "tutor" | "student" | "center"; id: string };
+  | { type: "profile"; id: string };
 
 type LikeState = { liked: boolean; count: number };
 

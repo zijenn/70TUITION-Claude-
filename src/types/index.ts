@@ -6,6 +6,7 @@ export type Tutor = {
   levels: string[];
   subjects: string[];
   region: string;
+  postalCode: string | null;
   line: string;
   rate: number;
   ft: boolean;
@@ -35,21 +36,7 @@ export type Student = {
   joined: string;
 };
 
-export type Center = {
-  id: string;
-  userId: string;
-  name: string;
-  levels: string[];
-  subjects: string[];
-  region: string;
-  line: string;
-  descriptor: string;
-  bio: string;
-  likes: number;
-  joined: string;
-};
-
-export type TargetType = "TUTOR" | "STUDENT" | "CENTER";
+export type TargetType = "TUTOR" | "STUDENT";
 
 export type QuickMatchCriteria = {
   level: string;
@@ -66,7 +53,7 @@ export type ConversationSummary = {
 };
 
 export type ShortlistItem = {
-  kind: "tutor" | "student" | "center";
+  kind: "tutor" | "student";
   id: string;
   title: string;
   subline: string;

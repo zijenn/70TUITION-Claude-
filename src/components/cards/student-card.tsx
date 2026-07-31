@@ -12,7 +12,7 @@ export function StudentCard({ student }: { student: Student }) {
   const score = matchScore(student, quickMatchCriteria);
 
   return (
-    <div className="card" onClick={() => openModal({ type: "profile", kind: "student", id: student.id })}>
+    <div className="card" onClick={() => openModal({ type: "profile", id: student.id })}>
       {score > 2 && <div className="tab-corner">Strong match</div>}
       <div className="card-photo-head">
         <Avatar seed={student.subject} size={208} />

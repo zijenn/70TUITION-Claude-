@@ -28,7 +28,7 @@ export function ModalHost() {
     className = "modal login-modal";
     style = { maxWidth: 420 };
   } else if (modal.type === "profile") {
-    content = <ProfileModalContent kind={modal.kind} id={modal.id} />;
+    content = <ProfileModalContent id={modal.id} />;
     className = "modal";
   }
 

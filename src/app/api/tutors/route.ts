@@ -8,11 +8,13 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const region = searchParams.get("region") || undefined;
   const subject = searchParams.get("subject") || undefined;
+  const name = searchParams.get("name") || undefined;
 
   const profiles = await prisma.tutorProfile.findMany({
     where: {
       ...(region ? { region } : {}),
       ...(subject ? { subjects: { has: subject } } : {}),
+      ...(name ? { name: { contains: name, mode: "insensitive" } } : {}),
     },
     orderBy: { createdAt: "desc" },
   });
@@ -27,6 +29,7 @@ export async function GET(req: Request) {
     levels: p.levels,
     subjects: p.subjects,
     region: p.region,
+    postalCode: p.postalCode,
     line: p.line,
     rate: p.rate,
     ft: p.ft,

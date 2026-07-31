@@ -19,6 +19,8 @@ export default function TutorsPage() {
   const [sortBy, setSortBy] = useState<SortBy>("likes");
   const [region, setRegion] = useState("");
   const [subject, setSubject] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [name, setName] = useState("");
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
 
   useEffect(() => {
@@ -28,15 +30,21 @@ export default function TutorsPage() {
   }, []);
 
   useEffect(() => {
+    const t = setTimeout(() => setName(nameInput.trim()), 300);
+    return () => clearTimeout(t);
+  }, [nameInput]);
+
+  useEffect(() => {
     const params = new URLSearchParams();
     if (region) params.set("region", region);
     if (subject) params.set("subject", subject);
+    if (name) params.set("name", name);
     setLoading(true);
     fetch(`/api/tutors?${params.toString()}`)
       .then((r) => r.json())
       .then((data: Tutor[]) => setTutors(data))
       .finally(() => setLoading(false));
-  }, [region, subject]);
+  }, [region, subject, name]);
 
   const sorted = useMemo(() => sortItems(tutors, sortBy), [tutors, sortBy]);
   const hasOwnProfile = tutors.some((t) => t.userId === session?.user?.id);
@@ -54,6 +62,13 @@ export default function TutorsPage() {
         <p>Real people, real syllabuses. Tap a card to read the full profile.</p>
       </div>
       <div className="toolbar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search by name…"
+          value={nameInput}
+          onChange={(e) => setNameInput(e.target.value)}
+        />
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
           <option value="likes">Sort: Most liked</option>
           <option value="rate-low">Sort: Rate, low to high</option>

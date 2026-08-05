@@ -179,18 +179,14 @@ html:has(.intro-scroller) {
   position: relative;
   z-index: 1;
 }
-/* Placeholder gradients — swap for background-image: url(...) once photos are supplied */
 .intro-page.bg-1 {
   background-image: url("/images/intro-1.png");
 }
 .intro-page.bg-2 {
-  background-image: linear-gradient(135deg, #17231f 0%, #2f6b62 100%);
+  background-image: url("/images/intro-2.png");
 }
 .intro-page.bg-3 {
-  background-image: linear-gradient(135deg, #241d10 0%, #c89b3c 100%);
-}
-.intro-page.bg-4 {
-  background-image: linear-gradient(135deg, #1a1a1a 0%, #5a5648 100%);
+  background-image: url("/images/intro-3.png");
 }
 
 .intro-hero {
@@ -263,6 +259,11 @@ html:has(.intro-scroller) {
   opacity: 1;
   transform: translateY(0);
 }
+.reveal-block > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .reveal-block h2 {
   font-size: clamp(26px, 4.4vw, 48px);
   font-weight: 500;
@@ -278,33 +279,7 @@ html:has(.intro-scroller) {
   line-height: 1.65;
   margin: 0;
 }
-.reveal-block .num {
-  font-family: var(--font-inter), sans-serif;
-  color: var(--gold);
-  font-size: 13px;
-  letter-spacing: 0.14em;
-  margin-bottom: 14px;
-  display: block;
-}
 
-.quickmatch-cta {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-lg);
-  padding: 36px;
-  text-align: center;
-  margin: 40px 0 90px;
-  background: var(--card-bg);
-  box-shadow: 0 1px 2px rgba(26, 26, 26, 0.04);
-}
-.quickmatch-cta h3 {
-  font-size: 26px;
-  margin: 0 0 8px;
-}
-.quickmatch-cta p {
-  color: var(--ink-soft);
-  margin: 0 0 20px;
-  font-size: 15px;
-}
 .btn-primary {
   font-family: var(--font-inter), sans-serif;
   font-size: 12px;

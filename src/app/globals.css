@@ -183,10 +183,10 @@ html:has(.intro-scroller) {
   background-image: url("/images/intro-1.png");
 }
 .intro-page.bg-2 {
-  background-image: url("/images/intro-2.png");
+  background-image: url("/images/intro-2.jpg");
 }
 .intro-page.bg-3 {
-  background-image: url("/images/intro-3.png");
+  background-image: url("/images/intro-3.jpg");
 }
 
 .intro-hero {

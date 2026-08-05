@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
+import { WhatsAppIcon } from "@/components/icons";
+import { locationLabelFor } from "@/lib/singapore-postal";
+import { formatSlots } from "@/lib/availability";
+import { whatsAppLink } from "@/lib/phone";
 import type { Student } from "@/types";
 
 async function fetchDetail(id: string): Promise<Student | null> {
@@ -62,6 +66,11 @@ export function ProfileModalContent({ id }: { id: string }) {
 
   const likeState = getLikeState("STUDENT", item.id, item.likes);
   const isOwnProfile = session?.user?.id === item.userId;
+  const locationLabel = locationLabelFor(item);
+  const availabilityLabel =
+    item.availabilitySlots.length > 0
+      ? formatSlots(item.availabilitySlots) + (item.timing ? ` · ${item.timing}` : "")
+      : item.timing || "Not specified";
 
   function handleChat() {
     requireAuth(() => {
@@ -102,11 +111,11 @@ export function ProfileModalContent({ id }: { id: string }) {
         </div>
         <div className="item">
           <div className="k">Location</div>
-          <div className="v">{item.region}</div>
+          <div className="v">{locationLabel}</div>
         </div>
         <div className="item">
-          <div className="k">Preferred timing</div>
-          <div className="v">{item.timing}</div>
+          <div className="k">Availability</div>
+          <div className="v">{availabilityLabel}</div>
         </div>
         <div className="item">
           <div className="k">Frequency</div>
@@ -129,14 +138,27 @@ export function ProfileModalContent({ id }: { id: string }) {
           </button>
         </div>
       ) : (
-        <div className="modal-actions">
-          <button className="btn-primary" onClick={handleChat}>
-            Chat
-          </button>
-          <button className="btn-ghost" onClick={handleShortlist}>
-            {likeState.liked ? "✓ Shortlisted" : "+ Shortlist"}
-          </button>
-        </div>
+        <>
+          <div className="modal-actions">
+            <button className="btn-primary" onClick={handleChat}>
+              Chat
+            </button>
+            <button className="btn-ghost" onClick={handleShortlist}>
+              {likeState.liked ? "✓ Shortlisted" : "+ Shortlist"}
+            </button>
+          </div>
+          {item.phoneNumber && (
+            <a
+              className="whatsapp-btn"
+              href={whatsAppLink(item.phoneNumber, `Hi, I found your profile on 70 Tuition!`)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <WhatsAppIcon />
+              WhatsApp · {item.phoneNumber}
+            </a>
+          )}
+        </>
       )}
     </>
   );

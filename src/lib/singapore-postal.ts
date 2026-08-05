@@ -36,3 +36,16 @@ export function postalDistrictLabel(postalCode: string | null | undefined): stri
   if (!match) return null;
   return `District ${match.district} · ${match.areas}`;
 }
+
+// Prefers the real OneMap-resolved street/building name; falls back to the
+// coarse district guess only if resolution wasn't available (e.g. saved
+// before this feature existed, or OneMap was unreachable at save time).
+export function locationLabelFor(item: {
+  mode?: string;
+  postalCode: string | null;
+  resolvedArea?: string | null;
+  region: string;
+}): string {
+  if (item.mode === "Online") return "Online";
+  return item.resolvedArea || postalDistrictLabel(item.postalCode) || item.region;
+}

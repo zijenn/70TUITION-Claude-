@@ -1,9 +1,9 @@
 import { colorFor, initials } from "@/lib/avatar";
-import { postalDistrictLabel } from "@/lib/singapore-postal";
+import { locationLabelFor } from "@/lib/singapore-postal";
 import type { Tutor } from "@/types";
 
 export function TutorSwipeCard({ tutor }: { tutor: Tutor }) {
-  const locationLabel = tutor.mode === "Online" ? "Online" : postalDistrictLabel(tutor.postalCode) ?? tutor.region;
+  const locationLabel = locationLabelFor(tutor);
 
   return (
     <div className="tutor-swipe-card-inner">

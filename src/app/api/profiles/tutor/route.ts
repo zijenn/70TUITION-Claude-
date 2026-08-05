@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { tutorProfileSchema } from "@/lib/validation";
+import { lookupPostalCode } from "@/lib/onemap";
 
 export async function GET() {
   const session = await auth();
@@ -24,8 +25,10 @@ export async function POST(req: Request) {
   const existing = await prisma.tutorProfile.findUnique({ where: { userId: session.user.id } });
   if (existing) return NextResponse.json({ error: "You already have a tutor profile" }, { status: 409 });
 
+  const resolvedArea = parsed.data.postalCode ? await lookupPostalCode(parsed.data.postalCode) : null;
+
   const profile = await prisma.tutorProfile.create({
-    data: { ...parsed.data, userId: session.user.id },
+    data: { ...parsed.data, resolvedArea, userId: session.user.id },
   });
 
   return NextResponse.json({ id: profile.id }, { status: 201 });
@@ -44,9 +47,16 @@ export async function PATCH(req: Request) {
   const existing = await prisma.tutorProfile.findUnique({ where: { userId: session.user.id } });
   if (!existing) return NextResponse.json({ error: "No profile to update" }, { status: 404 });
 
+  const resolvedArea =
+    parsed.data.postalCode && parsed.data.postalCode !== existing.postalCode
+      ? await lookupPostalCode(parsed.data.postalCode)
+      : parsed.data.postalCode
+        ? existing.resolvedArea
+        : null;
+
   const profile = await prisma.tutorProfile.update({
     where: { userId: session.user.id },
-    data: parsed.data,
+    data: { ...parsed.data, resolvedArea },
   });
 
   return NextResponse.json({ id: profile.id });

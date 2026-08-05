@@ -3,6 +3,7 @@
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
+import { locationLabelFor } from "@/lib/singapore-postal";
 import { GraduationCapIcon, ClockIcon, CalendarIcon, PinIcon } from "@/components/icons";
 import type { Student } from "@/types";
 
@@ -10,6 +11,7 @@ export function StudentCard({ student }: { student: Student }) {
   const { openModal, getLikeState, toggleLike, quickMatchCriteria } = useUI();
   const like = getLikeState("STUDENT", student.id, student.likes);
   const score = matchScore(student, quickMatchCriteria);
+  const locationLabel = locationLabelFor(student);
 
   return (
     <div className="card" onClick={() => openModal({ type: "profile", id: student.id })}>
@@ -33,7 +35,7 @@ export function StudentCard({ student }: { student: Student }) {
         </div>
         <div className="info-row">
           <PinIcon />
-          {student.region}
+          {locationLabel}
         </div>
       </div>
       <div className="oneliner">{student.genderPref}</div>

@@ -16,6 +16,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     subjects: p.subjects,
     region: p.region,
     postalCode: p.postalCode,
+    resolvedArea: p.resolvedArea,
     line: p.line,
     rate: p.rate,
     ft: p.ft,

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
-import { postalDistrictLabel } from "@/lib/singapore-postal";
+import { locationLabelFor } from "@/lib/singapore-postal";
 import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
 import type { Tutor } from "@/types";
 
@@ -14,8 +14,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
   const like = getLikeState("TUTOR", tutor.id, tutor.likes);
   const score = matchScore(tutor, quickMatchCriteria);
 
-  const locationLabel =
-    tutor.mode === "Online" ? "Online" : postalDistrictLabel(tutor.postalCode) ?? tutor.region;
+  const locationLabel = locationLabelFor(tutor);
 
   return (
     <div className="card" onClick={() => router.push(`/tutors/${tutor.id}`)}>

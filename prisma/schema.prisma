@@ -81,6 +81,7 @@ model TutorProfile {
   subjects String[]
   region   String
   postalCode String?
+  resolvedArea String?
   line     String
   rate     Int
   ft       Boolean
@@ -112,12 +113,17 @@ model StudentProfile {
   subject    String
   rate       Int
   region     String
+  postalCode   String?
+  resolvedArea String?
   timing     String
   freq       String
   duration   String
   genderPref String
   school     String
   bio        String @db.Text
+
+  phoneNumber String?
+  availabilitySlots String[] @default([])
 
   baseLikes Int @default(0)
 

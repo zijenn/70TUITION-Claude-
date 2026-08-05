@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { StudentCard } from "@/components/cards/student-card";
 import { useUI } from "@/components/providers/ui-provider";
+import { SubjectFilterRow, subjectMatchesCategory } from "@/components/subject-filter-row";
 import { REGIONS } from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
 import type { Student } from "@/types";
@@ -20,6 +21,7 @@ export default function StudentsPage() {
   const [region, setRegion] = useState("");
   const [subject, setSubject] = useState("");
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
+  const [category, setCategory] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/students")
@@ -38,7 +40,11 @@ export default function StudentsPage() {
       .finally(() => setLoading(false));
   }, [region, subject]);
 
-  const sorted = useMemo(() => sortItems(students, sortBy), [students, sortBy]);
+  const categoryFiltered = useMemo(
+    () => (category ? students.filter((s) => subjectMatchesCategory([s.subject], category)) : students),
+    [students, category]
+  );
+  const sorted = useMemo(() => sortItems(categoryFiltered, sortBy), [categoryFiltered, sortBy]);
   const hasOwnProfile = students.some((s) => s.userId === session?.user?.id);
 
   function handlePostClick() {
@@ -53,13 +59,13 @@ export default function StudentsPage() {
         <h2>Students</h2>
         <p>Students looking for the right tutor to work with.</p>
       </div>
-      <div className="toolbar">
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
-          <option value="likes">Sort: Most liked</option>
-          <option value="rate-low">Sort: Rate, low to high</option>
-          <option value="rate-high">Sort: Rate, high to low</option>
+      <div className="toolbar pill-toolbar">
+        <select className="pill-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
+          <option value="likes">Most liked</option>
+          <option value="rate-low">Rate: low to high</option>
+          <option value="rate-high">Rate: high to low</option>
         </select>
-        <select value={region} onChange={(e) => setRegion(e.target.value)}>
+        <select className="pill-select" value={region} onChange={(e) => setRegion(e.target.value)}>
           <option value="">Region: All</option>
           {REGIONS.map((r) => (
             <option key={r} value={r}>
@@ -67,7 +73,7 @@ export default function StudentsPage() {
             </option>
           ))}
         </select>
-        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+        <select className="pill-select" value={subject} onChange={(e) => setSubject(e.target.value)}>
           <option value="">Subject: All</option>
           {allSubjects.map((s) => (
             <option key={s} value={s}>
@@ -80,12 +86,13 @@ export default function StudentsPage() {
           {hasOwnProfile ? "✎ Edit my student profile" : "+ Post yourself as a student"}
         </button>
       </div>
+      <SubjectFilterRow selected={category} onSelect={setCategory} />
+      {!loading && sorted.length === 0 && (
+        <p className="mono" style={{ color: "var(--ink-soft)" }}>
+          No students match these filters yet.
+        </p>
+      )}
       <div className="carousel">
-        {!loading && sorted.length === 0 && (
-          <p className="mono" style={{ color: "var(--ink-soft)" }}>
-            No students match these filters yet.
-          </p>
-        )}
         {sorted.map((s) => (
           <StudentCard key={s.id} student={s} />
         ))}

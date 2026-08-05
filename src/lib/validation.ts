@@ -56,12 +56,27 @@ export const studentProfileSchema = z.object({
   subject: z.string().trim().min(1).max(100),
   rate: z.number().int().min(1).max(1000),
   region: z.enum(REGIONS as [string, ...string[]]),
-  timing: z.string().trim().min(1).max(150),
+  postalCode: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "Enter a valid 6-digit Singapore postal code")
+    .nullable()
+    .optional()
+    .or(z.literal("")),
+  timing: z.string().trim().max(150).default(""),
   freq: z.string().trim().min(1).max(50),
   duration: z.string().trim().min(1).max(50),
   genderPref: z.string().trim().min(1).max(50),
   school: z.string().trim().min(1).max(150),
   bio: z.string().trim().min(1).max(3000),
+  phoneNumber: z
+    .string()
+    .trim()
+    .regex(/^\d{8}$/, "Enter a valid 8-digit Singapore phone number")
+    .nullable()
+    .optional()
+    .or(z.literal("")),
+  availabilitySlots: z.array(z.string().regex(slotRegex)).max(50).optional(),
 });
 
 export const likeToggleSchema = z.object({

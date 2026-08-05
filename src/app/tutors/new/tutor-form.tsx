@@ -8,7 +8,8 @@ import { ImageUploadSlot } from "@/components/image-upload-slot";
 import { VideoUploadSlot } from "@/components/video-upload-slot";
 import { AvailabilityGrid } from "@/components/availability-grid";
 import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
-import { LEVELS, PERSONALITY_TRAITS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
+import { PostalCodePreview } from "@/components/postal-code-preview";
+import { LEVEL_TO_SUBJECT_GROUPS, LEVELS, PERSONALITY_TRAITS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
 
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
@@ -107,10 +108,18 @@ export function TutorForm() {
   }, []);
 
   function toggleLevel(level: string) {
-    setForm((f) => ({
-      ...f,
-      levels: f.levels.includes(level) ? f.levels.filter((l) => l !== level) : [...f.levels, level],
-    }));
+    setForm((f) => {
+      const levels = f.levels.includes(level) ? f.levels.filter((l) => l !== level) : [...f.levels, level];
+      const visibleGroups = new Set(levels.flatMap((l) => LEVEL_TO_SUBJECT_GROUPS[l] ?? []));
+      const visibleSubjects = new Set(
+        SUBJECT_GROUPS.filter((g) => visibleGroups.has(g.group)).flatMap((g) => g.subjects)
+      );
+      return {
+        ...f,
+        levels,
+        subjects: f.subjects.filter((s) => visibleSubjects.has(s)),
+      };
+    });
   }
 
   function toggleSubject(subject: string) {
@@ -301,24 +310,32 @@ export function TutorForm() {
 
       <div className="field">
         <label>Subjects you teach</label>
-        {SUBJECT_GROUPS.map((g) => (
-          <div key={g.group} className="subject-group">
-            <div className="subject-group-label">{g.group}</div>
-            <div className="chip-row">
-              {g.subjects.map((s) => (
-                <label key={s} className="chip" style={{ cursor: "pointer" }}>
-                  <input
-                    type="checkbox"
-                    style={{ width: "auto", marginRight: 6 }}
-                    checked={form.subjects.includes(s)}
-                    onChange={() => toggleSubject(s)}
-                  />
-                  {s}
-                </label>
-              ))}
+        {form.levels.length === 0 ? (
+          <p className="mono" style={{ color: "var(--ink-soft)", fontSize: 13 }}>
+            Pick a level above to see subjects.
+          </p>
+        ) : (
+          SUBJECT_GROUPS.filter((g) =>
+            form.levels.some((l) => (LEVEL_TO_SUBJECT_GROUPS[l] ?? []).includes(g.group))
+          ).map((g) => (
+            <div key={g.group} className="subject-group">
+              <div className="subject-group-label">{g.group}</div>
+              <div className="chip-row">
+                {g.subjects.map((s) => (
+                  <label key={s} className="chip" style={{ cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      style={{ width: "auto", marginRight: 6 }}
+                      checked={form.subjects.includes(s)}
+                      onChange={() => toggleSubject(s)}
+                    />
+                    {s}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
         <div className="field" style={{ marginTop: 10, marginBottom: 0 }}>
           <label>Other subjects (comma separated, optional)</label>
           <input
@@ -364,6 +381,7 @@ export function TutorForm() {
               placeholder="e.g. 238859"
               inputMode="numeric"
             />
+            <PostalCodePreview postalCode={form.postalCode} />
           </div>
         </div>
       )}

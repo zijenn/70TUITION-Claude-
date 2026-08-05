@@ -51,6 +51,19 @@ export const PERSONALITY_TRAITS = [
 
 export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
   {
+    group: "Preschool",
+    subjects: [
+      "Phonics & Pre-Reading",
+      "Numeracy & Pre-Math",
+      "Oral Communication / Show & Tell",
+      "Handwriting & Fine Motor Skills",
+      "Chinese Enrichment",
+      "Malay Enrichment",
+      "Tamil Enrichment",
+      "School Readiness",
+    ],
+  },
+  {
     group: "Primary (PSLE)",
     subjects: [
       "English Language",
@@ -108,24 +121,44 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
     ],
   },
   {
-    group: "JC (A-Level, H1/H2/H3)",
+    group: "JC - H1",
     subjects: [
       "General Paper (GP)",
-      "H1/H2 Mathematics",
-      "H1/H2 Further Mathematics",
-      "H1/H2 Physics",
-      "H1/H2 Chemistry",
-      "H1/H2 Biology",
-      "H1/H2 Economics",
-      "H1/H2 History",
-      "H1/H2 Geography",
-      "H1/H2 Literature in English",
-      "H1/H2 Chinese",
-      "H1/H2 Malay",
-      "H1/H2 Tamil",
-      "H2 Computing",
+      "H1 Mathematics",
+      "H1 Physics",
+      "H1 Chemistry",
+      "H1 Biology",
+      "H1 Economics",
+      "H1 History",
+      "H1 Geography",
+      "H1 Literature in English",
+      "H1 Chinese",
+      "H1 Malay",
+      "H1 Tamil",
       "H1 Project Work",
     ],
+  },
+  {
+    group: "JC - H2",
+    subjects: [
+      "H2 Mathematics",
+      "H2 Further Mathematics",
+      "H2 Physics",
+      "H2 Chemistry",
+      "H2 Biology",
+      "H2 Economics",
+      "H2 History",
+      "H2 Geography",
+      "H2 Literature in English",
+      "H2 Chinese",
+      "H2 Malay",
+      "H2 Tamil",
+      "H2 Computing",
+    ],
+  },
+  {
+    group: "JC - H3",
+    subjects: ["H3 Mathematics", "H3 Physics", "H3 Chemistry", "H3 Biology", "H3 Economics", "H3 History", "H3 Geography"],
   },
   {
     group: "IB (Diploma Programme)",
@@ -144,4 +177,32 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
       "Extended Essay (EE) support",
     ],
   },
+  {
+    group: "Poly/Uni",
+    subjects: [
+      "Engineering Mathematics",
+      "Statistics",
+      "Programming / Computing",
+      "Accounting & Finance",
+      "Business Studies",
+      "Academic Writing / Communication",
+    ],
+  },
+  {
+    group: "Adult",
+    subjects: ["Conversational English", "Exam Prep (IELTS/TOEFL)", "Computer Literacy", "Professional / Workplace Skills"],
+  },
 ];
+
+// Which subject groups appear when a tutor selects a given level. Selecting
+// "Secondary" reveals both the O/N-Level track and IP, since IP tutors often
+// span secondary years; "JC" reveals all three H1/H2/H3 tiers plus IB, since
+// IB Diploma is JC-equivalent.
+export const LEVEL_TO_SUBJECT_GROUPS: Record<string, string[]> = {
+  Preschool: ["Preschool"],
+  Primary: ["Primary (PSLE)"],
+  Secondary: ["Secondary (O-Level / N-Level)", "Integrated Programme (IP)"],
+  JC: ["JC - H1", "JC - H2", "JC - H3", "IB (Diploma Programme)"],
+  "Poly/Uni": ["Poly/Uni"],
+  Adult: ["Adult"],
+};

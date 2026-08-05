@@ -8,9 +8,10 @@ import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { PortfolioCarousel } from "@/components/portfolio-carousel";
 import { WhatsAppIcon } from "@/components/icons";
-import { postalDistrictLabel } from "@/lib/singapore-postal";
+import { locationLabelFor } from "@/lib/singapore-postal";
 import { formatSlots } from "@/lib/availability";
 import { whatsAppLink } from "@/lib/phone";
+import { formatMode } from "@/lib/format";
 import type { Tutor } from "@/types";
 
 export default function TutorProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -62,7 +63,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
 
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
   const isOwnProfile = session?.user?.id === tutor.userId;
-  const locationLabel = tutor.mode === "Online" ? "Online" : postalDistrictLabel(tutor.postalCode) ?? tutor.region;
+  const locationLabel = locationLabelFor(tutor);
   const availabilityLabel =
     tutor.availabilitySlots.length > 0
       ? formatSlots(tutor.availabilitySlots) + (tutor.avail ? ` · ${tutor.avail}` : "")
@@ -136,7 +137,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         </div>
         <div className="item">
           <div className="k">Mode</div>
-          <div className="v">{tutor.mode}</div>
+          <div className="v">{formatMode(tutor.mode)}</div>
         </div>
         <div className="item">
           <div className="k">Availability</div>

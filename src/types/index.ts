@@ -7,6 +7,7 @@ export type Tutor = {
   subjects: string[];
   region: string;
   postalCode: string | null;
+  resolvedArea: string | null;
   line: string;
   rate: number;
   ft: boolean;
@@ -31,12 +32,16 @@ export type Student = {
   subject: string;
   rate: number;
   region: string;
+  postalCode: string | null;
+  resolvedArea: string | null;
   timing: string;
   freq: string;
   duration: string;
   genderPref: string;
   school: string;
   bio: string;
+  phoneNumber: string | null;
+  availabilitySlots: string[];
   likes: number;
   joined: string;
 };

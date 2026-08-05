@@ -45,7 +45,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <AutoLoginTrigger />
             <Header />
             <main>{children}</main>
-            <footer>70 TUITION · A place for learning to take place · No fees, ever</footer>
+            <footer>70 Tuition</footer>
             <ModalHost />
             <BasketDrawer />
             <Toast />

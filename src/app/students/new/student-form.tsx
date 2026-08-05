@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
+import { AvailabilityGrid } from "@/components/availability-grid";
+import { PostalCodePreview } from "@/components/postal-code-preview";
 import { REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
 
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
@@ -12,24 +14,30 @@ type FormState = {
   subject: string;
   rate: string;
   region: string;
+  postalCode: string;
   timing: string;
   freq: string;
   duration: string;
   genderPref: string;
   school: string;
   bio: string;
+  phoneNumber: string;
+  availabilitySlots: string[];
 };
 
 const EMPTY: FormState = {
   subject: "",
   rate: "",
   region: REGIONS[0],
+  postalCode: "",
   timing: "",
   freq: "",
   duration: "",
   genderPref: "No preference",
   school: "",
   bio: "",
+  phoneNumber: "",
+  availabilitySlots: [],
 };
 
 export function StudentForm() {
@@ -52,12 +60,15 @@ export function StudentForm() {
             subject: p.subject,
             rate: String(p.rate),
             region: p.region,
+            postalCode: p.postalCode ?? "",
             timing: p.timing,
             freq: p.freq,
             duration: p.duration,
             genderPref: p.genderPref,
             school: p.school,
             bio: p.bio,
+            phoneNumber: p.phoneNumber ?? "",
+            availabilitySlots: p.availabilitySlots ?? [],
           });
           setSubjectIsOther(p.subject !== "" && !ALL_SUBJECTS.has(p.subject));
           setIsEdit(true);
@@ -74,13 +85,25 @@ export function StudentForm() {
       setError("Enter a valid hourly rate.");
       return;
     }
+    if (form.region !== "Online" && form.postalCode && !/^\d{6}$/.test(form.postalCode)) {
+      setError("Postal code must be 6 digits.");
+      return;
+    }
+    if (form.phoneNumber && !/^\d{8}$/.test(form.phoneNumber)) {
+      setError("Phone number must be 8 digits.");
+      return;
+    }
 
     setSaving(true);
     try {
       const res = await fetch("/api/profiles/student", {
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, rate }),
+        body: JSON.stringify({
+          ...form,
+          rate,
+          postalCode: form.region === "Online" ? "" : form.postalCode,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -190,6 +213,29 @@ export function StudentForm() {
         </div>
       </div>
 
+      {form.region !== "Online" && (
+        <div className="field">
+          <label>Postal code (optional) — shows a more specific location on your card</label>
+          <input
+            value={form.postalCode}
+            onChange={(e) => setForm({ ...form, postalCode: e.target.value.replace(/\D/g, "").slice(0, 6) })}
+            placeholder="e.g. 238859"
+            inputMode="numeric"
+          />
+          <PostalCodePreview postalCode={form.postalCode} />
+        </div>
+      )}
+
+      <div className="field">
+        <label>WhatsApp number (optional) — lets tutors contact you directly</label>
+        <input
+          value={form.phoneNumber}
+          onChange={(e) => setForm({ ...form, phoneNumber: e.target.value.replace(/\D/g, "").slice(0, 8) })}
+          placeholder="e.g. 91234567"
+          inputMode="numeric"
+        />
+      </div>
+
       <div className="field-row">
         <div className="field">
           <label>Preferred timing</label>
@@ -197,7 +243,6 @@ export function StudentForm() {
             value={form.timing}
             onChange={(e) => setForm({ ...form, timing: e.target.value })}
             placeholder="Weekday evenings"
-            required
           />
         </div>
         <div className="field">
@@ -229,6 +274,14 @@ export function StudentForm() {
             <option>Male tutor preferred</option>
           </select>
         </div>
+      </div>
+
+      <div className="field">
+        <label>Weekly availability</label>
+        <AvailabilityGrid
+          value={form.availabilitySlots}
+          onChange={(slots) => setForm((f) => ({ ...f, availabilitySlots: slots }))}
+        />
       </div>
 
       <div className="field">

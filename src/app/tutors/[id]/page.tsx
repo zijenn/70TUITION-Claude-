@@ -8,6 +8,7 @@ import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { PortfolioCarousel } from "@/components/portfolio-carousel";
 import { postalDistrictLabel } from "@/lib/singapore-postal";
+import { formatSlots } from "@/lib/availability";
 import type { Tutor } from "@/types";
 
 export default function TutorProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -60,6 +61,10 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
   const isOwnProfile = session?.user?.id === tutor.userId;
   const locationLabel = tutor.mode === "Online" ? "Online" : postalDistrictLabel(tutor.postalCode) ?? tutor.region;
+  const availabilityLabel =
+    tutor.availabilitySlots.length > 0
+      ? formatSlots(tutor.availabilitySlots) + (tutor.avail ? ` · ${tutor.avail}` : "")
+      : tutor.avail || "Not specified";
 
   function handleChat() {
     requireAuth(() => router.push(`/messages/${tutor!.userId}`));
@@ -77,6 +82,10 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
       <Link href="/tutors" className="back-link">
         ← Back to Tutors
       </Link>
+
+      {tutor.videoUrl && (
+        <video src={tutor.videoUrl} controls playsInline className="tutor-page-video" />
+      )}
 
       {tutor.galleryUrls.length > 0 && (
         <PortfolioCarousel
@@ -101,6 +110,19 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         <p>{tutor.bio}</p>
       </div>
 
+      {tutor.personalityTraits.length > 0 && (
+        <div className="modal-section">
+          <span className="label">Personality</span>
+          <div className="chip-row">
+            {tutor.personalityTraits.map((trait) => (
+              <span className="chip" key={trait}>
+                {trait}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="modal-section detail-grid">
         <div className="item">
           <div className="k">Rate</div>
@@ -112,7 +134,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         </div>
         <div className="item">
           <div className="k">Availability</div>
-          <div className="v">{tutor.avail}</div>
+          <div className="v">{availabilityLabel}</div>
         </div>
         <div className="item">
           <div className="k">Location</div>
@@ -135,6 +157,21 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
           <div className="v">{tutor.edu}</div>
         </div>
       </div>
+
+      {tutor.portfolioItems.length > 0 && (
+        <div className="modal-section">
+          <span className="label">Portfolio</span>
+          <div className="portfolio-item-grid">
+            {tutor.portfolioItems.map((item, i) => (
+              <div className="portfolio-item-card" key={i}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={item.url} alt={item.title} className="portfolio-item-thumb" />
+                <div className="portfolio-item-title">{item.title}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {isOwnProfile ? (
         <div className="modal-actions">

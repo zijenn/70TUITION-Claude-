@@ -16,6 +16,10 @@ export type Tutor = {
   bio: string;
   photoUrl: string | null;
   galleryUrls: string[];
+  videoUrl: string | null;
+  availabilitySlots: string[];
+  personalityTraits: string[];
+  portfolioItems: { url: string; title: string }[];
   likes: number;
   joined: string;
 };

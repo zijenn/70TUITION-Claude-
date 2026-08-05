@@ -14,6 +14,28 @@ export const LEVELS = ["Preschool", "Primary", "Secondary", "JC", "Poly/Uni", "A
 
 export const AVATAR_COLORS = ["#a9791f", "#2f6b62", "#7a5c8e", "#b5352f", "#3f6b9e", "#8a7346"];
 
+export const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+// Hour grid the availability time-bar offers, in 24h form. Covers 7am-11pm.
+export const AVAILABILITY_HOURS = Array.from({ length: 16 }, (_, i) => i + 7);
+
+export const PERSONALITY_TRAITS = [
+  "Patient",
+  "Energetic",
+  "Structured",
+  "Encouraging",
+  "Strict",
+  "Humorous",
+  "Calm",
+  "Enthusiastic",
+  "Detail-oriented",
+  "Flexible",
+  "Empathetic",
+  "Motivating",
+  "Straightforward",
+  "Creative",
+];
+
 export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
   {
     group: "Primary (PSLE)",

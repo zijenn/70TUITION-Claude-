@@ -1,5 +1,7 @@
 import { z } from "zod";
-import { LEVELS, REGIONS } from "./constants";
+import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS } from "./constants";
+
+const slotRegex = new RegExp(`^(${DAYS_OF_WEEK.join("|")})\\|\\d{1,2}\\|\\d{1,2}$`);
 
 export const registerSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -24,11 +26,23 @@ export const tutorProfileSchema = z.object({
   rate: z.number().int().min(1).max(1000),
   ft: z.boolean(),
   gender: z.enum(["Male", "Female"]),
-  avail: z.string().trim().min(1).max(150),
+  avail: z.string().trim().max(150).default(""),
   mode: z.enum(["Online", "Physical", "Both"]),
   bio: z.string().trim().min(1).max(3000),
   photoUrl: z.string().url().max(500).nullable().optional(),
   galleryUrls: z.array(z.string().url().max(500)).max(5).optional(),
+  videoUrl: z.string().url().max(500).nullable().optional(),
+  availabilitySlots: z.array(z.string().regex(slotRegex)).max(50).optional(),
+  personalityTraits: z.array(z.enum(PERSONALITY_TRAITS as [string, ...string[]])).max(14).optional(),
+  portfolioItems: z
+    .array(
+      z.object({
+        url: z.string().url().max(500),
+        title: z.string().trim().min(1).max(100),
+      })
+    )
+    .max(10)
+    .optional(),
 });
 
 export const studentProfileSchema = z.object({

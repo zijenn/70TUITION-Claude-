@@ -4,6 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { TutorCard } from "@/components/cards/tutor-card";
+import { TutorSwipeCard } from "@/components/cards/tutor-swipe-card";
+import { SwipeDeck } from "@/components/swipe-deck";
 import { useUI } from "@/components/providers/ui-provider";
 import { REGIONS } from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
@@ -12,7 +14,7 @@ import type { Tutor } from "@/types";
 export default function TutorsPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { openModal } = useUI();
+  const { openModal, requireAuth, toggleLike, showToast } = useUI();
 
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,6 +24,7 @@ export default function TutorsPage() {
   const [nameInput, setNameInput] = useState("");
   const [name, setName] = useState("");
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
+  const [view, setView] = useState<"grid" | "swipe">("grid");
 
   useEffect(() => {
     fetch("/api/tutors")
@@ -52,6 +55,13 @@ export default function TutorsPage() {
   function handlePostClick() {
     if (status === "authenticated") router.push("/tutors/new");
     else openModal({ type: "post", kind: "tutor" });
+  }
+
+  function handleSwipeRight(tutor: Tutor) {
+    requireAuth(async () => {
+      await toggleLike("TUTOR", tutor.id, tutor.likes);
+      showToast(`Added ${tutor.name} to your shortlist.`);
+    });
   }
 
   return (
@@ -90,21 +100,40 @@ export default function TutorsPage() {
             </option>
           ))}
         </select>
+        <div className="view-toggle">
+          <button className={view === "grid" ? "active" : ""} onClick={() => setView("grid")} type="button">
+            Grid
+          </button>
+          <button className={view === "swipe" ? "active" : ""} onClick={() => setView("swipe")} type="button">
+            Swipe
+          </button>
+        </div>
         <div className="spacer"></div>
         <button className="post-btn" onClick={handlePostClick}>
           {hasOwnProfile ? "✎ Edit my tutor profile" : "+ Post yourself as a tutor"}
         </button>
       </div>
-      <div className="carousel">
-        {!loading && sorted.length === 0 && (
-          <p className="mono" style={{ color: "var(--ink-soft)" }}>
-            No tutors match these filters yet.
-          </p>
-        )}
-        {sorted.map((t) => (
-          <TutorCard key={t.id} tutor={t} />
-        ))}
-      </div>
+      {!loading && sorted.length === 0 && (
+        <p className="mono" style={{ color: "var(--ink-soft)" }}>
+          No tutors match these filters yet.
+        </p>
+      )}
+      {view === "grid" ? (
+        <div className="carousel">
+          {sorted.map((t) => (
+            <TutorCard key={t.id} tutor={t} />
+          ))}
+        </div>
+      ) : (
+        sorted.length > 0 && (
+          <SwipeDeck
+            items={sorted}
+            renderCard={(t) => <TutorSwipeCard tutor={t} />}
+            onSwipeRight={handleSwipeRight}
+            onTap={(t) => router.push(`/tutors/${t.id}`)}
+          />
+        )
+      )}
     </section>
   );
 }

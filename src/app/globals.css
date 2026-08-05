@@ -1267,6 +1267,328 @@ button.thread-counterpart:hover h2 {
   background: var(--paper);
 }
 
+/* ---------- NAMED PORTFOLIO ITEMS ---------- */
+.portfolio-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.portfolio-editor-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.portfolio-editor-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.portfolio-editor-field input {
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 14px;
+}
+.portfolio-editor-remove {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+.portfolio-editor-remove:hover {
+  color: #b5352f;
+}
+.portfolio-item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+.portfolio-item-card {
+  text-align: center;
+}
+.portfolio-item-thumb {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  display: block;
+}
+.portfolio-item-title {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+
+/* ---------- VIDEO UPLOAD ---------- */
+.video-upload-slot {
+  max-width: 320px;
+}
+.video-upload-empty {
+  width: 100%;
+  padding: 28px 16px;
+  border: 1.5px dashed var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  text-align: center;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+.video-upload-empty:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.video-upload-empty:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.video-upload-preview {
+  position: relative;
+  width: 100%;
+}
+.video-upload-el {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  display: block;
+  max-height: 400px;
+}
+
+/* ---------- AVAILABILITY GRID ---------- */
+.availability-grid {
+  user-select: none;
+}
+.availability-grid-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-x: auto;
+}
+.availability-row {
+  display: grid;
+  grid-template-columns: 44px repeat(7, 1fr);
+  gap: 2px;
+}
+.availability-row-head {
+  margin-bottom: 2px;
+}
+.availability-hour-label {
+  font-size: 10px;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 4px;
+}
+.availability-day-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  text-align: center;
+  padding-bottom: 2px;
+}
+.availability-cell {
+  height: 18px;
+  min-width: 24px;
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+}
+.availability-cell:hover {
+  border-color: var(--gold);
+}
+.availability-cell.active {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.availability-hint {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 8px 0 0;
+}
+
+/* ---------- SWIPE DECK ---------- */
+.swipe-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 60px;
+}
+.swipe-stack {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  height: 560px;
+}
+.swipe-card {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: 0 14px 32px rgba(26, 26, 26, 0.16);
+  background: var(--card-bg);
+}
+.swipe-card-behind {
+  transform: scale(0.96) translateY(10px);
+  opacity: 0.7;
+}
+.swipe-card-top {
+  cursor: grab;
+  touch-action: pan-y;
+}
+.swipe-card-top:active {
+  cursor: grabbing;
+}
+.tutor-swipe-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.tutor-swipe-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.tutor-swipe-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: var(--font-newsreader), serif;
+  font-size: 64px;
+  font-weight: 600;
+}
+.tutor-swipe-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, 0.78) 100%);
+  pointer-events: none;
+}
+.tutor-swipe-info {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  color: #fff;
+  pointer-events: none;
+}
+.tutor-swipe-info h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.tutor-swipe-rate {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold);
+}
+.tutor-swipe-sub {
+  font-size: 13px;
+  opacity: 0.9;
+  margin-top: 2px;
+}
+.swipe-badge {
+  position: absolute;
+  top: 24px;
+  padding: 6px 14px;
+  border: 3px solid #fff;
+  border-radius: 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  transform: rotate(-12deg);
+}
+.swipe-badge-like {
+  right: 20px;
+  color: var(--gold);
+  border-color: var(--gold);
+}
+.swipe-badge-pass {
+  left: 20px;
+  color: #b5352f;
+  border-color: #b5352f;
+  transform: rotate(12deg);
+}
+.swipe-actions {
+  display: flex;
+  gap: 22px;
+  margin-top: 24px;
+}
+.swipe-action-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card-bg);
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(26, 26, 26, 0.08);
+  transition: transform 0.15s;
+}
+.swipe-action-btn:hover {
+  transform: translateY(-2px);
+}
+.swipe-action-btn.pass {
+  color: #b5352f;
+}
+.swipe-action-btn.like {
+  color: var(--gold);
+}
+.swipe-empty {
+  text-align: center;
+  padding: 60px 0;
+}
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.view-toggle button {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border: none;
+  background: var(--card-bg);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.view-toggle button.active {
+  background: var(--btn-bg);
+  color: #fff;
+}
+
 /* ---------- DEDICATED TUTOR PROFILE PAGE ---------- */
 .tutor-page {
   max-width: 640px;
@@ -1282,6 +1604,16 @@ button.thread-counterpart:hover h2 {
 }
 .back-link:hover {
   color: var(--gold);
+}
+.tutor-page-video {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+  max-height: 520px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: #000;
 }
 .tutor-page-head {
   display: flex;

@@ -5,7 +5,10 @@ import type { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
 import { ImageUploadSlot } from "@/components/image-upload-slot";
-import { LEVELS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
+import { VideoUploadSlot } from "@/components/video-upload-slot";
+import { AvailabilityGrid } from "@/components/availability-grid";
+import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
+import { LEVELS, PERSONALITY_TRAITS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
 
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
@@ -26,6 +29,10 @@ type FormState = {
   bio: string;
   photoUrl: string | null;
   galleryUrls: (string | null)[];
+  videoUrl: string | null;
+  availabilitySlots: string[];
+  personalityTraits: string[];
+  portfolioItems: PortfolioItem[];
 };
 
 const EMPTY: FormState = {
@@ -45,6 +52,10 @@ const EMPTY: FormState = {
   bio: "",
   photoUrl: null,
   galleryUrls: [null, null, null, null, null],
+  videoUrl: null,
+  availabilitySlots: [],
+  personalityTraits: [],
+  portfolioItems: [],
 };
 
 export function TutorForm() {
@@ -81,6 +92,10 @@ export function TutorForm() {
             bio: p.bio,
             photoUrl: p.photoUrl ?? null,
             galleryUrls: [0, 1, 2, 3, 4].map((i) => p.galleryUrls?.[i] ?? null),
+            videoUrl: p.videoUrl ?? null,
+            availabilitySlots: p.availabilitySlots ?? [],
+            personalityTraits: p.personalityTraits ?? [],
+            portfolioItems: Array.isArray(p.portfolioItems) ? p.portfolioItems : [],
           });
           setIsEdit(true);
         }
@@ -99,6 +114,15 @@ export function TutorForm() {
     setForm((f) => ({
       ...f,
       subjects: f.subjects.includes(subject) ? f.subjects.filter((s) => s !== subject) : [...f.subjects, subject],
+    }));
+  }
+
+  function togglePersonality(trait: string) {
+    setForm((f) => ({
+      ...f,
+      personalityTraits: f.personalityTraits.includes(trait)
+        ? f.personalityTraits.filter((t) => t !== trait)
+        : [...f.personalityTraits, trait],
     }));
   }
 
@@ -149,6 +173,10 @@ export function TutorForm() {
           bio: form.bio,
           photoUrl: form.photoUrl,
           galleryUrls: form.galleryUrls.filter((u): u is string => Boolean(u)),
+          videoUrl: form.videoUrl,
+          availabilitySlots: form.availabilitySlots,
+          personalityTraits: form.personalityTraits,
+          portfolioItems: form.portfolioItems.filter((it) => it.url && it.title.trim()),
         }),
       });
       if (!res.ok) {
@@ -186,7 +214,12 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>Gallery (up to 5) — testimonials, certs, or anything else</label>
+        <label>Intro video (optional)</label>
+        <VideoUploadSlot value={form.videoUrl} onChange={(url) => setForm((f) => ({ ...f, videoUrl: url }))} />
+      </div>
+
+      <div className="field">
+        <label>Gallery (up to 5) — testimonials, or anything else</label>
         <div className="upload-row">
           {form.galleryUrls.map((url, i) => (
             <ImageUploadSlot
@@ -204,6 +237,14 @@ export function TutorForm() {
             />
           ))}
         </div>
+      </div>
+
+      <div className="field">
+        <label>Portfolio (optional) — certificates, awards, anything you want named</label>
+        <PortfolioItemsEditor
+          items={form.portfolioItems}
+          onChange={(items) => setForm((f) => ({ ...f, portfolioItems: items }))}
+        />
       </div>
 
       <div className="field-row">
@@ -337,13 +378,37 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>Availability</label>
+        <label>Weekly availability</label>
+        <AvailabilityGrid
+          value={form.availabilitySlots}
+          onChange={(slots) => setForm((f) => ({ ...f, availabilitySlots: slots }))}
+        />
+      </div>
+
+      <div className="field">
+        <label>Additional availability notes (optional)</label>
         <input
           value={form.avail}
           onChange={(e) => setForm({ ...form, avail: e.target.value })}
-          placeholder="Weekday evenings, Sat mornings"
-          required
+          placeholder="e.g. Flexible around exam periods"
         />
+      </div>
+
+      <div className="field">
+        <label>Personality (optional)</label>
+        <div className="chip-row">
+          {PERSONALITY_TRAITS.map((trait) => (
+            <label key={trait} className="chip" style={{ cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                style={{ width: "auto", marginRight: 6 }}
+                checked={form.personalityTraits.includes(trait)}
+                onChange={() => togglePersonality(trait)}
+              />
+              {trait}
+            </label>
+          ))}
+        </div>
       </div>
 
       <div className="field checkbox-row">

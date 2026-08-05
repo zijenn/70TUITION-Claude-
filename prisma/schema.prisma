@@ -90,6 +90,11 @@ model TutorProfile {
 
   photoUrl    String?
   galleryUrls String[] @default([])
+  videoUrl    String?
+
+  availabilitySlots String[] @default([])
+  personalityTraits String[] @default([])
+  portfolioItems    Json     @default("[]")
 
   baseLikes Int @default(0)
 

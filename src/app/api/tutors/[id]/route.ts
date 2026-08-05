@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { formatJoined } from "@/lib/format";
 import { likeCountFor } from "@/lib/likes";
-import type { Tutor } from "@/types";
+import { toTutorDto } from "@/lib/tutor-dto";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -11,27 +10,5 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const likes = p.baseLikes + (await likeCountFor("TUTOR", p.id));
 
-  const tutor: Tutor = {
-    id: p.id,
-    userId: p.userId,
-    name: p.name,
-    edu: p.edu,
-    levels: p.levels,
-    subjects: p.subjects,
-    region: p.region,
-    postalCode: p.postalCode,
-    line: p.line,
-    rate: p.rate,
-    ft: p.ft,
-    gender: p.gender,
-    avail: p.avail,
-    mode: p.mode,
-    bio: p.bio,
-    photoUrl: p.photoUrl,
-    galleryUrls: p.galleryUrls,
-    likes,
-    joined: formatJoined(p.createdAt),
-  };
-
-  return NextResponse.json(tutor);
+  return NextResponse.json(toTutorDto(p, likes));
 }

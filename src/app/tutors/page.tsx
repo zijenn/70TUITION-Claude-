@@ -7,6 +7,7 @@ import { TutorCard } from "@/components/cards/tutor-card";
 import { TutorSwipeCard } from "@/components/cards/tutor-swipe-card";
 import { SwipeDeck } from "@/components/swipe-deck";
 import { useUI } from "@/components/providers/ui-provider";
+import { SubjectFilterRow, subjectMatchesCategory } from "@/components/subject-filter-row";
 import { REGIONS } from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
 import type { Tutor } from "@/types";
@@ -25,6 +26,7 @@ export default function TutorsPage() {
   const [name, setName] = useState("");
   const [allSubjects, setAllSubjects] = useState<string[]>([]);
   const [view, setView] = useState<"grid" | "swipe">("grid");
+  const [category, setCategory] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/tutors")
@@ -49,7 +51,11 @@ export default function TutorsPage() {
       .finally(() => setLoading(false));
   }, [region, subject, name]);
 
-  const sorted = useMemo(() => sortItems(tutors, sortBy), [tutors, sortBy]);
+  const categoryFiltered = useMemo(
+    () => (category ? tutors.filter((t) => subjectMatchesCategory(t.subjects, category)) : tutors),
+    [tutors, category]
+  );
+  const sorted = useMemo(() => sortItems(categoryFiltered, sortBy), [categoryFiltered, sortBy]);
   const hasOwnProfile = tutors.some((t) => t.userId === session?.user?.id);
 
   function handlePostClick() {
@@ -71,20 +77,20 @@ export default function TutorsPage() {
         <h2>Tutors</h2>
         <p>Real people, real syllabuses. Tap a card to read the full profile.</p>
       </div>
-      <div className="toolbar">
+      <div className="toolbar pill-toolbar">
         <input
           type="text"
-          className="search-input"
+          className="search-input pill-input"
           placeholder="Search by name…"
           value={nameInput}
           onChange={(e) => setNameInput(e.target.value)}
         />
-        <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
-          <option value="likes">Sort: Most liked</option>
-          <option value="rate-low">Sort: Rate, low to high</option>
-          <option value="rate-high">Sort: Rate, high to low</option>
+        <select className="pill-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
+          <option value="likes">Most liked</option>
+          <option value="rate-low">Rate: low to high</option>
+          <option value="rate-high">Rate: high to low</option>
         </select>
-        <select value={region} onChange={(e) => setRegion(e.target.value)}>
+        <select className="pill-select" value={region} onChange={(e) => setRegion(e.target.value)}>
           <option value="">Region: All</option>
           {REGIONS.map((r) => (
             <option key={r} value={r}>
@@ -92,7 +98,7 @@ export default function TutorsPage() {
             </option>
           ))}
         </select>
-        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+        <select className="pill-select" value={subject} onChange={(e) => setSubject(e.target.value)}>
           <option value="">Subject: All</option>
           {allSubjects.map((s) => (
             <option key={s} value={s}>
@@ -113,6 +119,7 @@ export default function TutorsPage() {
           {hasOwnProfile ? "✎ Edit my tutor profile" : "+ Post yourself as a tutor"}
         </button>
       </div>
+      <SubjectFilterRow selected={category} onSelect={setCategory} />
       {!loading && sorted.length === 0 && (
         <p className="mono" style={{ color: "var(--ink-soft)" }}>
           No tutors match these filters yet.

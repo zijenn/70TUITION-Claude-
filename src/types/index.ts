@@ -17,6 +17,7 @@ export type Tutor = {
   photoUrl: string | null;
   galleryUrls: string[];
   videoUrl: string | null;
+  phoneNumber: string | null;
   availabilitySlots: string[];
   personalityTraits: string[];
   portfolioItems: { url: string; title: string }[];

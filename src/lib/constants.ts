@@ -19,6 +19,19 @@ export const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Frid
 // Hour grid the availability time-bar offers, in 24h form. Covers 7am-11pm.
 export const AVAILABILITY_HOURS = Array.from({ length: 16 }, (_, i) => i + 7);
 
+export const SUBJECT_CATEGORIES = [
+  { label: "Math", icon: "math", keywords: ["math"] },
+  { label: "Physics", icon: "physics", keywords: ["physics"] },
+  { label: "Chemistry", icon: "chemistry", keywords: ["chemistry", "science"] },
+  { label: "Biology", icon: "biology", keywords: ["biology", "science"] },
+  { label: "English", icon: "language", keywords: ["english", "literature"] },
+  { label: "Mother Tongue", icon: "language", keywords: ["mother tongue", "chinese", "malay", "tamil"] },
+  { label: "Economics", icon: "economics", keywords: ["economics", "accounts", "business"] },
+  { label: "Computing", icon: "computing", keywords: ["computing"] },
+  { label: "Humanities", icon: "humanities", keywords: ["history", "geography", "social studies", "gp", "general paper"] },
+  { label: "Others", icon: "more", keywords: [] },
+] as const;
+
 export const PERSONALITY_TRAITS = [
   "Patient",
   "Energetic",

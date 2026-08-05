@@ -32,6 +32,13 @@ export const tutorProfileSchema = z.object({
   photoUrl: z.string().url().max(500).nullable().optional(),
   galleryUrls: z.array(z.string().url().max(500)).max(5).optional(),
   videoUrl: z.string().url().max(500).nullable().optional(),
+  phoneNumber: z
+    .string()
+    .trim()
+    .regex(/^\d{8}$/, "Enter a valid 8-digit Singapore phone number")
+    .nullable()
+    .optional()
+    .or(z.literal("")),
   availabilitySlots: z.array(z.string().regex(slotRegex)).max(50).optional(),
   personalityTraits: z.array(z.enum(PERSONALITY_TRAITS as [string, ...string[]])).max(14).optional(),
   portfolioItems: z

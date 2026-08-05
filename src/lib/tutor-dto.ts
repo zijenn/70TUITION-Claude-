@@ -26,6 +26,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     photoUrl: p.photoUrl,
     galleryUrls: p.galleryUrls,
     videoUrl: p.videoUrl,
+    phoneNumber: p.phoneNumber,
     availabilitySlots: p.availabilitySlots,
     personalityTraits: p.personalityTraits,
     portfolioItems,

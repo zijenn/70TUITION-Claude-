@@ -30,6 +30,7 @@ type FormState = {
   photoUrl: string | null;
   galleryUrls: (string | null)[];
   videoUrl: string | null;
+  phoneNumber: string;
   availabilitySlots: string[];
   personalityTraits: string[];
   portfolioItems: PortfolioItem[];
@@ -53,6 +54,7 @@ const EMPTY: FormState = {
   photoUrl: null,
   galleryUrls: [null, null, null, null, null],
   videoUrl: null,
+  phoneNumber: "",
   availabilitySlots: [],
   personalityTraits: [],
   portfolioItems: [],
@@ -93,6 +95,7 @@ export function TutorForm() {
             photoUrl: p.photoUrl ?? null,
             galleryUrls: [0, 1, 2, 3, 4].map((i) => p.galleryUrls?.[i] ?? null),
             videoUrl: p.videoUrl ?? null,
+            phoneNumber: p.phoneNumber ?? "",
             availabilitySlots: p.availabilitySlots ?? [],
             personalityTraits: p.personalityTraits ?? [],
             portfolioItems: Array.isArray(p.portfolioItems) ? p.portfolioItems : [],
@@ -151,6 +154,10 @@ export function TutorForm() {
       setError("Postal code must be 6 digits.");
       return;
     }
+    if (form.phoneNumber && !/^\d{8}$/.test(form.phoneNumber)) {
+      setError("Phone number must be 8 digits.");
+      return;
+    }
 
     setSaving(true);
     try {
@@ -174,6 +181,7 @@ export function TutorForm() {
           photoUrl: form.photoUrl,
           galleryUrls: form.galleryUrls.filter((u): u is string => Boolean(u)),
           videoUrl: form.videoUrl,
+          phoneNumber: form.phoneNumber,
           availabilitySlots: form.availabilitySlots,
           personalityTraits: form.personalityTraits,
           portfolioItems: form.portfolioItems.filter((it) => it.url && it.title.trim()),
@@ -186,6 +194,22 @@ export function TutorForm() {
       }
       showToast(isEdit ? "Tutor profile updated." : "You're now listed as a tutor.");
       router.push("/tutors");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!confirm("Delete your tutor profile? This removes your listing and can't be undone.")) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/profiles/tutor", { method: "DELETE" });
+      if (res.ok) {
+        showToast("Your tutor profile has been deleted.");
+        router.push("/tutors");
+      } else {
+        setError("Could not delete your profile — try again.");
+      }
     } finally {
       setSaving(false);
     }
@@ -345,6 +369,16 @@ export function TutorForm() {
       )}
 
       <div className="field">
+        <label>WhatsApp number (optional) — lets students contact you directly</label>
+        <input
+          value={form.phoneNumber}
+          onChange={(e) => setForm({ ...form, phoneNumber: e.target.value.replace(/\D/g, "").slice(0, 8) })}
+          placeholder="e.g. 91234567"
+          inputMode="numeric"
+        />
+      </div>
+
+      <div className="field">
         <label>One-line pitch</label>
         <input
           value={form.line}
@@ -433,6 +467,11 @@ export function TutorForm() {
       <button className="btn-primary" type="submit" disabled={saving}>
         {saving ? "Saving…" : isEdit ? "Save changes" : "Post my profile"}
       </button>
+      {isEdit && (
+        <button type="button" className="delete-profile-btn" onClick={handleDelete} disabled={saving}>
+          Delete my profile
+        </button>
+      )}
     </form>
   );
 }

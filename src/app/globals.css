@@ -407,6 +407,38 @@ html:has(.intro-scroller) {
   color: var(--ink);
 }
 
+.pill-toolbar {
+  border: none;
+  padding: 6px 0 4px;
+  margin-bottom: 10px;
+}
+.pill-input,
+.pill-select {
+  border-radius: 999px !important;
+  padding: 10px 16px !important;
+  font-size: 13px !important;
+  border-color: var(--line) !important;
+  transition: border-color 0.15s;
+}
+.pill-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235a5648' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 32px !important;
+}
+.pill-input:hover,
+.pill-select:hover,
+.pill-input:focus,
+.pill-select:focus {
+  border-color: var(--gold) !important;
+  outline: none;
+}
+.pill-input {
+  min-width: 180px;
+}
+
 /* ---------- CARDS / CAROUSEL ---------- */
 .carousel {
   display: grid;
@@ -1425,6 +1457,59 @@ button.thread-counterpart:hover h2 {
   margin: 8px 0 0;
 }
 
+/* ---------- SUBJECT ICON FILTER ---------- */
+.subject-filter-row {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding: 4px 2px 18px;
+  margin-bottom: 8px;
+}
+.subject-filter-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  padding: 4px;
+}
+.subject-filter-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    color 0.15s;
+}
+.subject-filter-icon svg {
+  width: 22px;
+  height: 22px;
+}
+.subject-filter-item:hover .subject-filter-icon {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.subject-filter-item.active .subject-filter-icon {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+.subject-filter-item.active {
+  color: var(--ink);
+}
+
 /* ---------- SWIPE DECK ---------- */
 .swipe-deck {
   display: flex;
@@ -1589,6 +1674,54 @@ button.thread-counterpart:hover h2 {
   color: #fff;
 }
 
+.delete-profile-btn {
+  display: block;
+  margin: 14px auto 0;
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-family: var(--font-inter), sans-serif;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 6px;
+}
+.delete-profile-btn:hover {
+  color: #b5352f;
+}
+.delete-profile-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- ADMIN ---------- */
+.admin-section {
+  margin-bottom: 40px;
+}
+.admin-section h3 {
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+.admin-row-list {
+  border-top: 1px solid var(--line);
+}
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 4px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-row-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+.admin-row-sub {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
 /* ---------- DEDICATED TUTOR PROFILE PAGE ---------- */
 .tutor-page {
   max-width: 640px;
@@ -1605,26 +1738,42 @@ button.thread-counterpart:hover h2 {
 .back-link:hover {
   color: var(--gold);
 }
-.tutor-page-video {
-  display: block;
-  width: 100%;
-  max-width: 640px;
-  max-height: 520px;
-  margin: 0 auto;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--line);
-  background: #000;
-}
-.tutor-page-head {
+.tutor-page-titlebar {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 28px 0 32px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
 }
-.tutor-page-head h2 {
-  margin: 18px 0 4px;
-  font-size: 30px;
+.tutor-page-title {
+  margin: 0 0 4px;
+  font-size: 26px;
+  font-weight: 700;
+  text-align: left;
+}
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px 20px;
+  border-radius: var(--radius);
+  background: #25d366;
+  color: #fff;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.whatsapp-btn:hover {
+  background: #1eb857;
+}
+.whatsapp-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 ::selection {

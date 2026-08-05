@@ -38,11 +38,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     ...authConfig.callbacks,
     async jwt({ token, user }) {
-      if (user) token.id = user.id;
+      if (user) {
+        token.id = user.id;
+        const dbUser = await prisma.user.findUnique({ where: { id: user.id }, select: { isAdmin: true } });
+        token.isAdmin = dbUser?.isAdmin ?? false;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.id) session.user.id = token.id as string;
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
+        session.user.isAdmin = Boolean(token.isAdmin);
+      }
       return session;
     },
   },

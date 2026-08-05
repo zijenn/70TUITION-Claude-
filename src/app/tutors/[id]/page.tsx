@@ -7,8 +7,10 @@ import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { PortfolioCarousel } from "@/components/portfolio-carousel";
+import { WhatsAppIcon } from "@/components/icons";
 import { postalDistrictLabel } from "@/lib/singapore-postal";
 import { formatSlots } from "@/lib/availability";
+import { whatsAppLink } from "@/lib/phone";
 import type { Tutor } from "@/types";
 
 export default function TutorProfilePage({ params }: { params: Promise<{ id: string }> }) {
@@ -66,6 +68,20 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
       ? formatSlots(tutor.availabilitySlots) + (tutor.avail ? ` · ${tutor.avail}` : "")
       : tutor.avail || "Not specified";
 
+  const mediaSlides = [
+    ...(tutor.videoUrl
+      ? [
+          <video key="video" src={tutor.videoUrl} controls playsInline className="portfolio-slide-img">
+            Sorry, your browser doesn&apos;t support embedded videos.
+          </video>,
+        ]
+      : []),
+    ...tutor.galleryUrls.map((url) => (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img key={url} src={url} alt="" className="portfolio-slide-img" />
+    )),
+  ];
+
   function handleChat() {
     requireAuth(() => router.push(`/messages/${tutor!.userId}`));
   }
@@ -83,27 +99,17 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         ← Back to Tutors
       </Link>
 
-      {tutor.videoUrl && (
-        <video src={tutor.videoUrl} controls playsInline className="tutor-page-video" />
-      )}
-
-      {tutor.galleryUrls.length > 0 && (
-        <PortfolioCarousel
-          large
-          slides={tutor.galleryUrls.map((url) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={url} src={url} alt="" className="portfolio-slide-img" />
-          ))}
-        />
-      )}
-
-      <div className="tutor-page-head">
-        <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} size={256} />
-        <h2>{tutor.name}</h2>
-        <div className="sub-line">
-          {tutor.edu} · {tutor.gender} · {tutor.ft ? "Full-time" : "Part-time"} tutor
+      <div className="tutor-page-titlebar">
+        <div>
+          <h2 className="tutor-page-title">{tutor.name}</h2>
+          <div className="sub-line">
+            {tutor.edu} · {tutor.gender} · {tutor.ft ? "Full-time" : "Part-time"} tutor
+          </div>
         </div>
+        <Avatar seed={tutor.name} photoUrl={tutor.photoUrl} size={56} />
       </div>
+
+      {mediaSlides.length > 0 && <PortfolioCarousel large slides={mediaSlides} />}
 
       <div className="modal-section">
         <span className="label">About</span>
@@ -180,14 +186,27 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
           </button>
         </div>
       ) : (
-        <div className="modal-actions">
-          <button className="btn-primary" onClick={handleChat}>
-            Chat
-          </button>
-          <button className="btn-ghost" onClick={handleShortlist}>
-            {likeState.liked ? "✓ Shortlisted" : "+ Shortlist"}
-          </button>
-        </div>
+        <>
+          <div className="modal-actions">
+            <button className="btn-primary" onClick={handleChat}>
+              Chat
+            </button>
+            <button className="btn-ghost" onClick={handleShortlist}>
+              {likeState.liked ? "✓ Shortlisted" : "+ Shortlist"}
+            </button>
+          </div>
+          {tutor.phoneNumber && (
+            <a
+              className="whatsapp-btn"
+              href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <WhatsAppIcon />
+              WhatsApp · {tutor.phoneNumber}
+            </a>
+          )}
+        </>
       )}
     </section>
   );

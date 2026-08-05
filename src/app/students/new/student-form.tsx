@@ -94,6 +94,22 @@ export function StudentForm() {
     }
   }
 
+  async function handleDelete() {
+    if (!confirm("Delete your student profile? This removes your listing and can't be undone.")) return;
+    setSaving(true);
+    try {
+      const res = await fetch("/api/profiles/student", { method: "DELETE" });
+      if (res.ok) {
+        showToast("Your student profile has been deleted.");
+        router.push("/students");
+      } else {
+        setError("Could not delete your profile — try again.");
+      }
+    } finally {
+      setSaving(false);
+    }
+  }
+
   if (loading) {
     return (
       <p className="mono" style={{ color: "var(--ink-soft)" }}>
@@ -225,6 +241,11 @@ export function StudentForm() {
       <button className="btn-primary" type="submit" disabled={saving}>
         {saving ? "Saving…" : isEdit ? "Save changes" : "Post my profile"}
       </button>
+      {isEdit && (
+        <button type="button" className="delete-profile-btn" onClick={handleDelete} disabled={saving}>
+          Delete my profile
+        </button>
+      )}
     </form>
   );
 }

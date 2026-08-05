@@ -17,6 +17,7 @@ model User {
   emailVerified DateTime?
   image         String?
   passwordHash  String? // null for Google-only accounts
+  isAdmin       Boolean   @default(false)
 
   accounts Account[]
   sessions Session[]
@@ -91,6 +92,7 @@ model TutorProfile {
   photoUrl    String?
   galleryUrls String[] @default([])
   videoUrl    String?
+  phoneNumber String?
 
   availabilitySlots String[] @default([])
   personalityTraits String[] @default([])

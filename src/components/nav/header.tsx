@@ -62,6 +62,11 @@ export function Header() {
               {tab.label}
             </Link>
           ))}
+          {session?.user?.isAdmin && (
+            <Link href="/admin" className={`tab-btn${pathname?.startsWith("/admin") ? " active" : ""}`}>
+              Admin
+            </Link>
+          )}
         </nav>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           {status === "authenticated" && (

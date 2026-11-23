@@ -1907,3 +1907,431 @@ button.thread-counterpart:hover h2 {
   color: rgba(255, 255, 255, 0.72);
   margin-top: 2px;
 }
+
+/* ---------- TUTOR PROFILE PAGE ---------- */
+.tp {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 24px 100px;
+}
+.tp-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  align-items: flex-start;
+}
+.tp-main {
+  flex: 999 1 560px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.tp-side {
+  flex: 1 1 300px;
+  min-width: 0;
+  position: sticky;
+  top: 88px;
+}
+.tp-hero {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: center;
+}
+.avatar.tp-photo {
+  border-radius: 28px;
+  flex: none;
+}
+.tp-hero-text {
+  flex: 1 1 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tp-hero-text h1 {
+  margin: 0;
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 700;
+  text-align: left;
+}
+.tp-line {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.tp-tags,
+.tp-trait-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tp-tags {
+  margin-top: 4px;
+}
+.tp-tags span {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--paper-dim);
+  color: var(--ink-soft);
+}
+.tp-trait-row span {
+  font-size: 14px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.tp-media {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.tp-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.tp-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tp-card-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+}
+.tp-card-head span,
+.tp-note,
+.tp-sublabel {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.tp-note {
+  margin: 0;
+}
+.tp-sublabel {
+  font-weight: 600;
+}
+.tp-bio {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+.tp-traits {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tp-portfolio {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+.tp-portfolio figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tp-portfolio img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 14px;
+  background: var(--paper-dim);
+}
+.tp-portfolio figcaption {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* What I teach */
+.tm-scroll,
+.ag-scroll {
+  overflow-x: auto;
+}
+.tm {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+.tm thead th {
+  padding: 0 8px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-align: center;
+}
+.tm thead th:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+.tm tbody th {
+  text-align: left;
+  font-weight: 500;
+  padding: 14px 8px 14px 0;
+  border-top: 1px solid var(--line);
+}
+.tm td {
+  text-align: center;
+  padding: 14px 8px;
+  border-top: 1px solid var(--line);
+}
+.tm-yes {
+  width: 22px;
+  height: 22px;
+  vertical-align: middle;
+}
+.tm-yes circle {
+  fill: var(--gold-soft);
+}
+.tm-yes path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tm-no {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--line);
+  vertical-align: middle;
+}
+.tm-loose {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* When I'm free */
+.ag {
+  min-width: 540px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ag-row {
+  display: grid;
+  grid-template-columns: 120px repeat(7, minmax(48px, 1fr));
+  gap: 6px;
+}
+.ag-day {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  padding-bottom: 4px;
+}
+.ag-band {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 8px;
+}
+.ag-band b {
+  font-size: 14px;
+}
+.ag-band small {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+.ag-cell {
+  height: 52px;
+  border-radius: 10px;
+  background: var(--paper-dim);
+}
+.ag-cell.on {
+  background: var(--gold);
+}
+.ag-legend {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.ag-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ag-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  background: var(--paper-dim);
+  border: 1px solid var(--line);
+}
+.ag-swatch.on {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+/* Side card */
+.tp-side-card {
+  background: var(--card-bg);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.tp-rate {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.tp-rate strong {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.tp-rate span {
+  font-size: 15px;
+  color: var(--ink-soft);
+}
+.tp-facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 14px;
+}
+.tp-facts li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.tp-facts svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin-top: 1px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tp-facts div {
+  display: flex;
+  flex-direction: column;
+}
+.tp-facts span {
+  color: var(--ink-soft);
+}
+.tp-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tp-btn {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+}
+.tp-btn svg {
+  width: 18px;
+  height: 18px;
+}
+.tp-btn-main {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+.tp-btn-wa {
+  background: #e6f4ea;
+  color: #14532d;
+}
+.tp-btn-ghost {
+  background: var(--card-bg);
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+.tp-btn-ghost svg {
+  fill: none;
+  stroke: #b5352f;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tp-btn-ghost svg.liked {
+  fill: #b5352f;
+}
+.tp-fine {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  text-align: center;
+}
+@media (max-width: 900px) {
+  .tp-side {
+    position: static;
+  }
+}
+.tm-phone,
+.ag-phone {
+  display: none;
+}
+.ag-phone-row {
+  display: grid;
+  grid-template-columns: 48px repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+.ag-phone .ag-cell {
+  height: 36px;
+}
+@media (max-width: 640px) {
+  .tm-scroll,
+  .ag-scroll {
+    display: none;
+  }
+  .tm-phone {
+    display: block;
+  }
+  .ag-phone {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .tp-card {
+    padding: 20px;
+  }
+  .tp-hero-text h1 {
+    font-size: 30px;
+  }
+  .avatar.tp-photo {
+    width: 96px !important;
+    height: 96px !important;
+    border-radius: 22px;
+    font-size: 32px !important;
+  }
+}

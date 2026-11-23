@@ -65,3 +65,45 @@ export function slotsToCells(slots: string[]): Set<string> {
   }
   return cells;
 }
+
+// ---------- Profile page: weekly grid by time of day ----------
+
+export const TIME_BANDS = [
+  { key: "morning", label: "Morning", hours: "8am–12pm", start: 6, end: 12 },
+  { key: "afternoon", label: "Afternoon", hours: "12–5pm", start: 12, end: 17 },
+  { key: "evening", label: "Evening", hours: "5–10pm", start: 17, end: 24 },
+] as const;
+
+/** For each time band, which days (indexes into DAYS_OF_WEEK) have any slot overlapping it. */
+export function availabilityGrid(slots: string[]): boolean[][] {
+  const grid = TIME_BANDS.map(() => DAYS_OF_WEEK.map(() => false));
+  for (const slot of slots) {
+    const [day, startStr, endStr] = slot.split("|");
+    const d = DAYS_OF_WEEK.indexOf(day);
+    const start = Number(startStr);
+    const end = Number(endStr);
+    if (d < 0 || !Number.isFinite(start) || !Number.isFinite(end)) continue;
+    TIME_BANDS.forEach((b, i) => {
+      if (start < b.end && end > b.start) grid[i][d] = true;
+    });
+  }
+  return grid;
+}
+
+/** Plain-English summary, e.g. "Weekday evenings · Weekend mornings". */
+export function summarizeAvailability(slots: string[]): string {
+  const grid = availabilityGrid(slots);
+  const parts: string[] = [];
+  TIME_BANDS.forEach((b, i) => {
+    const days = grid[i].map((on, d) => (on ? d : -1)).filter((d) => d >= 0);
+    if (days.length === 0) return;
+    const band = b.label.toLowerCase() + "s";
+    const key = days.join(",");
+    if (key === "0,1,2,3,4,5,6") parts.push(`${b.label}s daily`);
+    else if (key === "0,1,2,3,4") parts.push(`Weekday ${band}`);
+    else if (key === "5,6") parts.push(`Weekend ${band}`);
+    else parts.push(`${days.map((d) => DAYS_OF_WEEK[d].slice(0, 3)).join(", ")} ${band}`);
+  });
+  const weekdayFirst = (p: string) => (p.startsWith("Weekday") ? 0 : p.startsWith("Weekend") ? 2 : 1);
+  return parts.sort((a, b) => weekdayFirst(a) - weekdayFirst(b)).join(" · ");
+}

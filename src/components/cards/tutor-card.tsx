@@ -5,8 +5,8 @@ import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { locationLabelFor } from "@/lib/singapore-postal";
-import { GraduationCapIcon, BookIcon, PinIcon } from "@/components/icons";
-import { SubjectList } from "@/components/subject-list";
+import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
+import { LevelBadges, SubjectSummary } from "@/components/subject-list";
 import type { Tutor } from "@/types";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
@@ -29,9 +29,13 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
           <GraduationCapIcon />
           {tutor.edu}
         </div>
-        <div className="info-row align-top">
+        <div className="info-row">
           <BookIcon />
-          <SubjectList subjects={tutor.subjects} />
+          <SubjectSummary subjects={tutor.subjects} />
+        </div>
+        <div className="info-row">
+          <LevelsIcon />
+          <LevelBadges subjects={tutor.subjects} fallback={tutor.levels} />
         </div>
         <div className="info-row">
           <PinIcon />

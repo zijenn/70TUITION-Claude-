@@ -1,6 +1,6 @@
 "use client";
 
-import { SubjectList } from "@/components/subject-list";
+import { LevelBadges, SubjectList } from "@/components/subject-list";
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -150,7 +150,9 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         </div>
         <div className="item">
           <div className="k">Levels</div>
-          <div className="v">{tutor.levels.join(", ")}</div>
+          <div className="v">
+            <LevelBadges subjects={tutor.subjects} fallback={tutor.levels} />
+          </div>
         </div>
         <div className="item">
           <div className="k">Subjects</div>

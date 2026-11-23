@@ -267,6 +267,40 @@ export function groupSubjects(values: string[]): { label: string | null; subject
   return groups;
 }
 
+// Tiny badge text used next to a subject ("English  Pri  Sec  IP").
+export const LEVEL_BADGE_LABEL: Record<string, string> = {
+  Preschool: "Pre",
+  Primary: "Pri",
+  Secondary: "Sec",
+  IP: "IP",
+  JC: "JC",
+  IB: "IB",
+  "Poly/Uni": "Poly/Uni",
+  Adult: "Adult",
+};
+
+/** Subject-first view: each subject once, with the levels it's taught at (short labels, display order). */
+export function subjectsWithLevels(values: string[]): { subject: string; levels: string[] }[] {
+  const order = [...new Set(Object.values(GROUP_SHORT_LABEL))];
+  const map = new Map<string, Set<string>>();
+  for (const v of values) {
+    const i = v.indexOf(SUBJECT_KEY_SEP);
+    const label = i > 0 ? v.slice(0, i) : null;
+    const known = label !== null && order.includes(label);
+    const subject = known ? v.slice(i + SUBJECT_KEY_SEP.length) : v;
+    if (!map.has(subject)) map.set(subject, new Set());
+    if (known) map.get(subject)!.add(label!);
+  }
+  return [...map].map(([subject, lv]) => ({ subject, levels: order.filter((l) => lv.has(l)) }));
+}
+
+/** Short levels taught, in display order, derived from stored subjects. */
+export function levelsTaught(values: string[]): string[] {
+  const order = [...new Set(Object.values(GROUP_SHORT_LABEL))];
+  const seen = new Set(values.map((v) => v.split(SUBJECT_KEY_SEP)[0]));
+  return order.filter((l) => seen.has(l));
+}
+
 /** One-line summary, e.g. "Primary School: English Language, Mathematics · Secondary School: English Language". */
 export function formatSubjects(values: string[]): string {
   return groupSubjects(values)

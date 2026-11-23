@@ -6,6 +6,7 @@ import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { locationLabelFor } from "@/lib/singapore-postal";
 import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
+import { SubjectList } from "@/components/subject-list";
 import type { Tutor } from "@/types";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
@@ -32,9 +33,9 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
           <LevelsIcon />
           {tutor.levels.join(", ")}
         </div>
-        <div className="info-row">
+        <div className="info-row align-top">
           <BookIcon />
-          {tutor.subjects.join(", ")}
+          <SubjectList subjects={tutor.subjects} />
         </div>
         <div className="info-row">
           <PinIcon />

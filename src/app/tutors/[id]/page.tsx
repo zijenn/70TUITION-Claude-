@@ -1,5 +1,6 @@
 "use client";
 
+import { SubjectList } from "@/components/subject-list";
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -153,7 +154,9 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         </div>
         <div className="item">
           <div className="k">Subjects</div>
-          <div className="v">{tutor.subjects.join(", ")}</div>
+          <div className="v">
+            <SubjectList subjects={tutor.subjects} />
+          </div>
         </div>
         <div className="item">
           <div className="k">Joined</div>

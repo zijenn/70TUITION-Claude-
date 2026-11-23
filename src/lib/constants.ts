@@ -206,3 +206,62 @@ export const LEVEL_TO_SUBJECT_GROUPS: Record<string, string[]> = {
   "Poly/Uni": ["Poly/Uni"],
   Adult: ["Adult"],
 };
+
+// Short label used as the prefix of a stored tutor subject, and as the heading
+// when subjects are displayed grouped. JC H1/H2/H3 share "JC" — their subject
+// names already carry the H-tier, so they stay unique.
+export const GROUP_SHORT_LABEL: Record<string, string> = {
+  Preschool: "Preschool",
+  "Primary (PSLE)": "Primary",
+  "Secondary (O-Level / N-Level)": "Secondary",
+  "Integrated Programme (IP)": "IP",
+  "JC - H1": "JC",
+  "JC - H2": "JC",
+  "JC - H3": "JC",
+  "IB (Diploma Programme)": "IB",
+  "Poly/Uni": "Poly/Uni",
+  Adult: "Adult",
+};
+
+// Tutor subjects are stored level-scoped ("Primary · English Language") so the
+// same subject at two levels is two separate picks. Free-text "other" subjects
+// and older profiles store bare names, which have no prefix.
+export const SUBJECT_KEY_SEP = " · ";
+
+export function subjectKey(group: string, subject: string): string {
+  return `${GROUP_SHORT_LABEL[group] ?? group}${SUBJECT_KEY_SEP}${subject}`;
+}
+
+const KNOWN_SUBJECT_KEYS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects.map((s) => subjectKey(g.group, s))));
+
+export function isKnownSubjectKey(value: string): boolean {
+  return KNOWN_SUBJECT_KEYS.has(value);
+}
+
+/** Group subjects by level for display: [{ label: "Primary", subjects: ["English Language", "Mathematics"] }, ...]. */
+export function groupSubjects(values: string[]): { label: string | null; subjects: string[] }[] {
+  const order = [...new Set(Object.values(GROUP_SHORT_LABEL))];
+  const byLabel = new Map<string, string[]>();
+  const loose: string[] = [];
+  for (const v of values) {
+    const i = v.indexOf(SUBJECT_KEY_SEP);
+    const label = i > 0 ? v.slice(0, i) : null;
+    if (label && order.includes(label)) {
+      byLabel.set(label, [...(byLabel.get(label) ?? []), v.slice(i + SUBJECT_KEY_SEP.length)]);
+    } else {
+      loose.push(v);
+    }
+  }
+  const groups: { label: string | null; subjects: string[] }[] = order
+    .filter((l) => byLabel.has(l))
+    .map((l) => ({ label: l, subjects: byLabel.get(l)! }));
+  if (loose.length) groups.push({ label: groups.length ? "Others" : null, subjects: loose });
+  return groups;
+}
+
+/** One-line summary, e.g. "Primary: English Language, Mathematics · Secondary: English Language". */
+export function formatSubjects(values: string[]): string {
+  return groupSubjects(values)
+    .map((g) => (g.label ? `${g.label}: ${g.subjects.join(", ")}` : g.subjects.join(", ")))
+    .join(SUBJECT_KEY_SEP);
+}

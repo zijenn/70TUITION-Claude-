@@ -13,7 +13,7 @@ export const tutorProfileSchema = z.object({
   name: z.string().trim().min(1).max(100),
   edu: z.string().trim().min(1).max(150),
   levels: z.array(z.enum(LEVELS as [string, ...string[]])).min(1),
-  subjects: z.array(z.string().trim().min(1)).min(1).max(10),
+  subjects: z.array(z.string().trim().min(1).max(120)).min(1).max(40),
   region: z.enum(REGIONS as [string, ...string[]]),
   postalCode: z
     .string()

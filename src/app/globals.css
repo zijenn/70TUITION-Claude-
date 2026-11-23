@@ -470,6 +470,22 @@ html:has(.intro-scroller) {
   flex-shrink: 0;
   color: var(--gold);
 }
+.info-row.align-top {
+  align-items: flex-start;
+}
+.subject-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.subject-list-level {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  margin-right: 6px;
+}
 .info-row.lead {
   font-size: 15px;
   color: var(--ink);

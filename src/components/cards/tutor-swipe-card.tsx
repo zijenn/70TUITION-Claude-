@@ -1,3 +1,4 @@
+import { formatSubjects } from "@/lib/constants";
 import { colorFor, initials } from "@/lib/avatar";
 import { locationLabelFor } from "@/lib/singapore-postal";
 import type { Tutor } from "@/types";
@@ -31,7 +32,7 @@ export function TutorSwipeCard({ tutor }: { tutor: Tutor }) {
         </h3>
         <div className="tutor-swipe-sub">{tutor.edu}</div>
         <div className="tutor-swipe-sub">
-          {tutor.subjects.slice(0, 3).join(", ")} · {locationLabel}
+          {formatSubjects(tutor.subjects.slice(0, 3))} · {locationLabel}
         </div>
       </div>
     </div>

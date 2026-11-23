@@ -9,9 +9,30 @@ import { VideoUploadSlot } from "@/components/video-upload-slot";
 import { AvailabilityGrid } from "@/components/availability-grid";
 import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
 import { PostalCodePreview } from "@/components/postal-code-preview";
-import { LEVEL_TO_SUBJECT_GROUPS, LEVELS, PERSONALITY_TRAITS, REGIONS, SUBJECT_GROUPS } from "@/lib/constants";
+import {
+  LEVEL_TO_SUBJECT_GROUPS,
+  LEVELS,
+  PERSONALITY_TRAITS,
+  REGIONS,
+  SUBJECT_GROUPS,
+  isKnownSubjectKey,
+  subjectKey,
+} from "@/lib/constants";
 
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
+
+// Older profiles stored bare names ("English Language"). Expand each to a
+// level-scoped key for every selected level whose groups offer it.
+function toSubjectKeys(stored: string[], levels: string[]): string[] {
+  const groups = SUBJECT_GROUPS.filter((g) => levels.some((l) => (LEVEL_TO_SUBJECT_GROUPS[l] ?? []).includes(g.group)));
+  return [
+    ...new Set(
+      stored.flatMap((s) =>
+        isKnownSubjectKey(s) ? [s] : groups.filter((g) => g.subjects.includes(s)).map((g) => subjectKey(g.group, s))
+      )
+    ),
+  ];
+}
 
 type FormState = {
   name: string;
@@ -76,8 +97,8 @@ export function TutorForm() {
       .then((data) => {
         if (data.profile) {
           const p = data.profile;
-          const knownSubjects = p.subjects.filter((s: string) => ALL_SUBJECTS.has(s));
-          const otherSubjects = p.subjects.filter((s: string) => !ALL_SUBJECTS.has(s));
+          const knownSubjects = toSubjectKeys(p.subjects, p.levels);
+          const otherSubjects = p.subjects.filter((s: string) => !isKnownSubjectKey(s) && !ALL_SUBJECTS.has(s));
           setForm({
             name: p.name,
             edu: p.edu,
@@ -112,7 +133,7 @@ export function TutorForm() {
       const levels = f.levels.includes(level) ? f.levels.filter((l) => l !== level) : [...f.levels, level];
       const visibleGroups = new Set(levels.flatMap((l) => LEVEL_TO_SUBJECT_GROUPS[l] ?? []));
       const visibleSubjects = new Set(
-        SUBJECT_GROUPS.filter((g) => visibleGroups.has(g.group)).flatMap((g) => g.subjects)
+        SUBJECT_GROUPS.filter((g) => visibleGroups.has(g.group)).flatMap((g) => g.subjects.map((s) => subjectKey(g.group, s)))
       );
       return {
         ...f,
@@ -326,8 +347,8 @@ export function TutorForm() {
                     <input
                       type="checkbox"
                       style={{ width: "auto", marginRight: 6 }}
-                      checked={form.subjects.includes(s)}
-                      onChange={() => toggleSubject(s)}
+                      checked={form.subjects.includes(subjectKey(g.group, s))}
+                      onChange={() => toggleSubject(subjectKey(g.group, s))}
                     />
                     {s}
                   </label>

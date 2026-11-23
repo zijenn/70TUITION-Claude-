@@ -10,7 +10,6 @@ export default function AdminPage() {
   const { data: session, status } = useSession();
   const { showToast } = useUI();
   const [tutors, setTutors] = useState<ProfileRow[]>([]);
-  const [students, setStudents] = useState<ProfileRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   function load() {
@@ -20,7 +19,6 @@ export default function AdminPage() {
       .then((data) => {
         if (data) {
           setTutors(data.tutors ?? []);
-          setStudents(data.students ?? []);
         }
       })
       .finally(() => setLoading(false));
@@ -31,7 +29,7 @@ export default function AdminPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, session?.user?.isAdmin]);
 
-  async function handleDelete(kind: "tutor" | "student", id: string, title: string) {
+  async function handleDelete(kind: "tutor", id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
     const res = await fetch("/api/admin/profiles", {
       method: "DELETE",
@@ -72,7 +70,7 @@ export default function AdminPage() {
       <div className="listing-head">
         <span className="eyebrow">Admin</span>
         <h2>Manage profiles</h2>
-        <p>Delete any tutor or student listing from the site.</p>
+        <p>Delete any tutor listing from the site.</p>
       </div>
 
       <div className="admin-section">
@@ -92,22 +90,6 @@ export default function AdminPage() {
         </div>
       </div>
 
-      <div className="admin-section">
-        <h3>Students ({students.length})</h3>
-        <div className="admin-row-list">
-          {students.map((s) => (
-            <div className="admin-row" key={s.id}>
-              <div>
-                <div className="admin-row-title">{s.title}</div>
-                <div className="admin-row-sub">{s.email}</div>
-              </div>
-              <button className="btn-ghost" onClick={() => handleDelete("student", s.id, s.title)}>
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

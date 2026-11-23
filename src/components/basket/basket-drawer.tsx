@@ -47,8 +47,7 @@ export function BasketDrawer() {
                 className="basket-item"
                 onClick={() => {
                   closeBasket();
-                  if (item.kind === "tutor") router.push(`/tutors/${item.id}`);
-                  else openModal({ type: "profile", id: item.id });
+                  router.push(`/tutors/${item.id}`);
                 }}
               >
                 <Avatar seed={item.avatarSeed} photoUrl={item.photoUrl} size={44} />

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { RevealBlock } from "@/components/reveal-block";
 
 export default function IntroPage() {
-  const [stats, setStats] = useState<{ tutors: number; students: number } | null>(null);
+  const [stats, setStats] = useState<{ tutors: number } | null>(null);
 
   useEffect(() => {
     fetch("/api/stats")
@@ -43,7 +43,7 @@ export default function IntroPage() {
           <div>
             <h2>Learning should feel like a good conversation.</h2>
             <p>
-              Every tutor and student here shows up as a person first — not a listing, not a price tag. We just
+              Every tutor here shows up as a person first — not a listing, not a price tag. We just
               help you find the right one.
             </p>
           </div>
@@ -53,7 +53,7 @@ export default function IntroPage() {
           <div>
             <h2>Free for everyone.</h2>
             <p>
-              No commission — our vision is to create a place for students and tutors to find their ideal match
+              No commission — our vision is to create a place for students and parents to find their ideal tutor
               without having to worry about commission fees.
             </p>
             {stats && (
@@ -61,10 +61,6 @@ export default function IntroPage() {
                 <div>
                   <div className="stat-num">{stats.tutors.toLocaleString()}</div>
                   <div className="stat-label">Tutors listed</div>
-                </div>
-                <div>
-                  <div className="stat-num">{stats.students.toLocaleString()}</div>
-                  <div className="stat-label">Students looking</div>
                 </div>
                 <div>
                   <div className="stat-num">$0</div>

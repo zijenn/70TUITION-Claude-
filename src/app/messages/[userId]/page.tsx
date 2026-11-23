@@ -12,7 +12,7 @@ type Counterpart = {
   id: string;
   name: string;
   photoUrl: string | null;
-  profileKind: "tutor" | "student" | null;
+  profileKind: "tutor" | null;
   profileId: string | null;
 };
 
@@ -70,7 +70,7 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
 
   const myId = session?.user?.id;
 
-  const canOpenProfile = counterpart?.profileKind && counterpart?.profileId;
+  const canOpenProfile = counterpart?.profileKind === "tutor" && counterpart?.profileId;
 
   return (
     <section>
@@ -82,8 +82,7 @@ export default function ThreadPage({ params }: { params: Promise<{ userId: strin
           <button
             className="thread-counterpart"
             onClick={() => {
-              if (counterpart!.profileKind === "tutor") router.push(`/tutors/${counterpart!.profileId}`);
-              else openModal({ type: "profile", id: counterpart!.profileId! });
+              router.push(`/tutors/${counterpart!.profileId}`);
             }}
           >
             <Avatar seed={counterpart!.name} photoUrl={counterpart!.photoUrl} size={40} />

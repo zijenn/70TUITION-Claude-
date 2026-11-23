@@ -26,26 +26,6 @@ export type Tutor = {
   joined: string;
 };
 
-export type Student = {
-  id: string;
-  userId: string;
-  subject: string;
-  rate: number;
-  region: string;
-  postalCode: string | null;
-  resolvedArea: string | null;
-  timing: string;
-  freq: string;
-  duration: string;
-  genderPref: string;
-  school: string;
-  bio: string;
-  phoneNumber: string | null;
-  availabilitySlots: string[];
-  likes: number;
-  joined: string;
-};
-
 export type TargetType = "TUTOR" | "STUDENT";
 
 export type QuickMatchCriteria = {
@@ -63,7 +43,7 @@ export type ConversationSummary = {
 };
 
 export type ShortlistItem = {
-  kind: "tutor" | "student";
+  kind: "tutor";
   id: string;
   title: string;
   subline: string;

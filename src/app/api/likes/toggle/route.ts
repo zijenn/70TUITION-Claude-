@@ -3,11 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { likeToggleSchema } from "@/lib/validation";
 
-async function getBaseLikes(targetType: "TUTOR" | "STUDENT", targetId: string) {
-  if (targetType === "TUTOR") {
-    return prisma.tutorProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
-  }
-  return prisma.studentProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
+async function getBaseLikes(targetId: string) {
+  return prisma.tutorProfile.findUnique({ where: { id: targetId }, select: { baseLikes: true } });
 }
 
 export async function POST(req: Request) {
@@ -19,7 +16,7 @@ export async function POST(req: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const { targetType, targetId } = parsed.data;
 
-  const target = await getBaseLikes(targetType, targetId);
+  const target = await getBaseLikes(targetId);
   if (!target) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const existing = await prisma.like.findUnique({

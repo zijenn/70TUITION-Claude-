@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 // Edge-safe subset of the auth config — no Prisma-touching providers here.
 // Used directly by middleware.ts (which runs on the Edge runtime) and spread
 // into the full config in auth.ts.
-const PROTECTED_PREFIXES = ["/messages", "/tutors/new", "/students/new"];
+const PROTECTED_PREFIXES = ["/messages", "/tutors/new"];
 
 export const authConfig = {
   providers: [],

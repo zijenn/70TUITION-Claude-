@@ -11,7 +11,6 @@ import type { ConversationSummary } from "@/types";
 
 const TABS = [
   { href: "/tutors", label: "Tutors" },
-  { href: "/students", label: "Students" },
 ];
 
 export function Header() {

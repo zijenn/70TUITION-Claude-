@@ -5,7 +5,6 @@ import { useUI } from "@/components/providers/ui-provider";
 import { LoginModalContent } from "./login-modal";
 import { QuickMatchModalContent } from "./quickmatch-modal";
 import { PostModalContent } from "./post-modal";
-import { ProfileModalContent } from "./profile-modal";
 
 export function ModalHost() {
   const { modal, closeModal } = useUI();
@@ -27,9 +26,6 @@ export function ModalHost() {
     content = <PostModalContent kind={modal.kind} />;
     className = "modal login-modal";
     style = { maxWidth: 420 };
-  } else if (modal.type === "profile") {
-    content = <ProfileModalContent id={modal.id} />;
-    className = "modal";
   }
 
   return (

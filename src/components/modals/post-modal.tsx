@@ -2,7 +2,7 @@
 
 import { useUI } from "@/components/providers/ui-provider";
 
-export function PostModalContent({ kind }: { kind: "tutor" | "student" }) {
+export function PostModalContent({ kind }: { kind: "tutor" }) {
   const { closeModal, openModal } = useUI();
   return (
     <>

@@ -4,6 +4,6 @@ import { prisma } from "@/lib/prisma";
 export const revalidate = 300;
 
 export async function GET() {
-  const [tutors, students] = await Promise.all([prisma.tutorProfile.count(), prisma.studentProfile.count()]);
-  return NextResponse.json({ tutors, students });
+  const tutors = await prisma.tutorProfile.count();
+  return NextResponse.json({ tutors });
 }

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { BasketIcon, ChatIcon } from "@/components/icons";
+import { ThemeToggle } from "@/components/nav/theme-toggle";
 import type { ConversationSummary } from "@/types";
 
 const TABS = [
@@ -81,6 +82,7 @@ export function Header() {
               {shortlistCount > 0 && <span className="header-icon-badge">{shortlistCount}</span>}
             </button>
           )}
+          <ThemeToggle />
           <button className="login-btn" onClick={handleAuthClick}>
             {status === "authenticated" ? `Log out (${session?.user?.name?.split(" ")[0] ?? "Account"})` : "Log in"}
           </button>

@@ -223,6 +223,14 @@ export const GROUP_SHORT_LABEL: Record<string, string> = {
   Adult: "Adult",
 };
 
+// Heading shown above each level's subjects on cards and profiles.
+export const LEVEL_DISPLAY_LABEL: Record<string, string> = {
+  Primary: "Primary School",
+  Secondary: "Secondary School",
+  JC: "Junior College",
+  "Poly/Uni": "Poly / Uni",
+};
+
 // Tutor subjects are stored level-scoped ("Primary · English Language") so the
 // same subject at two levels is two separate picks. Free-text "other" subjects
 // and older profiles store bare names, which have no prefix.
@@ -238,7 +246,7 @@ export function isKnownSubjectKey(value: string): boolean {
   return KNOWN_SUBJECT_KEYS.has(value);
 }
 
-/** Group subjects by level for display: [{ label: "Primary", subjects: ["English Language", "Mathematics"] }, ...]. */
+/** Group subjects by level for display: [{ label: "Primary School", subjects: ["English Language", "Mathematics"] }, ...]. */
 export function groupSubjects(values: string[]): { label: string | null; subjects: string[] }[] {
   const order = [...new Set(Object.values(GROUP_SHORT_LABEL))];
   const byLabel = new Map<string, string[]>();
@@ -254,12 +262,12 @@ export function groupSubjects(values: string[]): { label: string | null; subject
   }
   const groups: { label: string | null; subjects: string[] }[] = order
     .filter((l) => byLabel.has(l))
-    .map((l) => ({ label: l, subjects: byLabel.get(l)! }));
+    .map((l) => ({ label: LEVEL_DISPLAY_LABEL[l] ?? l, subjects: byLabel.get(l)! }));
   if (loose.length) groups.push({ label: groups.length ? "Others" : null, subjects: loose });
   return groups;
 }
 
-/** One-line summary, e.g. "Primary: English Language, Mathematics · Secondary: English Language". */
+/** One-line summary, e.g. "Primary School: English Language, Mathematics · Secondary School: English Language". */
 export function formatSubjects(values: string[]): string {
   return groupSubjects(values)
     .map((g) => (g.label ? `${g.label}: ${g.subjects.join(", ")}` : g.subjects.join(", ")))

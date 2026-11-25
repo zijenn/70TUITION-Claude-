@@ -2784,10 +2784,20 @@ html.modal-open body {
     padding: 2px 2px 10px;
     margin-bottom: 4px;
   }
+  /* Equal-width items so the spacing is even; long names wrap to two lines. */
+  .subject-filter-row {
+    gap: 4px;
+  }
   .subject-filter-item {
     gap: 4px;
     font-size: 11px;
     padding: 2px;
+    width: 66px;
+    flex: none;
+    justify-content: flex-start;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
   }
   .subject-filter-icon {
     width: 36px;

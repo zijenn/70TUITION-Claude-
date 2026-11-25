@@ -2,6 +2,7 @@
 
 import { formatRate } from "@/lib/format";
 import { TeachMatrix } from "@/components/teach-matrix";
+import { LEVEL_DISPLAY_LABEL, levelsTaught, subjectsWithLevels } from "@/lib/constants";
 import { Credentials } from "@/components/credentials";
 import { AvailabilityWeek } from "@/components/availability-week";
 import { use, useEffect, useState } from "react";
@@ -67,6 +68,8 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
   const isOwnProfile = session?.user?.id === tutor.userId;
   const availabilitySummary = summarizeAvailability(tutor.availabilitySlots);
+  const subjectNames = subjectsWithLevels(tutor.subjects).map((s) => s.subject);
+  const levelNames = levelsTaught(tutor.subjects).map((l) => LEVEL_DISPLAY_LABEL[l] ?? l);
   const modeLabel = tutor.mode === "Both" ? "Online and in person" : tutor.mode === "Online" ? "Online only" : "In person";
   const area = areaLabelFor(tutor);
   const region = tutor.region !== "Online" ? tutor.region : null;
@@ -184,10 +187,16 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                   </div>
                 </li>
               )}
-              {availabilitySummary && (
+              {subjectNames.length > 0 && (
                 <li>
-                  <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
-                  <div><b>{availabilitySummary}</b></div>
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" /><path d="M4 19V5M8 7h7" /></svg>
+                  <div>
+                    <b>
+                      {subjectNames.slice(0, 3).join(", ")}
+                      {subjectNames.length > 3 && ` +${subjectNames.length - 3} more`}
+                    </b>
+                    {levelNames.length > 0 && <span>{levelNames.join(", ")}</span>}
+                  </div>
                 </li>
               )}
             </ul>

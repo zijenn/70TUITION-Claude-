@@ -2611,3 +2611,74 @@ button.thread-counterpart:hover h2 {
     max-height: calc(100vh - 200px);
   }
 }
+
+/* ---------- TUTOR PROFILE: PHONE LAYOUT (laptop unchanged) ---------- */
+@media (max-width: 640px) {
+  /* The site wrapper already pads 28px: pull the page out so content isn't double-padded. */
+  .tp {
+    margin: 0 -12px;
+    padding: 16px 0 80px;
+  }
+  .tp-layout {
+    gap: 20px;
+  }
+  .tp-main {
+    gap: 20px;
+  }
+  /* Photo beside the name, not above it. */
+  .tp-hero {
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .avatar.tp-photo {
+    width: 84px !important;
+    height: 84px !important;
+    border-radius: 20px;
+    font-size: 28px !important;
+  }
+  .tp-hero-text {
+    flex: 1 1 auto;
+    gap: 6px;
+  }
+  .tp-hero-text h1 {
+    font-size: 26px;
+  }
+  .tp-line {
+    font-size: 15px;
+  }
+  .tp-tags {
+    margin-top: 2px;
+    gap: 6px;
+  }
+  .tp-tags span {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+  /* Media sized to the screen instead of a 520px-tall box. */
+  .tp-media .portfolio-viewport.large {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .tp-card {
+    padding: 18px 16px;
+    gap: 14px;
+    border-radius: 16px;
+  }
+  .tp-card-head h2 {
+    font-size: 18px;
+  }
+  /* Stats side by side. */
+  .cr-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .cr-stats strong {
+    font-size: 24px;
+  }
+  .tp-side-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+}

@@ -2751,24 +2751,19 @@ html.modal-open body {
     flex: 1 1 100%;
     padding: 8px 14px !important;
   }
-  /* Sort / region / level / subject: one row you swipe sideways. */
+  /* Sort / region / level / subject: a 2x2 grid, no sideways swiping. */
   .filter-pills {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     flex: 1 1 100%;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    margin: 0 -12px;
-    padding: 0 12px;
-  }
-  .filter-pills::-webkit-scrollbar {
-    display: none;
+    gap: 8px;
   }
   .filter-pills .pill-select {
-    flex: none;
-    width: auto;
-    padding: 6px 30px 6px 12px !important;
-    font-size: 14px !important;
+    width: 100%;
+    min-width: 0;
+    padding: 8px 30px 8px 14px !important;
+    font-size: 16px !important;
+    text-overflow: ellipsis;
   }
   .toolbar .view-toggle button {
     padding: 6px 14px;
@@ -2803,48 +2798,69 @@ html.modal-open body {
     height: 17px;
   }
 
-  /* Two compact cards per row. */
+  /* One card per row: photo on the left, details on the right (like PropertyGuru / Grab listings). */
   .carousel {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
     padding: 4px 0 18px;
   }
   .carousel .card {
-    padding: 12px 10px 10px;
-    border-radius: 14px;
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-areas:
+      "photo name"
+      "photo info"
+      "foot foot";
+    column-gap: 14px;
+    row-gap: 4px;
+    padding: 14px;
+    border-radius: 16px;
   }
   .carousel .card:hover {
     transform: none;
   }
-  .carousel .card .tab-corner {
-    font-size: 9px;
-    padding: 3px 7px;
-  }
   .carousel .card-photo-head {
-    margin-bottom: 8px;
+    display: contents;
   }
   .carousel .card-photo-head .avatar {
-    width: 84px !important;
-    height: 84px !important;
-    font-size: 28px !important;
-    margin-bottom: 8px;
+    grid-area: photo;
+    width: 96px !important;
+    height: 96px !important;
+    font-size: 32px !important;
+    border-radius: 18px;
+    margin: 0;
   }
   .carousel .card h4 {
-    font-size: 15px;
+    grid-area: name;
+    text-align: left;
+    font-size: 17px;
+    font-weight: 600;
     line-height: 1.25;
+    padding-right: 70px;
+  }
+  .carousel .card .tab-corner {
+    font-size: 10px;
+    padding: 3px 8px;
   }
   .carousel .info-rows {
-    gap: 6px;
+    grid-area: info;
+    gap: 5px;
+    min-width: 0;
+    margin: 0;
+    align-self: start;
+  }
+  .carousel .card {
+    grid-template-rows: auto 1fr auto;
   }
   .carousel .info-row,
   .carousel .info-row.lead {
-    font-size: 12px;
-    gap: 6px;
+    font-size: 14px;
+    gap: 7px;
     min-width: 0;
   }
   .carousel .info-row > svg {
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
     flex: none;
   }
   .carousel .info-row > span,
@@ -2855,32 +2871,24 @@ html.modal-open body {
     white-space: nowrap;
   }
   .carousel .card-inst {
-    font-size: 11px;
+    font-size: 13px;
   }
-  /* Levels row and one-liner are on the profile; keep the card short. */
   .carousel .info-row:nth-child(3),
   .carousel .oneliner {
     display: none;
   }
   .carousel .card-foot {
-    margin-top: 8px;
-    padding-top: 8px;
+    grid-area: foot;
+    margin-top: 10px;
+    padding-top: 10px;
     align-items: center;
   }
   .carousel .rate-tag {
-    font-size: 13px;
+    font-size: 16px;
   }
-  .carousel .rate-tag .card-exp {
-    font-size: 10.5px;
-  }
-  /* Heart only; the word is read out to screen readers. */
   .carousel .like-btn {
-    font-size: 0;
-    min-height: 36px;
-    padding: 0;
+    font-size: 14px;
+    min-height: 40px;
   }
-  .carousel .like-btn svg {
-    width: 20px;
-    height: 20px;
-  }
+
 }

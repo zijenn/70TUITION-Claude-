@@ -75,7 +75,6 @@ export default function TutorsPage() {
       <div className="listing-head">
         <span className="eyebrow">Browse</span>
         <h2>Tutors</h2>
-        <p>Real people, real syllabuses. Tap a card to read the full profile.</p>
       </div>
       <div className="toolbar pill-toolbar">
         <input

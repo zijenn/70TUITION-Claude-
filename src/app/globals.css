@@ -2726,3 +2726,161 @@ html.modal-open body {
     padding-right: 12px;
   }
 }
+
+/* ---------- TUTORS PAGE ON PHONES (laptop unchanged) ---------- */
+.filter-pills {
+  display: contents;
+}
+@media (max-width: 640px) {
+  .listing-head {
+    padding: 14px 0 2px;
+  }
+  .listing-head .eyebrow {
+    font-size: 11px;
+  }
+  .listing-head h2 {
+    font-size: 26px;
+    margin: 2px 0 2px;
+  }
+  .toolbar.pill-toolbar {
+    gap: 8px;
+    padding: 6px 0 4px;
+    margin-bottom: 6px;
+  }
+  .toolbar .search-input {
+    flex: 1 1 100%;
+    padding: 8px 14px !important;
+  }
+  /* Sort / region / level / subject: one row you swipe sideways. */
+  .filter-pills {
+    display: flex;
+    flex: 1 1 100%;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 -12px;
+    padding: 0 12px;
+  }
+  .filter-pills::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-pills .pill-select {
+    flex: none;
+    width: auto;
+    padding: 6px 30px 6px 12px !important;
+    font-size: 14px !important;
+  }
+  .toolbar .view-toggle button {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+  .toolbar .spacer {
+    display: block;
+    flex: 1;
+  }
+  .toolbar .post-btn {
+    padding: 7px 12px;
+    font-size: 13px;
+  }
+
+  /* Subject icons: smaller. */
+  .subject-filter-row {
+    gap: 10px;
+    padding: 2px 2px 10px;
+    margin-bottom: 4px;
+  }
+  .subject-filter-item {
+    gap: 4px;
+    font-size: 11px;
+    padding: 2px;
+  }
+  .subject-filter-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .subject-filter-icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  /* Two compact cards per row. */
+  .carousel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 4px 0 18px;
+  }
+  .carousel .card {
+    padding: 12px 10px 10px;
+    border-radius: 14px;
+  }
+  .carousel .card:hover {
+    transform: none;
+  }
+  .carousel .card .tab-corner {
+    font-size: 9px;
+    padding: 3px 7px;
+  }
+  .carousel .card-photo-head {
+    margin-bottom: 8px;
+  }
+  .carousel .card-photo-head .avatar {
+    width: 84px !important;
+    height: 84px !important;
+    font-size: 28px !important;
+    margin-bottom: 8px;
+  }
+  .carousel .card h4 {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+  .carousel .info-rows {
+    gap: 6px;
+  }
+  .carousel .info-row,
+  .carousel .info-row.lead {
+    font-size: 12px;
+    gap: 6px;
+    min-width: 0;
+  }
+  .carousel .info-row > svg {
+    width: 13px;
+    height: 13px;
+    flex: none;
+  }
+  .carousel .info-row > span,
+  .carousel .card-inst {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .carousel .card-inst {
+    font-size: 11px;
+  }
+  /* Levels row and one-liner are on the profile; keep the card short. */
+  .carousel .info-row:nth-child(3),
+  .carousel .oneliner {
+    display: none;
+  }
+  .carousel .card-foot {
+    margin-top: 8px;
+    padding-top: 8px;
+    align-items: center;
+  }
+  .carousel .rate-tag {
+    font-size: 13px;
+  }
+  .carousel .rate-tag .card-exp {
+    font-size: 10.5px;
+  }
+  /* Heart only; the word is read out to screen readers. */
+  .carousel .like-btn {
+    font-size: 0;
+    min-height: 36px;
+    padding: 0;
+  }
+  .carousel .like-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}

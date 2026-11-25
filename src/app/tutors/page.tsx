@@ -7,8 +7,16 @@ import { TutorCard } from "@/components/cards/tutor-card";
 import { TutorSwipeCard } from "@/components/cards/tutor-swipe-card";
 import { SwipeDeck } from "@/components/swipe-deck";
 import { useUI } from "@/components/providers/ui-provider";
-import { SubjectFilterRow, subjectMatchesCategory } from "@/components/subject-filter-row";
-import { LEVEL_DISPLAY_LABEL, REGIONS, levelsTaught, subjectsWithLevels } from "@/lib/constants";
+import {
+  SubjectFilterRow,
+  subjectMatchesCategory,
+} from "@/components/subject-filter-row";
+import {
+  LEVEL_DISPLAY_LABEL,
+  REGIONS,
+  levelsTaught,
+  subjectsWithLevels,
+} from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
 import type { Tutor } from "@/types";
 
@@ -45,10 +53,20 @@ export default function TutorsPage() {
 
   // Dropdown options come from the tutors listed, by subject name (each once) and level.
   const allSubjects = useMemo(
-    () => [...new Set(tutors.flatMap((t) => subjectsWithLevels(t.subjects).map((s) => s.subject)))].sort(),
-    [tutors]
+    () =>
+      [
+        ...new Set(
+          tutors.flatMap((t) =>
+            subjectsWithLevels(t.subjects).map((s) => s.subject),
+          ),
+        ),
+      ].sort(),
+    [tutors],
   );
-  const allLevels = useMemo(() => levelsTaught(tutors.flatMap((t) => t.subjects)), [tutors]);
+  const allLevels = useMemo(
+    () => levelsTaught(tutors.flatMap((t) => t.subjects)),
+    [tutors],
+  );
 
   // Filtering runs on the cleaned-up subjects/regions the API returns, so older
   // profiles saved under previous names still match.
@@ -56,16 +74,23 @@ export default function TutorsPage() {
     () =>
       tutors.filter((t) => {
         if (region && t.region !== region) return false;
-        if (category && !subjectMatchesCategory(t.subjects, category)) return false;
+        if (category && !subjectMatchesCategory(t.subjects, category))
+          return false;
         const rows = subjectsWithLevels(t.subjects);
-        if (subject && level) return rows.some((r) => r.subject === subject && r.levels.includes(level));
+        if (subject && level)
+          return rows.some(
+            (r) => r.subject === subject && r.levels.includes(level),
+          );
         if (subject) return rows.some((r) => r.subject === subject);
         if (level) return rows.some((r) => r.levels.includes(level));
         return true;
       }),
-    [tutors, category, region, subject, level]
+    [tutors, category, region, subject, level],
   );
-  const sorted = useMemo(() => sortItems(categoryFiltered, sortBy), [categoryFiltered, sortBy]);
+  const sorted = useMemo(
+    () => sortItems(categoryFiltered, sortBy),
+    [categoryFiltered, sortBy],
+  );
   const hasOwnProfile = tutors.some((t) => t.userId === session?.user?.id);
 
   function handlePostClick() {
@@ -94,46 +119,75 @@ export default function TutorsPage() {
           value={nameInput}
           onChange={(e) => setNameInput(e.target.value)}
         />
-        <select className="pill-select" value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
-          <option value="likes">Most liked</option>
-          <option value="rate-low">Rate: low to high</option>
-          <option value="rate-high">Rate: high to low</option>
-        </select>
-        <select className="pill-select" value={region} onChange={(e) => setRegion(e.target.value)}>
-          <option value="">Region: All</option>
-          {REGIONS.map((r) => (
-            <option key={r} value={r}>
-              {r}
-            </option>
-          ))}
-        </select>
-        <select className="pill-select" value={level} onChange={(e) => setLevel(e.target.value)}>
-          <option value="">Level: All</option>
-          {allLevels.map((l) => (
-            <option key={l} value={l}>
-              {LEVEL_DISPLAY_LABEL[l] ?? l}
-            </option>
-          ))}
-        </select>
-        <select className="pill-select" value={subject} onChange={(e) => setSubject(e.target.value)}>
-          <option value="">Subject: All</option>
-          {allSubjects.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </select>
+        {/* Laptop: these sit inline as before (display: contents). Phone: one swipeable row. */}
+        <div className="filter-pills">
+          <select
+            className="pill-select"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as SortBy)}
+          >
+            <option value="likes">Most liked</option>
+            <option value="rate-low">Rate: low to high</option>
+            <option value="rate-high">Rate: high to low</option>
+          </select>
+          <select
+            className="pill-select"
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+          >
+            <option value="">Region: All</option>
+            {REGIONS.map((r) => (
+              <option key={r} value={r}>
+                {r}
+              </option>
+            ))}
+          </select>
+          <select
+            className="pill-select"
+            value={level}
+            onChange={(e) => setLevel(e.target.value)}
+          >
+            <option value="">Level: All</option>
+            {allLevels.map((l) => (
+              <option key={l} value={l}>
+                {LEVEL_DISPLAY_LABEL[l] ?? l}
+              </option>
+            ))}
+          </select>
+          <select
+            className="pill-select"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+          >
+            <option value="">Subject: All</option>
+            {allSubjects.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="view-toggle">
-          <button className={view === "grid" ? "active" : ""} onClick={() => setView("grid")} type="button">
+          <button
+            className={view === "grid" ? "active" : ""}
+            onClick={() => setView("grid")}
+            type="button"
+          >
             Grid
           </button>
-          <button className={view === "swipe" ? "active" : ""} onClick={() => setView("swipe")} type="button">
+          <button
+            className={view === "swipe" ? "active" : ""}
+            onClick={() => setView("swipe")}
+            type="button"
+          >
             Swipe
           </button>
         </div>
         <div className="spacer"></div>
         <button className="post-btn" onClick={handlePostClick}>
-          {hasOwnProfile ? "✎ Edit my tutor profile" : "+ Post yourself as a tutor"}
+          {hasOwnProfile
+            ? "✎ Edit my tutor profile"
+            : "+ Post yourself as a tutor"}
         </button>
       </div>
       <SubjectFilterRow selected={category} onSelect={setCategory} />

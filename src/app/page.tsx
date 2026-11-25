@@ -41,7 +41,7 @@ export default function IntroPage() {
                 </div>
                 <div>
                   <div className="stat-num">$0</div>
-                  <div className="stat-label">Commission, ever</div>
+                  <div className="stat-label">Commission</div>
                 </div>
               </div>
             )}

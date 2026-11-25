@@ -84,7 +84,7 @@ const EMPTY: FormState = {
   availabilitySlots: [],
   personalityTraits: [],
   portfolioItems: [],
-  credentials: { results: [], yearsExperience: "", studentsTaught: "", trackRecord: [] },
+  credentials: { yearsExperience: "", studentsTaught: "" },
 };
 
 export function TutorForm() {
@@ -127,10 +127,8 @@ export function TutorForm() {
             personalityTraits: p.personalityTraits ?? [],
             portfolioItems: Array.isArray(p.portfolioItems) ? p.portfolioItems : [],
             credentials: {
-              results: Array.isArray(p.results) ? p.results : [],
               yearsExperience: p.yearsExperience != null ? String(p.yearsExperience) : "",
               studentsTaught: p.studentsTaught != null ? String(p.studentsTaught) : "",
-              trackRecord: p.trackRecord ?? [],
             },
           });
           setIsEdit(true);

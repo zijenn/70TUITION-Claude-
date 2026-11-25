@@ -1,10 +1,10 @@
 import type { Tutor } from "@/types";
 
-/** Profile page: experience, own results, track record, certificates. Hidden when empty. */
+/** Profile page: experience and certificates. Hidden when empty. */
 export function Credentials({ tutor }: { tutor: Tutor }) {
-  const { yearsExperience, studentsTaught, results, trackRecord, portfolioItems } = tutor;
+  const { yearsExperience, studentsTaught, portfolioItems } = tutor;
   const hasStats = yearsExperience != null || studentsTaught != null;
-  if (!hasStats && results.length === 0 && trackRecord.length === 0 && portfolioItems.length === 0) return null;
+  if (!hasStats && portfolioItems.length === 0) return null;
 
   return (
     <section className="tp-card">
@@ -26,45 +26,6 @@ export function Credentials({ tutor }: { tutor: Tutor }) {
               <span>{studentsTaught === 1 ? "student taught" : "students taught"}</span>
             </div>
           )}
-        </div>
-      )}
-
-      {results.length > 0 && (
-        <div className="cr-block">
-          <div className="cr-block-head">
-            <span className="tp-sublabel">My own results</span>
-            <span className="cr-note">Self-reported</span>
-          </div>
-          <table className="cr-results">
-            <tbody>
-              {results.map((r, i) => (
-                <tr key={i}>
-                  <td className="cr-exam">{r.exam}</td>
-                  <td>
-                    <span className="cr-exam-inline">{r.exam}</span>
-                    {r.subject}
-                  </td>
-                  <td className="cr-grade">{r.grade}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {trackRecord.length > 0 && (
-        <div className="cr-block">
-          <span className="tp-sublabel">Track record</span>
-          <ul className="cr-track">
-            {trackRecord.map((t, i) => (
-              <li key={i}>
-                <svg aria-hidden="true" viewBox="0 0 24 24">
-                  <path d="M4 16l5-5 4 4 7-7M15 8h5v5" />
-                </svg>
-                {t}
-              </li>
-            ))}
-          </ul>
         </div>
       )}
 

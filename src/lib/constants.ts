@@ -305,18 +305,6 @@ export function formatSubjects(values: string[]): string {
     .join(SUBJECT_KEY_SEP);
 }
 
-// Exams a tutor can list their own results for.
-export const RESULT_EXAMS = [
-  "PSLE",
-  "GCE O-Level",
-  "GCE N-Level",
-  "GCE A-Level",
-  "IB Diploma",
-  "Polytechnic Diploma",
-  "University",
-  "Other",
-] as const;
-
 // Tutor's education level — the wording Singapore tutoring agencies use.
 export const EDUCATION_LEVELS = [
   "GCE O-Level",

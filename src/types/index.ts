@@ -22,15 +22,11 @@ export type Tutor = {
   availabilitySlots: string[];
   personalityTraits: string[];
   portfolioItems: { url: string; title: string }[];
-  results: ExamResult[];
   yearsExperience: number | null;
   studentsTaught: number | null;
-  trackRecord: string[];
   likes: number;
   joined: string;
 };
-
-export type ExamResult = { exam: string; subject: string; grade: string };
 
 export type TargetType = "TUTOR" | "STUDENT";
 

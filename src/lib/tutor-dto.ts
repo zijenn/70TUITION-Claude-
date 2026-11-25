@@ -3,7 +3,7 @@ import { canonicalSubjects } from "@/lib/constants";
 import { formatName, sentenceCase } from "@/lib/format";
 import type { TutorProfile } from "@prisma/client";
 import { formatJoined } from "./format";
-import type { ExamResult, Tutor } from "@/types";
+import type { Tutor } from "@/types";
 
 export function toTutorDto(p: TutorProfile, likes: number): Tutor {
   const portfolioItems = Array.isArray(p.portfolioItems)
@@ -34,10 +34,8 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     availabilitySlots: p.availabilitySlots,
     personalityTraits: p.personalityTraits,
     portfolioItems,
-    results: Array.isArray(p.results) ? (p.results as unknown as ExamResult[]) : [],
     yearsExperience: p.yearsExperience ?? null,
     studentsTaught: p.studentsTaught ?? null,
-    trackRecord: p.trackRecord ?? [],
     likes,
     joined: formatJoined(p.createdAt),
   };

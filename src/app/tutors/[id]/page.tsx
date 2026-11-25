@@ -2,7 +2,7 @@
 
 import { formatRate } from "@/lib/format";
 import { TeachMatrix } from "@/components/teach-matrix";
-import { LEVEL_DISPLAY_LABEL, levelsTaught, subjectsWithLevels } from "@/lib/constants";
+import { subjectsWithLevels } from "@/lib/constants";
 import { Credentials } from "@/components/credentials";
 import { AvailabilityWeek } from "@/components/availability-week";
 import { use, useEffect, useState } from "react";
@@ -69,7 +69,6 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   const isOwnProfile = session?.user?.id === tutor.userId;
   const availabilitySummary = summarizeAvailability(tutor.availabilitySlots);
   const subjectNames = subjectsWithLevels(tutor.subjects).map((s) => s.subject);
-  const levelNames = levelsTaught(tutor.subjects).map((l) => LEVEL_DISPLAY_LABEL[l] ?? l);
   const modeLabel = tutor.mode === "Both" ? "Online and in person" : tutor.mode === "Online" ? "Online only" : "In person";
   const area = areaLabelFor(tutor);
   const region = tutor.region !== "Online" ? tutor.region : null;
@@ -195,7 +194,6 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                       {subjectNames.slice(0, 3).join(", ")}
                       {subjectNames.length > 3 && ` +${subjectNames.length - 3} more`}
                     </b>
-                    {levelNames.length > 0 && <span>{levelNames.join(", ")}</span>}
                   </div>
                 </li>
               )}

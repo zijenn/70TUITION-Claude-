@@ -3,6 +3,7 @@ export type Tutor = {
   userId: string;
   name: string;
   edu: string;
+  institution: string | null;
   levels: string[];
   subjects: string[];
   region: string;

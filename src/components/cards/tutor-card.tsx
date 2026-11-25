@@ -28,13 +28,16 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
       <div className="info-rows">
         <div className="info-row lead">
           <GraduationCapIcon />
-          {tutor.edu}
-          {tutor.yearsExperience != null && tutor.yearsExperience > 0 && (
-            <span className="card-exp">
-              {" "}
-              · {tutor.yearsExperience} {tutor.yearsExperience === 1 ? "yr" : "yrs"} exp
-            </span>
-          )}
+          <span>
+            {tutor.edu}
+            {tutor.institution && <span className="card-exp">, {tutor.institution}</span>}
+            {tutor.yearsExperience != null && tutor.yearsExperience > 0 && (
+              <span className="card-exp">
+                {" "}
+                · {tutor.yearsExperience} {tutor.yearsExperience === 1 ? "yr" : "yrs"} exp
+              </span>
+            )}
+          </span>
         </div>
         <div className="info-row">
           <BookIcon />

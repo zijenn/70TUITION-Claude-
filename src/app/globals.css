@@ -2438,3 +2438,34 @@ button.thread-counterpart:hover h2 {
   color: var(--ink-soft);
   font-size: 14px;
 }
+.cr-edu {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.cr-edu svg {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cr-edu div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cr-edu strong {
+  font-size: 16px;
+  font-weight: 700;
+}
+.cr-edu span {
+  font-size: 14px;
+  color: var(--ink-soft);
+}

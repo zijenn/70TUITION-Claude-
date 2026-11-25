@@ -11,6 +11,7 @@ import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio
 import { PostalCodePreview } from "@/components/postal-code-preview";
 import { CredentialsEditor, credentialsPayload, type CredentialsValue } from "@/components/credentials-editor";
 import { regionForPostal } from "@/lib/singapore-postal";
+import { formatInstitution } from "@/lib/format";
 import {
   EDUCATION_LEVELS,
   LEVEL_TO_SUBJECT_GROUPS,
@@ -21,6 +22,15 @@ import {
   isKnownSubjectKey,
   subjectKey,
 } from "@/lib/constants";
+
+// Example institution for the education level picked.
+function institutionPlaceholder(edu: string): string {
+  if (edu === "GCE O-Level") return "Dunman High School";
+  if (edu === "GCE A-Level" || edu === "IB Diploma") return "Raffles Institution";
+  if (edu === "Polytechnic Diploma") return "Ngee Ann Polytechnic";
+  if (edu.includes("MOE")) return "Tampines Secondary School";
+  return "National University of Singapore";
+}
 
 // Hourly rates in $10 steps.
 const RATE_OPTIONS = Array.from({ length: 30 }, (_, i) => (i + 1) * 10);
@@ -46,6 +56,7 @@ function toSubjectKeys(stored: string[], levels: string[]): string[] {
 type FormState = {
   name: string;
   edu: string;
+  institution: string;
   levels: string[];
   subjects: string[];
   otherSubjects: string;
@@ -72,6 +83,7 @@ type FormState = {
 const EMPTY: FormState = {
   name: "",
   edu: "",
+  institution: "",
   levels: [],
   subjects: [],
   otherSubjects: "",
@@ -115,6 +127,7 @@ export function TutorForm() {
           setForm({
             name: p.name,
             edu: p.edu,
+            institution: p.institution ?? "",
             levels: p.levels,
             subjects: knownSubjects,
             otherSubjects: otherSubjects.join(", "),
@@ -221,6 +234,7 @@ export function TutorForm() {
         body: JSON.stringify({
           name: form.name,
           edu: form.edu,
+          institution: form.institution.trim() || null,
           levels: form.levels,
           subjects,
           region: form.mode === "Online" ? "Online" : form.region,
@@ -358,6 +372,21 @@ export function TutorForm() {
             ))}
           </select>
         </div>
+      </div>
+
+      <div className="field">
+        <label htmlFor="institution">Institution (optional)</label>
+        <input
+          id="institution"
+          value={form.institution}
+          maxLength={120}
+          placeholder={institutionPlaceholder(form.edu)}
+          onChange={(e) => setForm({ ...form, institution: e.target.value })}
+        />
+        <small className="field-hint">
+          Where you got your education level, or the school you teach at if you&apos;re an MOE teacher.
+          {form.institution.trim() && <> Shown as: {formatInstitution(form.institution)}</>}
+        </small>
       </div>
 
       <div className="field">

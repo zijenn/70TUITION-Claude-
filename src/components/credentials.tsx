@@ -1,15 +1,25 @@
 import type { Tutor } from "@/types";
 
-/** Profile page: experience and certificates. Hidden when empty. */
+/** Profile page: education, experience and certificates. */
 export function Credentials({ tutor }: { tutor: Tutor }) {
   const { yearsExperience, studentsTaught, portfolioItems } = tutor;
   const hasStats = yearsExperience != null || studentsTaught != null;
-  if (!hasStats && portfolioItems.length === 0) return null;
 
   return (
     <section className="tp-card">
       <div className="tp-card-head">
         <h2>Credentials</h2>
+      </div>
+
+      <div className="cr-edu">
+        <svg aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M2 9l10-5 10 5-10 5z" />
+          <path d="M6 11v5c3 2 9 2 12 0v-5" />
+        </svg>
+        <div>
+          <strong>{tutor.edu}</strong>
+          {tutor.institution && <span>{tutor.institution}</span>}
+        </div>
       </div>
 
       {hasStats && (

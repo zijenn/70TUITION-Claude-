@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS, canonicalSubjects } from "./constants";
-import { formatName, sentenceCase } from "./format";
+import { formatInstitution, formatName, sentenceCase } from "./format";
 import { regionForPostal } from "./singapore-postal";
 
 const slotRegex = new RegExp(`^(${DAYS_OF_WEEK.join("|")})\\|\\d{1,2}\\|\\d{1,2}$`);
@@ -14,6 +14,13 @@ export const registerSchema = z.object({
 export const tutorProfileSchema = z.object({
   name: z.string().trim().min(1).max(100).transform(formatName),
   edu: z.string().trim().min(1).max(150),
+  institution: z
+    .string()
+    .trim()
+    .max(120)
+    .transform((s) => (s ? formatInstitution(s) : null))
+    .nullable()
+    .optional(),
   levels: z.array(z.enum(LEVELS as [string, ...string[]])).min(1),
   subjects: z
     .array(z.string().trim().min(1).max(120))

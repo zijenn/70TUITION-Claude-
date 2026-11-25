@@ -21,7 +21,10 @@ export function TutorSwipeCard({ tutor }: { tutor: Tutor }) {
         <h3>
           {tutor.name} <span className="tutor-swipe-rate">{formatRate(tutor)}/hr</span>
         </h3>
-        <div className="tutor-swipe-sub">{tutor.edu}</div>
+        <div className="tutor-swipe-sub">
+          {tutor.edu}
+          {tutor.institution && ` · ${tutor.institution}`}
+        </div>
         <div className="tutor-swipe-sub">
           {subjectsWithLevels(tutor.subjects).slice(0, 3).map((s) => s.subject).join(", ")} · {locationLabel}
         </div>

@@ -7,7 +7,7 @@ import type { QuickMatchCriteria, TargetType } from "@/types";
 
 export type ModalState =
   | { type: "none" }
-  | { type: "login" }
+  | { type: "login"; next?: string }
   | { type: "quickmatch" }
   | { type: "post"; kind: "tutor" };
 

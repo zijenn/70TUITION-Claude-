@@ -14,7 +14,10 @@ export const authConfig = {
       const isLoggedIn = !!auth?.user;
       const isProtected = PROTECTED_PREFIXES.some((p) => nextUrl.pathname.startsWith(p));
       if (isProtected && !isLoggedIn) {
-        return NextResponse.redirect(new URL("/?login=1", nextUrl));
+        const url = new URL("/", nextUrl);
+        url.searchParams.set("login", "1");
+        url.searchParams.set("next", nextUrl.pathname);
+        return NextResponse.redirect(url);
       }
       return true;
     },

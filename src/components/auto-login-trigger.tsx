@@ -11,7 +11,10 @@ function AutoLoginTriggerInner() {
 
   useEffect(() => {
     if (searchParams.get("login") === "1") {
-      openModal({ type: "login" });
+      const next = searchParams.get("next");
+      // Only same-site paths, never "//evil.com" or full URLs.
+      const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : undefined;
+      openModal({ type: "login", next: safeNext });
       router.replace("/");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

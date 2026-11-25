@@ -3,11 +3,13 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useUI } from "@/components/providers/ui-provider";
 import { GoogleIcon } from "@/components/icons";
 
-export function LoginModalContent() {
+export function LoginModalContent({ next }: { next?: string }) {
   const { closeModal, showToast } = useUI();
+  const router = useRouter();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -16,7 +18,7 @@ export function LoginModalContent() {
   const [loading, setLoading] = useState(false);
 
   async function handleGoogle() {
-    await signIn("google");
+    await signIn("google", next ? { callbackUrl: next } : undefined);
   }
 
   async function handleSubmit(e: FormEvent) {
@@ -45,6 +47,7 @@ export function LoginModalContent() {
       }
       closeModal();
       showToast(mode === "register" ? "Account created. You're logged in." : "Logged in.");
+      if (next) router.push(next);
     } finally {
       setLoading(false);
     }

@@ -22,14 +22,6 @@ export default function IntroPage() {
             <h1>
               Tuition, but make it <em>a match.</em>
             </h1>
-            <div className="hero-ctas">
-              <Link href="/tutors" className="hero-cta-main">
-                Find a tutor
-              </Link>
-              <Link href="/tutors/new" className="hero-cta-ghost">
-                List yourself as a tutor
-              </Link>
-            </div>
             <div className="scroll-cue">SCROLL</div>
           </div>
         </div>
@@ -55,7 +47,10 @@ export default function IntroPage() {
             )}
             <div className="hero-ctas">
               <Link href="/tutors" className="hero-cta-main">
-                Browse tutors
+                Find a tutor
+              </Link>
+              <Link href="/tutors/new" className="hero-cta-ghost">
+                List yourself as a tutor
               </Link>
             </div>
           </div>

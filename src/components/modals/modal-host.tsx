@@ -16,7 +16,7 @@ export function ModalHost() {
   let style: CSSProperties | undefined;
 
   if (modal.type === "login") {
-    content = <LoginModalContent />;
+    content = <LoginModalContent next={modal.next} />;
     className = "modal login-modal";
   } else if (modal.type === "quickmatch") {
     content = <QuickMatchModalContent />;

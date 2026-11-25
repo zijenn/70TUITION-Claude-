@@ -10,6 +10,7 @@ import { AvailabilityGrid } from "@/components/availability-grid";
 import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
 import { PostalCodePreview } from "@/components/postal-code-preview";
 import {
+  EDUCATION_LEVELS,
   LEVEL_TO_SUBJECT_GROUPS,
   LEVELS,
   PERSONALITY_TRAITS,
@@ -307,8 +308,21 @@ export function TutorForm() {
           <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required />
         </div>
         <div className="field">
-          <label>Education</label>
-          <input value={form.edu} onChange={(e) => setForm({ ...form, edu: e.target.value })} required />
+          <label htmlFor="edu">Tutor&apos;s education level</label>
+          <select id="edu" value={form.edu} onChange={(e) => setForm({ ...form, edu: e.target.value })} required>
+            <option value="" disabled>
+              Select your highest level
+            </option>
+            {/* Older profiles typed this freely: keep their value selectable until they pick a new one. */}
+            {form.edu && !(EDUCATION_LEVELS as readonly string[]).includes(form.edu) && (
+              <option value={form.edu}>{form.edu}</option>
+            )}
+            {EDUCATION_LEVELS.map((lvl) => (
+              <option key={lvl} value={lvl}>
+                {lvl}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

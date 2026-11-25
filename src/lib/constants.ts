@@ -307,3 +307,17 @@ export function formatSubjects(values: string[]): string {
     .map((g) => (g.label ? `${g.label}: ${g.subjects.join(", ")}` : g.subjects.join(", ")))
     .join(SUBJECT_KEY_SEP);
 }
+
+// Tutor's education level — the wording Singapore tutoring agencies use.
+export const EDUCATION_LEVELS = [
+  "GCE O-Level",
+  "GCE A-Level",
+  "IB Diploma",
+  "Polytechnic Diploma",
+  "Undergraduate (currently studying)",
+  "Bachelor's Degree",
+  "Master's Degree",
+  "PhD",
+  "Current MOE Teacher",
+  "Ex-MOE Teacher",
+] as const;

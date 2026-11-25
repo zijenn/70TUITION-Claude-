@@ -129,6 +129,23 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
 
           <section className="tp-card">
             <div className="tp-card-head">
+              <h2>About me</h2>
+            </div>
+            <p className="tp-bio">{tutor.bio}</p>
+            {tutor.personalityTraits.length > 0 && (
+              <div className="tp-traits">
+                <span className="tp-sublabel">Teaching style</span>
+                <div className="tp-trait-row">
+                  {tutor.personalityTraits.map((trait) => (
+                    <span key={trait}>{trait}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </section>
+
+          <section className="tp-card">
+            <div className="tp-card-head">
               <h2>What I teach</h2>
             </div>
             <TeachMatrix subjects={tutor.subjects} fallbackLevels={tutor.levels} />
@@ -146,24 +163,6 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
               {tutor.avail && <p className="tp-note">{tutor.avail}</p>}
             </section>
           )}
-
-          <section className="tp-card">
-            <div className="tp-card-head">
-              <h2>About me</h2>
-            </div>
-            <p className="tp-bio">{tutor.bio}</p>
-            {tutor.personalityTraits.length > 0 && (
-              <div className="tp-traits">
-                <span className="tp-sublabel">Teaching style</span>
-                <div className="tp-trait-row">
-                  {tutor.personalityTraits.map((trait) => (
-                    <span key={trait}>{trait}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </section>
-
         </div>
 
         <aside className="tp-side">

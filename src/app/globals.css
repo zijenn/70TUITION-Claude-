@@ -2682,3 +2682,33 @@ button.thread-counterpart:hover h2 {
     border-radius: 16px;
   }
 }
+
+/* ---------- POPUPS ON PHONES (login, sign-up, quick match) ---------- */
+html.modal-open,
+html.modal-open body {
+  overflow: hidden;
+  scroll-snap-type: none !important;
+}
+.modal-overlay {
+  bottom: auto;
+  height: 100%;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 640px) {
+  .modal-overlay {
+    padding: 16px 12px 32px;
+  }
+  .modal {
+    padding: 28px 20px 24px;
+  }
+  /* iPhones zoom in on inputs under 16px; keep everything at 16px. */
+  input,
+  select,
+  textarea,
+  .login-modal input,
+  .pill-input,
+  .pill-select {
+    font-size: 16px !important;
+  }
+}

@@ -2964,13 +2964,13 @@ html.modal-open body {
     gap: 3px;
   }
   .tp-mobile-rate strong {
-    font-size: 19px;
+    font-size: 21px;
     font-weight: 700;
     letter-spacing: -0.01em;
     white-space: nowrap;
   }
   .tp-mobile-rate span {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--ink-soft);
   }
   .tp-mobile-bar .tp-btn {

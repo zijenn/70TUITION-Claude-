@@ -645,15 +645,30 @@ html:has(.intro-scroller) {
 }
 .like-btn {
   font-family: var(--font-sans), sans-serif;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 600;
   background: none;
   border: none;
   cursor: pointer;
   color: var(--ink-soft);
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
+  min-height: 44px;
+  padding: 0 4px;
   transition: color 0.15s;
+}
+.like-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.like-btn.liked svg {
+  fill: currentColor;
 }
 .like-btn:hover {
   color: var(--gold);

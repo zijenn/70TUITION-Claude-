@@ -6,10 +6,15 @@ export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ likedKeys: [] });
 
+  // Only tutors that still exist, so the badge matches what the shortlist drawer shows
+  // (old likes on student listings or deleted tutors are ignored).
   const likes = await prisma.like.findMany({
-    where: { userId: session.user.id },
-    select: { targetType: true, targetId: true },
+    where: { userId: session.user.id, targetType: "TUTOR" },
+    select: { targetId: true },
   });
+  const existing = likes.length
+    ? await prisma.tutorProfile.findMany({ where: { id: { in: likes.map((l: { targetId: string }) => l.targetId) } }, select: { id: true } })
+    : [];
 
-  return NextResponse.json({ likedKeys: likes.map((l) => `${l.targetType}:${l.targetId}`) });
+  return NextResponse.json({ likedKeys: existing.map((t: { id: string }) => `TUTOR:${t.id}`) });
 }

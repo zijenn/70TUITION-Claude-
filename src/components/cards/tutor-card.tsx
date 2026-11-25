@@ -47,12 +47,16 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
         <span className="rate-tag">${tutor.rate}/hr</span>
         <button
           className={`like-btn${like.liked ? " liked" : ""}`}
+          aria-pressed={like.liked}
           onClick={(e) => {
             e.stopPropagation();
             toggleLike("TUTOR", tutor.id, tutor.likes);
           }}
         >
-          {like.liked ? "♥" : "♡"} {like.count}
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+          </svg>
+          {like.liked ? "Shortlisted" : "Shortlist"}
         </button>
       </div>
     </div>

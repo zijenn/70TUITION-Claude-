@@ -93,17 +93,25 @@ export function availabilityGrid(slots: string[]): boolean[][] {
 /** Plain-English summary, e.g. "Weekday evenings · Weekend mornings". */
 export function summarizeAvailability(slots: string[]): string {
   const grid = availabilityGrid(slots);
-  const parts: string[] = [];
+  // Each phrase remembers its first day so the summary reads Mon -> Sun.
+  const parts: { text: string; firstDay: number; band: number }[] = [];
   TIME_BANDS.forEach((b, i) => {
     const days = grid[i].map((on, d) => (on ? d : -1)).filter((d) => d >= 0);
     if (days.length === 0) return;
     const band = b.label.toLowerCase() + "s";
     const key = days.join(",");
-    if (key === "0,1,2,3,4,5,6") parts.push(`${b.label}s daily`);
-    else if (key === "0,1,2,3,4") parts.push(`Weekday ${band}`);
-    else if (key === "5,6") parts.push(`Weekend ${band}`);
-    else parts.push(`${days.map((d) => DAYS_OF_WEEK[d].slice(0, 3)).join(", ")} ${band}`);
+    const text =
+      key === "0,1,2,3,4,5,6"
+        ? `${b.label}s daily`
+        : key === "0,1,2,3,4"
+          ? `Weekday ${band}`
+          : key === "5,6"
+            ? `Weekend ${band}`
+            : `${days.map((d) => DAYS_OF_WEEK[d].slice(0, 3)).join(", ")} ${band}`;
+    parts.push({ text, firstDay: days[0], band: i });
   });
-  const weekdayFirst = (p: string) => (p.startsWith("Weekday") ? 0 : p.startsWith("Weekend") ? 2 : 1);
-  return parts.sort((a, b) => weekdayFirst(a) - weekdayFirst(b)).join(" · ");
+  return parts
+    .sort((a, b) => a.firstDay - b.firstDay || a.band - b.band)
+    .map((p) => p.text)
+    .join(" · ");
 }

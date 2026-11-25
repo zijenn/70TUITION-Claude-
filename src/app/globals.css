@@ -6,8 +6,8 @@
   --ink: #0f172a;
   --ink-soft: #526075;
   --line: #e3e7ee;
-  --gold: #c89b3c;
-  --gold-soft: #f6ecd4;
+  --gold: #b5852a;
+  --gold-soft: #f4e8cc;
   --teal: #2f6b62;
   --teal-soft: #e2ece9;
   --btn-bg: #0f172a;
@@ -78,13 +78,28 @@ a {
 }
 
 /* ---------- NAV ---------- */
+header,
+footer {
+  /* Navy bar in light and dark mode: re-theme everything inside it. */
+  --ink: #faf7f2;
+  --ink-soft: #a3aec2;
+  --line: rgba(255, 255, 255, 0.12);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --gold: #e0b45a;
+  --btn-bg: #e0b45a;
+  --btn-fg: #0f172a;
+  color: var(--ink);
+}
 header {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  background: rgba(15, 23, 42, 0.96);
   backdrop-filter: blur(6px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid #e0b45a;
+}
+[data-theme="dark"] header {
+  background: rgba(11, 18, 34, 0.96);
 }
 .nav-inner {
   max-width: 1180px;
@@ -153,7 +168,7 @@ nav.tabs {
   transition: background 0.15s, color 0.15s;
 }
 .login-btn:hover {
-  background: var(--gold);
+  background: #faf7f2;
   color: #0f172a;
 }
 @media (max-width: 820px) {
@@ -975,7 +990,8 @@ html:has(.intro-scroller) {
 }
 
 footer {
-  border-top: 1px solid var(--line);
+  background: #0f172a;
+  border-top: 1px solid #e0b45a;
   padding: 26px 28px;
   text-align: center;
   color: var(--ink-soft);
@@ -1091,7 +1107,8 @@ footer {
   padding: 0 3px;
   border-radius: 8px;
   background: var(--gold);
-  color: #fff;
+  color: #0f172a;
+  font-weight: 700;
   font-family: var(--font-sans), sans-serif;
   font-size: 10px;
   line-height: 16px;

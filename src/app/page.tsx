@@ -19,14 +19,9 @@ export default function IntroPage() {
       <div className="intro-scroller">
         <div className="intro-page bg-1">
           <div className="intro-hero">
-            <span className="stamp">Est. for 70,000 hours of learning</span>
             <h1>
               Tuition, but make it <em>a match.</em>
             </h1>
-            <p>
-              Not a marketplace. Not a listing site. A place built for one thing — finding the person on the
-              other side of the whiteboard.
-            </p>
             <div className="hero-ctas">
               <Link href="/tutors" className="hero-cta-main">
                 Find a tutor
@@ -38,16 +33,6 @@ export default function IntroPage() {
             <div className="scroll-cue">SCROLL</div>
           </div>
         </div>
-
-        <RevealBlock className="intro-page bg-2">
-          <div>
-            <h2>Learning should feel like a good conversation.</h2>
-            <p>
-              Every tutor here shows up as a person first — not a listing, not a price tag. We just
-              help you find the right one.
-            </p>
-          </div>
-        </RevealBlock>
 
         <RevealBlock className="intro-page bg-3">
           <div>

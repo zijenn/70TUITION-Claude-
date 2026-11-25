@@ -1640,14 +1640,42 @@ button.thread-counterpart:hover h2 {
   object-fit: cover;
   pointer-events: none;
 }
-.tutor-swipe-fallback {
+.tutor-swipe-poster {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 28px 30%;
+  box-sizing: border-box;
+  overflow: hidden;
   color: #fff;
   font-family: var(--font-sans), sans-serif;
-  font-size: 64px;
-  font-weight: 600;
+}
+.tutor-swipe-poster::before,
+.tutor-swipe-poster::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+.tutor-swipe-poster::before {
+  width: 70%;
+  aspect-ratio: 1;
+  top: -18%;
+  right: -22%;
+}
+.tutor-swipe-poster::after {
+  width: 48%;
+  aspect-ratio: 1;
+  top: 34%;
+  left: -20%;
+}
+.tutor-swipe-poster span {
+  position: relative;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 .tutor-swipe-scrim {
   position: absolute;

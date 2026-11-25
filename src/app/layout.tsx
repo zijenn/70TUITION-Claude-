@@ -25,8 +25,9 @@ const wordmark = Bricolage_Grotesque({
   display: "swap",
 });
 
-// Applies a saved dark-mode choice before first paint so the page doesn't flash.
-const themeScript = `try{if(localStorage.getItem("theme")==="dark")document.documentElement.dataset.theme="dark"}catch(e){}`;
+// Dark by default (set on <html> below). Before first paint, switch to light
+// only if this visitor chose light before, so the page doesn't flash.
+const themeScript = `try{if(localStorage.getItem("theme")==="light")delete document.documentElement.dataset.theme}catch(e){}`;
 
 export const metadata: Metadata = {
   title: "70 Tuition — Find your match in learning",
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${wordmark.variable}`} suppressHydrationWarning>
+    <html lang="en" data-theme="dark" className={`${jakarta.variable} ${wordmark.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

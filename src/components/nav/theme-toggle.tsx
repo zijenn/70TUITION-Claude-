@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-/** Light by default; remembers a dark choice in localStorage (read early by the script in layout.tsx). */
+/** Dark by default; remembers a light choice in localStorage (read early by the script in layout.tsx). */
 export function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
 
   useEffect(() => {
     setDark(document.documentElement.dataset.theme === "dark");

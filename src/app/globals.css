@@ -558,6 +558,10 @@ html:has(.intro-scroller) {
   font-size: 15px;
   color: var(--ink);
   font-weight: 500;
+  align-items: flex-start;
+}
+.info-row.lead > svg {
+  margin-top: 3px;
 }
 .card .tab-corner {
   position: absolute;
@@ -2439,7 +2443,20 @@ button.thread-counterpart:hover h2 {
   flex-direction: column;
   gap: 10px;
 }
-.card-exp {
+.card-edu {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.card-inst {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.rate-tag .card-exp {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--ink-soft);
 }
 .rate-range {

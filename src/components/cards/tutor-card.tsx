@@ -28,15 +28,9 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
       <div className="info-rows">
         <div className="info-row lead">
           <GraduationCapIcon />
-          <span>
+          <span className="card-edu">
             {tutor.edu}
-            {tutor.institution && <span className="card-exp">, {tutor.institution}</span>}
-            {tutor.yearsExperience != null && tutor.yearsExperience > 0 && (
-              <span className="card-exp">
-                {" "}
-                · {tutor.yearsExperience} {tutor.yearsExperience === 1 ? "yr" : "yrs"} exp
-              </span>
-            )}
+            {tutor.institution && <span className="card-inst">{tutor.institution}</span>}
           </span>
         </div>
         <div className="info-row">
@@ -54,7 +48,14 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
       </div>
       <div className="oneliner">{tutor.line}</div>
       <div className="card-foot">
-        <span className="rate-tag">{formatRate(tutor)}/hr</span>
+        <span className="rate-tag">
+          {formatRate(tutor)}/hr
+          {tutor.yearsExperience != null && tutor.yearsExperience > 0 && (
+            <span className="card-exp">
+              {tutor.yearsExperience} {tutor.yearsExperience === 1 ? "yr" : "yrs"} experience
+            </span>
+          )}
+        </span>
         <button
           className={`like-btn${like.liked ? " liked" : ""}`}
           aria-pressed={like.liked}

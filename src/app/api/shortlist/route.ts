@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { ShortlistItem } from "@/types";
+import { formatName } from "@/lib/format";
 
 export async function GET() {
   const session = await auth();
@@ -26,7 +27,7 @@ export async function GET() {
         items.push({
           kind: "tutor",
           id: t.id,
-          title: t.name,
+          title: formatName(t.name),
           subline: t.edu,
           avatarSeed: t.name,
           photoUrl: t.photoUrl,

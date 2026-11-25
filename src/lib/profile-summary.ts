@@ -1,3 +1,4 @@
+import { formatName } from "@/lib/format";
 import { prisma } from "./prisma";
 
 export type ProfileSummary = {
@@ -13,6 +14,6 @@ export async function getProfileSummaryForUser(userId: string): Promise<ProfileS
     select: { id: true, name: true, photoUrl: true },
   });
 
-  if (tutor) return { kind: "tutor", id: tutor.id, name: tutor.name, photoUrl: tutor.photoUrl };
+  if (tutor) return { kind: "tutor", id: tutor.id, name: formatName(tutor.name), photoUrl: tutor.photoUrl };
   return null;
 }

@@ -1,3 +1,4 @@
+import { formatName } from "@/lib/format";
 import type { TutorProfile } from "@prisma/client";
 import { formatJoined } from "./format";
 import type { Tutor } from "@/types";
@@ -10,7 +11,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
   return {
     id: p.id,
     userId: p.userId,
-    name: p.name,
+    name: formatName(p.name),
     edu: p.edu,
     levels: p.levels,
     subjects: p.subjects,

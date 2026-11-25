@@ -65,7 +65,9 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
   const isOwnProfile = session?.user?.id === tutor.userId;
   const availabilitySummary = summarizeAvailability(tutor.availabilitySlots);
-  const modeLabel = tutor.mode === "Both" ? "Online and in person" : tutor.mode === "Offline" ? "In person" : tutor.mode;
+  const modeLabel = tutor.mode === "Both" ? "Online and in person" : tutor.mode === "Online" ? "Online only" : "In person";
+  const area = areaLabelFor(tutor);
+  const region = tutor.region !== "Online" ? tutor.region : null;
   const firstName = tutor.name.split(" ")[0];
 
   const mediaSlides = [
@@ -185,12 +187,12 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                 <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
                 <div><b>{modeLabel}</b></div>
               </li>
-              {tutor.mode !== "Online" && (
+              {tutor.mode !== "Online" && (area || region) && (
                 <li>
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
                   <div>
-                    <b>{areaLabelFor(tutor) ?? tutor.region}</b>
-                    {areaLabelFor(tutor) && <span>{tutor.region}</span>}
+                    <b>{area ?? region}</b>
+                    {area && region && <span>{region}</span>}
                   </div>
                 </li>
               )}

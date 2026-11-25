@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS, canonicalSubjects } from "./constants";
 import { formatName, sentenceCase } from "./format";
+import { regionForPostal } from "./singapore-postal";
 
 const slotRegex = new RegExp(`^(${DAYS_OF_WEEK.join("|")})\\|\\d{1,2}\\|\\d{1,2}$`);
 
@@ -55,6 +56,10 @@ export const tutorProfileSchema = z.object({
     )
     .max(10)
     .optional(),
+}).refine((d) => d.mode === "Online" || d.region !== "Online" || !!regionForPostal(d.postalCode), {
+  message: "Choose the region where you teach in person.",
+  path: ["region"],
+
 });
 
 export const likeToggleSchema = z.object({

@@ -55,7 +55,11 @@ export function locationLabelFor(item: {
 }): string {
   if (item.mode === "Online") return "Online";
   const area = areaLabelFor(item);
-  return area ? `${area} · ${item.region}` : item.region;
+  const region = item.region !== "Online" ? item.region : null;
+  if (area && region) return `${area} · ${region}`;
+  if (area || region) return (area || region)!;
+  // Older profiles saved without a real region.
+  return item.mode === "Both" ? "Online and in person" : "In person";
 }
 
 /** Just the specific place ("Tampines"), or null when only a region is known. */

@@ -66,7 +66,7 @@ const EMPTY: FormState = {
   levels: [],
   subjects: [],
   otherSubjects: "",
-  region: REGIONS[0],
+  region: "",
   postalCode: "",
   line: "",
   rate: "",
@@ -383,14 +383,15 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>Mode</label>
+        <label htmlFor="mode">How you teach</label>
         <select
+          id="mode"
           value={form.mode}
           onChange={(e) => setForm({ ...form, mode: e.target.value as FormState["mode"] })}
         >
-          <option value="Online">Online</option>
-          <option value="Physical">Physical</option>
-          <option value="Both">Both</option>
+          <option value="Both">Online and in person</option>
+          <option value="Physical">In person only</option>
+          <option value="Online">Online only</option>
         </select>
       </div>
 
@@ -400,9 +401,13 @@ export function TutorForm() {
             <label>Region</label>
             <select
               disabled={!!regionForPostal(form.postalCode)}
-              value={form.region === "Online" ? REGIONS[1] : form.region}
+              value={form.region === "Online" ? "" : form.region}
               onChange={(e) => setForm({ ...form, region: e.target.value })}
+              required
             >
+              <option value="" disabled>
+                Select your region
+              </option>
               {REGIONS.filter((r) => r !== "Online").map((r) => (
                 <option key={r} value={r}>
                   {r}

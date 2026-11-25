@@ -2350,3 +2350,9 @@ button.thread-counterpart:hover h2 {
     font-size: 32px !important;
   }
 }
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--ink-soft);
+}

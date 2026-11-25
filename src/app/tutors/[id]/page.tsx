@@ -10,7 +10,7 @@ import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { PortfolioCarousel } from "@/components/portfolio-carousel";
 import { WhatsAppIcon } from "@/components/icons";
-import { locationLabelFor } from "@/lib/singapore-postal";
+import { areaLabelFor } from "@/lib/singapore-postal";
 import { summarizeAvailability } from "@/lib/availability";
 import { whatsAppLink } from "@/lib/phone";
 import type { Tutor } from "@/types";
@@ -64,7 +64,6 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
 
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
   const isOwnProfile = session?.user?.id === tutor.userId;
-  const locationLabel = locationLabelFor(tutor);
   const availabilitySummary = summarizeAvailability(tutor.availabilitySlots);
   const modeLabel = tutor.mode === "Both" ? "Online and in person" : tutor.mode === "Offline" ? "In person" : tutor.mode;
   const firstName = tutor.name.split(" ")[0];
@@ -190,8 +189,8 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                 <li>
                   <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
                   <div>
-                    <b>{locationLabel}</b>
-                    {locationLabel !== tutor.region && <span>{tutor.region}</span>}
+                    <b>{areaLabelFor(tutor) ?? tutor.region}</b>
+                    {areaLabelFor(tutor) && <span>{tutor.region}</span>}
                   </div>
                 </li>
               )}

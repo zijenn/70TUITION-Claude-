@@ -1,5 +1,6 @@
+import { regionForPostal } from "@/lib/singapore-postal";
 import { canonicalSubject } from "@/lib/constants";
-import { formatName } from "@/lib/format";
+import { formatName, sentenceCase } from "@/lib/format";
 import type { TutorProfile } from "@prisma/client";
 import { formatJoined } from "./format";
 import type { Tutor } from "@/types";
@@ -16,16 +17,16 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     edu: p.edu,
     levels: p.levels,
     subjects: [...new Set<string>(p.subjects.map((s: string) => canonicalSubject(s)))],
-    region: p.region,
+    region: p.mode === "Online" ? p.region : (regionForPostal(p.postalCode) ?? p.region),
     postalCode: p.postalCode,
     resolvedArea: p.resolvedArea,
-    line: p.line,
+    line: sentenceCase(p.line),
     rate: p.rate,
     ft: p.ft,
     gender: p.gender,
     avail: p.avail,
     mode: p.mode,
-    bio: p.bio,
+    bio: sentenceCase(p.bio),
     photoUrl: p.photoUrl,
     galleryUrls: p.galleryUrls,
     videoUrl: p.videoUrl,

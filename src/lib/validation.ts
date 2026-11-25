@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS, canonicalSubject } from "./constants";
-import { formatName } from "./format";
+import { formatName, sentenceCase } from "./format";
 
 const slotRegex = new RegExp(`^(${DAYS_OF_WEEK.join("|")})\\|\\d{1,2}\\|\\d{1,2}$`);
 
@@ -27,13 +27,13 @@ export const tutorProfileSchema = z.object({
     .nullable()
     .optional()
     .or(z.literal("")),
-  line: z.string().trim().min(1).max(140),
+  line: z.string().trim().min(1).max(140).transform(sentenceCase),
   rate: z.number().int().min(1).max(1000),
   ft: z.boolean(),
   gender: z.enum(["Male", "Female"]),
   avail: z.string().trim().max(150).default(""),
   mode: z.enum(["Online", "Physical", "Both"]),
-  bio: z.string().trim().min(1).max(3000),
+  bio: z.string().trim().min(1).max(3000).transform(sentenceCase),
   photoUrl: z.string().url().max(500).nullable().optional(),
   galleryUrls: z.array(z.string().url().max(500)).max(5).optional(),
   videoUrl: z.string().url().max(500).nullable().optional(),

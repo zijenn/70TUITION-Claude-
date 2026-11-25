@@ -9,6 +9,7 @@ import { VideoUploadSlot } from "@/components/video-upload-slot";
 import { AvailabilityGrid } from "@/components/availability-grid";
 import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
 import { PostalCodePreview } from "@/components/postal-code-preview";
+import { regionForPostal } from "@/lib/singapore-postal";
 import {
   EDUCATION_LEVELS,
   LEVEL_TO_SUBJECT_GROUPS,
@@ -398,6 +399,7 @@ export function TutorForm() {
           <div className="field">
             <label>Region</label>
             <select
+              disabled={!!regionForPostal(form.postalCode)}
               value={form.region === "Online" ? REGIONS[1] : form.region}
               onChange={(e) => setForm({ ...form, region: e.target.value })}
             >
@@ -407,12 +409,17 @@ export function TutorForm() {
                 </option>
               ))}
             </select>
+            {regionForPostal(form.postalCode) && <small className="field-hint">Set from your postal code</small>}
           </div>
           <div className="field">
             <label>Postal code (optional) — shows a more specific location on your card</label>
             <input
               value={form.postalCode}
-              onChange={(e) => setForm({ ...form, postalCode: e.target.value.replace(/\D/g, "").slice(0, 6) })}
+              onChange={(e) => {
+                const postalCode = e.target.value.replace(/\D/g, "").slice(0, 6);
+                const region = regionForPostal(postalCode);
+                setForm({ ...form, postalCode, ...(region ? { region } : {}) });
+              }}
               placeholder="e.g. 238859"
               inputMode="numeric"
             />
@@ -511,8 +518,11 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>Bio</label>
-        <textarea value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} required />
+        <label htmlFor="bio">About you</label>
+        <textarea
+          id="bio"
+          placeholder="How you teach, who you've helped, and what a typical lesson looks like."
+          value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} required />
       </div>
 
       {error && <div className="form-error">{error}</div>}

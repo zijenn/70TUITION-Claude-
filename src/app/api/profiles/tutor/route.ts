@@ -1,3 +1,4 @@
+import { regionForPostal } from "@/lib/singapore-postal";
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
   const resolvedArea = parsed.data.postalCode ? await lookupPostalCode(parsed.data.postalCode) : null;
 
   const profile = await prisma.tutorProfile.create({
-    data: { ...parsed.data, resolvedArea, userId: session.user.id },
+    data: { ...parsed.data, region: regionForPostal(parsed.data.postalCode) ?? parsed.data.region, resolvedArea, userId: session.user.id },
   });
 
   return NextResponse.json({ id: profile.id }, { status: 201 });
@@ -56,7 +57,7 @@ export async function PATCH(req: Request) {
 
   const profile = await prisma.tutorProfile.update({
     where: { userId: session.user.id },
-    data: { ...parsed.data, resolvedArea },
+    data: { ...parsed.data, region: regionForPostal(parsed.data.postalCode) ?? parsed.data.region, resolvedArea },
   });
 
   return NextResponse.json({ id: profile.id });

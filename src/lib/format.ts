@@ -34,3 +34,8 @@ export function sentenceCase(text: string): string {
     )
     .replace(/(^|\s)i(?=['’]?[\s,.!?]|$)/g, "$1I");
 }
+
+/** "$50–70" for a range, "$50" for a single price (add "/hr" where shown). */
+export function formatRate(t: { rate: number; rateMax?: number | null }): string {
+  return t.rateMax && t.rateMax > t.rate ? `$${t.rate}–${t.rateMax}` : `$${t.rate}`;
+}

@@ -84,6 +84,7 @@ model TutorProfile {
   resolvedArea String?
   line     String
   rate     Int
+  rateMax  Int?
   ft       Boolean
   gender   String
   avail    String

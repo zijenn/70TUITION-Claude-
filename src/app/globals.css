@@ -2432,3 +2432,16 @@ button.thread-counterpart:hover h2 {
 .card-exp {
   color: var(--ink-soft);
 }
+.rate-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.rate-range select {
+  flex: 1;
+  min-width: 0;
+}
+.rate-range span {
+  color: var(--ink-soft);
+  font-size: 14px;
+}

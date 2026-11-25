@@ -1,5 +1,6 @@
 "use client";
 
+import { formatRate } from "@/lib/format";
 import { useRouter } from "next/navigation";
 import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
@@ -50,7 +51,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
       </div>
       <div className="oneliner">{tutor.line}</div>
       <div className="card-foot">
-        <span className="rate-tag">${tutor.rate}/hr</span>
+        <span className="rate-tag">{formatRate(tutor)}/hr</span>
         <button
           className={`like-btn${like.liked ? " liked" : ""}`}
           aria-pressed={like.liked}

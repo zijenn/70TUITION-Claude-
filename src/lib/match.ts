@@ -3,6 +3,7 @@ import type { QuickMatchCriteria } from "@/types";
 type Matchable = {
   region: string;
   rate: number;
+  rateMax?: number | null;
   likes: number;
   levels?: string[];
   subjects?: string[];
@@ -30,6 +31,6 @@ export function sortItems<T extends Matchable>(list: T[], sortBy: SortBy): T[] {
   const arr = [...list];
   if (sortBy === "likes") arr.sort((a, b) => b.likes - a.likes);
   else if (sortBy === "rate-low") arr.sort((a, b) => a.rate - b.rate);
-  else if (sortBy === "rate-high") arr.sort((a, b) => b.rate - a.rate);
+  else if (sortBy === "rate-high") arr.sort((a, b) => (b.rateMax ?? b.rate) - (a.rateMax ?? a.rate));
   return arr;
 }

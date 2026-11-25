@@ -1,3 +1,4 @@
+import { formatRate } from "@/lib/format";
 import { subjectsWithLevels } from "@/lib/constants";
 import { colorFor } from "@/lib/avatar";
 import { locationLabelFor } from "@/lib/singapore-postal";
@@ -18,7 +19,7 @@ export function TutorSwipeCard({ tutor }: { tutor: Tutor }) {
       <div className="tutor-swipe-scrim" />
       <div className="tutor-swipe-info">
         <h3>
-          {tutor.name} <span className="tutor-swipe-rate">${tutor.rate}/hr</span>
+          {tutor.name} <span className="tutor-swipe-rate">{formatRate(tutor)}/hr</span>
         </h3>
         <div className="tutor-swipe-sub">{tutor.edu}</div>
         <div className="tutor-swipe-sub">

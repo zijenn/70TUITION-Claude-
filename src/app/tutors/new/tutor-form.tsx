@@ -22,6 +22,12 @@ import {
   subjectKey,
 } from "@/lib/constants";
 
+// Hourly rates in $10 steps.
+const RATE_OPTIONS = Array.from({ length: 30 }, (_, i) => (i + 1) * 10);
+function snapRate(n: number): number {
+  return Math.min(300, Math.max(10, Math.round(n / 10) * 10));
+}
+
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
 // Older profiles stored bare names ("English Language"). Expand each to a
@@ -47,6 +53,7 @@ type FormState = {
   postalCode: string;
   line: string;
   rate: string;
+  rateMax: string;
   ft: boolean;
   gender: string;
   avail: string;
@@ -72,6 +79,7 @@ const EMPTY: FormState = {
   postalCode: "",
   line: "",
   rate: "",
+  rateMax: "",
   ft: false,
   gender: "",
   avail: "",
@@ -113,7 +121,9 @@ export function TutorForm() {
             region: p.region,
             postalCode: p.postalCode ?? "",
             line: p.line,
-            rate: String(p.rate),
+            // Older profiles could type any number: snap to the nearest $10.
+            rate: String(snapRate(p.rate)),
+            rateMax: String(snapRate(p.rateMax ?? p.rate)),
             ft: p.ft,
             gender: p.gender,
             avail: p.avail,
@@ -185,8 +195,13 @@ export function TutorForm() {
       return;
     }
     const rate = parseInt(form.rate, 10);
+    const rateTop = parseInt(form.rateMax || form.rate, 10);
     if (!Number.isFinite(rate) || rate <= 0) {
-      setError("Enter a valid hourly rate.");
+      setError("Choose your hourly rate.");
+      return;
+    }
+    if (rateTop < rate) {
+      setError("The top of your rate range can't be below the bottom.");
       return;
     }
     if (form.mode !== "Online" && form.postalCode && !/^\d{6}$/.test(form.postalCode)) {
@@ -212,6 +227,7 @@ export function TutorForm() {
           postalCode: form.mode === "Online" ? "" : form.postalCode,
           line: form.line,
           rate,
+          rateMax: rateTop > rate ? rateTop : null,
           ft: form.ft,
           gender: form.gender,
           avail: form.avail,
@@ -477,14 +493,47 @@ export function TutorForm() {
 
       <div className="field-row">
         <div className="field">
-          <label>Rate ($/hr)</label>
-          <input
-            type="number"
-            min={1}
-            value={form.rate}
-            onChange={(e) => setForm({ ...form, rate: e.target.value })}
-            required
-          />
+          <label htmlFor="rate">Rate per hour</label>
+          <div className="rate-range">
+            <select
+              id="rate"
+              aria-label="From"
+              value={form.rate}
+              onChange={(e) => {
+                const rate = e.target.value;
+                // Keep the top end at or above the bottom end.
+                const rateMax = !form.rateMax || Number(form.rateMax) < Number(rate) ? rate : form.rateMax;
+                setForm({ ...form, rate, rateMax });
+              }}
+              required
+            >
+              <option value="" disabled>
+                From
+              </option>
+              {RATE_OPTIONS.map((r) => (
+                <option key={r} value={r}>
+                  ${r}
+                </option>
+              ))}
+            </select>
+            <span>to</span>
+            <select
+              aria-label="To"
+              value={form.rateMax}
+              onChange={(e) => setForm({ ...form, rateMax: e.target.value })}
+              disabled={!form.rate}
+            >
+              <option value="" disabled>
+                To
+              </option>
+              {RATE_OPTIONS.filter((r) => !form.rate || r >= Number(form.rate)).map((r) => (
+                <option key={r} value={r}>
+                  ${r}
+                </option>
+              ))}
+            </select>
+          </div>
+          <small className="field-hint">Pick the same amount twice for a fixed rate.</small>
         </div>
         <div className="field">
           <label>Gender</label>

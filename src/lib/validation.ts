@@ -29,7 +29,8 @@ export const tutorProfileSchema = z.object({
     .optional()
     .or(z.literal("")),
   line: z.string().trim().min(1).max(140).transform(sentenceCase),
-  rate: z.number().int().min(1).max(1000),
+  rate: z.number().int().min(10).max(300).multipleOf(10),
+  rateMax: z.number().int().min(10).max(300).multipleOf(10).nullable().optional(),
   ft: z.boolean(),
   gender: z.enum(["Male", "Female"]),
   avail: z.string().trim().max(150).default(""),
@@ -58,6 +59,9 @@ export const tutorProfileSchema = z.object({
     )
     .max(10)
     .optional(),
+}).refine((d) => d.rateMax == null || d.rateMax >= d.rate, {
+  message: "The top of your rate range can't be below the bottom.",
+  path: ["rateMax"],
 }).refine((d) => d.mode === "Online" || d.region !== "Online" || !!regionForPostal(d.postalCode), {
   message: "Choose the region where you teach in person.",
   path: ["region"],

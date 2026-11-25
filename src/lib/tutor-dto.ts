@@ -22,6 +22,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     resolvedArea: p.resolvedArea,
     line: sentenceCase(p.line),
     rate: p.rate,
+    rateMax: p.rateMax ?? null,
     ft: p.ft,
     gender: p.gender,
     avail: p.avail,

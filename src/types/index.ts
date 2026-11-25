@@ -10,6 +10,7 @@ export type Tutor = {
   resolvedArea: string | null;
   line: string;
   rate: number;
+  rateMax: number | null;
   ft: boolean;
   gender: string;
   avail: string;

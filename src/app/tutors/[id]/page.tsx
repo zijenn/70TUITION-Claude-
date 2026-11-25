@@ -1,5 +1,6 @@
 "use client";
 
+import { formatRate } from "@/lib/format";
 import { TeachMatrix } from "@/components/teach-matrix";
 import { Credentials } from "@/components/credentials";
 import { AvailabilityWeek } from "@/components/availability-week";
@@ -166,7 +167,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
         <aside className="tp-side">
           <div className="tp-side-card">
             <div className="tp-rate">
-              <strong>${tutor.rate}</strong>
+              <strong>{formatRate(tutor)}</strong>
               <span>/ hour</span>
             </div>
             <ul className="tp-facts">

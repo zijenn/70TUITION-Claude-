@@ -38,12 +38,9 @@ export function SubjectList({ subjects }: { subjects: string[] }) {
   );
 }
 
-// Compact names for cards, e.g. "Mother Tongue (Chinese)" -> "Chinese".
+// Compact names for cards: "English Language" -> "English".
 function shortName(subject: string): string {
-  return subject
-    .replace(/^Higher Mother Tongue \((\w+)\)$/, "Higher $1")
-    .replace(/^Mother Tongue \((\w+)\)$/, "$1")
-    .replace(/^English Language$/, "English");
+  return subject.replace(/^English Language$/, "English");
 }
 
 /** Card: first two subjects + "+N more". */

@@ -1,3 +1,4 @@
+import { canonicalSubject } from "@/lib/constants";
 import { formatName } from "@/lib/format";
 import type { TutorProfile } from "@prisma/client";
 import { formatJoined } from "./format";
@@ -14,7 +15,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     name: formatName(p.name),
     edu: p.edu,
     levels: p.levels,
-    subjects: p.subjects,
+    subjects: [...new Set<string>(p.subjects.map((s: string) => canonicalSubject(s)))],
     region: p.region,
     postalCode: p.postalCode,
     resolvedArea: p.resolvedArea,

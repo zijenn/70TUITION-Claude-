@@ -67,12 +67,12 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
     group: "Primary (PSLE)",
     subjects: [
       "English Language",
-      "Mother Tongue (Chinese)",
-      "Mother Tongue (Malay)",
-      "Mother Tongue (Tamil)",
-      "Higher Mother Tongue (Chinese)",
-      "Higher Mother Tongue (Malay)",
-      "Higher Mother Tongue (Tamil)",
+      "Chinese",
+      "Malay",
+      "Tamil",
+      "Higher Chinese",
+      "Higher Malay",
+      "Higher Tamil",
       "Mathematics",
       "Science",
       "Foundation Mathematics",
@@ -83,9 +83,9 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
     group: "Secondary (O-Level / N-Level)",
     subjects: [
       "English Language",
-      "Mother Tongue (Chinese)",
-      "Mother Tongue (Malay)",
-      "Mother Tongue (Tamil)",
+      "Chinese",
+      "Malay",
+      "Tamil",
       "Mathematics (E Math)",
       "Additional Mathematics (A Math)",
       "Combined Science (Physics/Chemistry)",
@@ -321,3 +321,17 @@ export const EDUCATION_LEVELS = [
   "Current MOE Teacher",
   "Ex-MOE Teacher",
 ] as const;
+
+// Old subject names saved before the rename -> current names.
+const LEGACY_SUBJECT_NAMES: [RegExp, string][] = [
+  [/Higher Mother Tongue \((Chinese|Malay|Tamil)\)$/, "Higher $1"],
+  [/Mother Tongue \((Chinese|Malay|Tamil)\)$/, "$1"],
+];
+
+/** Rewrite an old stored subject ("Primary · Mother Tongue (Chinese)") to its current name ("Primary · Chinese"). */
+export function canonicalSubject(value: string): string {
+  for (const [re, to] of LEGACY_SUBJECT_NAMES) {
+    if (re.test(value)) return value.replace(re, to);
+  }
+  return value;
+}

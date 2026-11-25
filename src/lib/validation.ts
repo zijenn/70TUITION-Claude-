@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS, canonicalSubject } from "./constants";
+import { DAYS_OF_WEEK, LEVELS, PERSONALITY_TRAITS, REGIONS, canonicalSubjects } from "./constants";
 import { formatName, sentenceCase } from "./format";
 
 const slotRegex = new RegExp(`^(${DAYS_OF_WEEK.join("|")})\\|\\d{1,2}\\|\\d{1,2}$`);
@@ -15,10 +15,10 @@ export const tutorProfileSchema = z.object({
   edu: z.string().trim().min(1).max(150),
   levels: z.array(z.enum(LEVELS as [string, ...string[]])).min(1),
   subjects: z
-    .array(z.string().trim().min(1).max(120).transform(canonicalSubject))
+    .array(z.string().trim().min(1).max(120))
     .min(1)
     .max(40)
-    .transform((s) => [...new Set(s)]),
+    .transform(canonicalSubjects),
   region: z.enum(REGIONS as [string, ...string[]]),
   postalCode: z
     .string()

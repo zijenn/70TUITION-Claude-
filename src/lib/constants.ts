@@ -86,14 +86,11 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
       "Chinese",
       "Malay",
       "Tamil",
-      "Mathematics (E Math)",
-      "Additional Mathematics (A Math)",
-      "Combined Science (Physics/Chemistry)",
-      "Combined Science (Physics/Biology)",
-      "Combined Science (Chemistry/Biology)",
-      "Pure Physics",
-      "Pure Chemistry",
-      "Pure Biology",
+      "Mathematics",
+      "Additional Mathematics",
+      "Physics",
+      "Chemistry",
+      "Biology",
       "History",
       "Geography",
       "Social Studies",
@@ -322,16 +319,33 @@ export const EDUCATION_LEVELS = [
   "Ex-MOE Teacher",
 ] as const;
 
-// Old subject names saved before the rename -> current names.
+// Old subject names saved before renames -> current names. A "|" in the
+// replacement splits one old subject into several (Combined Science).
 const LEGACY_SUBJECT_NAMES: [RegExp, string][] = [
   [/Higher Mother Tongue \((Chinese|Malay|Tamil)\)$/, "Higher $1"],
   [/Mother Tongue \((Chinese|Malay|Tamil)\)$/, "$1"],
+  [/Combined Science \((Physics|Chemistry|Biology)\/(Physics|Chemistry|Biology)\)$/, "$1|$2"],
+  [/Pure (Physics|Chemistry|Biology)$/, "$1"],
+  [/Mathematics \(E Math\)$/, "Mathematics"],
+  [/Additional Mathematics \(A Math\)$/, "Additional Mathematics"],
 ];
 
-/** Rewrite an old stored subject ("Primary · Mother Tongue (Chinese)") to its current name ("Primary · Chinese"). */
-export function canonicalSubject(value: string): string {
+/**
+ * Rewrite an old stored subject to its current name(s), keeping the level prefix:
+ * "Primary · Mother Tongue (Chinese)" -> ["Primary · Chinese"],
+ * "Secondary · Combined Science (Physics/Chemistry)" -> ["Secondary · Physics", "Secondary · Chemistry"].
+ */
+export function canonicalSubject(value: string): string[] {
   for (const [re, to] of LEGACY_SUBJECT_NAMES) {
-    if (re.test(value)) return value.replace(re, to);
+    const m = value.match(re);
+    if (!m) continue;
+    const prefix = value.slice(0, m.index);
+    return m[0].replace(re, to).split("|").map((name) => prefix + name);
   }
-  return value;
+  return [value];
+}
+
+/** Current, de-duplicated subject list for a stored one. */
+export function canonicalSubjects(values: string[]): string[] {
+  return [...new Set(values.flatMap(canonicalSubject))];
 }

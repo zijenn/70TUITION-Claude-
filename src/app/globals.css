@@ -2992,3 +2992,25 @@ html.modal-open body {
     padding-bottom: calc(96px + env(safe-area-inset-bottom));
   }
 }
+
+/* ---------- AVAILABILITY PICKER: TOUCH ---------- */
+.availability-cell {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.availability-grid.is-dragging {
+  touch-action: none;
+}
+.availability-hint-touch {
+  display: none;
+}
+@media (hover: none) and (pointer: coarse) {
+  .availability-hint-mouse {
+    display: none;
+  }
+  .availability-hint-touch {
+    display: block;
+  }
+}

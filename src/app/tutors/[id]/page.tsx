@@ -121,6 +121,27 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
             </div>
           </div>
 
+          {/* Phones only: the side card's key facts, shown up top (hidden on laptop). */}
+          <ul className="tp-quickfacts">
+            <li>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M8 20h8M12 16v4" /></svg>
+              {modeLabel}
+            </li>
+            {tutor.mode !== "Online" && (area || region) && (
+              <li>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z" /><circle cx="12" cy="10" r="2.5" /></svg>
+                {area && region ? `${area}, ${region}` : (area ?? region)}
+              </li>
+            )}
+            {subjectNames.length > 0 && (
+              <li>
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z" /><path d="M4 19V5M8 7h7" /></svg>
+                {subjectNames.slice(0, 3).join(", ")}
+                {subjectNames.length > 3 && ` +${subjectNames.length - 3} more`}
+              </li>
+            )}
+          </ul>
+
           {mediaSlides.length > 0 && (
             <div className="tp-media">
               <PortfolioCarousel large slides={mediaSlides} />
@@ -229,6 +250,46 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
             <p className="tp-fine">Free to contact. 70 Tuition never takes commission.</p>
           </div>
         </aside>
+
+        {/* Phones only: price and actions pinned to the bottom of the screen (hidden on laptop). */}
+        <div className="tp-mobile-bar">
+          <div className="tp-mobile-rate">
+            <strong>{formatRate(tutor)}</strong>
+            <span>/hr</span>
+          </div>
+          {isOwnProfile ? (
+            <button className="tp-btn tp-btn-main" onClick={() => router.push("/tutors/new")}>
+              Edit my profile
+            </button>
+          ) : (
+            <>
+              <button
+                className="tp-btn tp-btn-ghost tp-icon-btn"
+                onClick={handleShortlist}
+                aria-label={likeState.liked ? "Remove from shortlist" : "Add to shortlist"}
+                aria-pressed={likeState.liked}
+              >
+                <svg aria-hidden="true" viewBox="0 0 24 24" className={likeState.liked ? "liked" : ""}>
+                  <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+                </svg>
+              </button>
+              {tutor.phoneNumber && (
+                <a
+                  className="tp-btn tp-btn-wa tp-icon-btn"
+                  href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="WhatsApp"
+                >
+                  <WhatsAppIcon />
+                </a>
+              )}
+              <button className="tp-btn tp-btn-main" onClick={handleChat}>
+                Message
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </section>
   );

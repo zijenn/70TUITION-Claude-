@@ -2902,3 +2902,93 @@ html.modal-open body {
   }
 
 }
+
+/* ---------- TUTOR PROFILE: PHONE QUICK FACTS + BOTTOM BAR (hidden on laptop) ---------- */
+.tp-quickfacts,
+.tp-mobile-bar {
+  display: none;
+}
+@media (max-width: 640px) {
+  .tp-quickfacts {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin: -4px 0 0;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: var(--card-bg);
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .tp-quickfacts li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .tp-quickfacts svg {
+    width: 17px;
+    height: 17px;
+    flex: none;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* The bar and quick facts replace the side card on phones. */
+  .tp-side {
+    display: none;
+  }
+  .tp-mobile-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--card-bg) 94%, transparent);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid var(--line);
+  }
+  .tp-mobile-rate {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+  }
+  .tp-mobile-rate strong {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .tp-mobile-rate span {
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .tp-mobile-bar .tp-btn {
+    height: 44px;
+  }
+  .tp-mobile-bar .tp-btn-main {
+    padding: 0 22px;
+  }
+  .tp-icon-btn {
+    width: 44px;
+    padding: 0;
+    flex: none;
+  }
+  /* Room so the bar never covers the end of the page or the footer. */
+  .tp {
+    padding-bottom: 24px;
+  }
+  body:has(.tp-mobile-bar) footer {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+}

@@ -19,6 +19,7 @@ import {
   PERSONALITY_TRAITS,
   REGIONS,
   SUBJECT_GROUPS,
+  canonicalSubjects,
   isKnownSubjectKey,
   subjectKey,
 } from "@/lib/constants";
@@ -122,13 +123,15 @@ export function TutorForm() {
       .then((data) => {
         if (data.profile) {
           const p = data.profile;
-          const knownSubjects = toSubjectKeys(p.subjects, p.levels);
-          const otherSubjects = p.subjects.filter((s: string) => !isKnownSubjectKey(s) && !ALL_SUBJECTS.has(s));
+          // Apply subject renames / removals (Mother Tongue, Combined Science, Preschool) before ticking boxes.
+          const subjects: string[] = canonicalSubjects(p.subjects);
+          const knownSubjects = toSubjectKeys(subjects, p.levels);
+          const otherSubjects = subjects.filter((s: string) => !isKnownSubjectKey(s) && !ALL_SUBJECTS.has(s));
           setForm({
             name: p.name,
             edu: p.edu,
             institution: p.institution ?? "",
-            levels: p.levels,
+            levels: p.levels.filter((l: string) => LEVELS.includes(l)),
             subjects: knownSubjects,
             otherSubjects: otherSubjects.join(", "),
             region: p.region,

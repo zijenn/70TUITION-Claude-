@@ -16,7 +16,7 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     name: formatName(p.name),
     edu: p.edu,
     institution: p.institution ? formatInstitution(p.institution) : null,
-    levels: p.levels,
+    levels: (p.levels as string[]).filter((l) => l !== "Preschool"),
     subjects: canonicalSubjects(p.subjects as string[]),
     region: p.mode === "Online" ? p.region : (regionForPostal(p.postalCode) ?? p.region),
     postalCode: p.postalCode,

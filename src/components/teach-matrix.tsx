@@ -3,7 +3,6 @@ import { LEVEL_DISPLAY_LABEL, levelsTaught, subjectsWithLevels } from "@/lib/con
 import { SubjectList } from "@/components/subject-list";
 
 const LEVEL_COLOR: Record<string, string> = {
-  Preschool: "--lvl-preschool",
   Primary: "--lvl-primary",
   Secondary: "--lvl-secondary",
   IP: "--lvl-ip",

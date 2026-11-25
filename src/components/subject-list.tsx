@@ -3,7 +3,6 @@ import { LEVEL_BADGE_LABEL, LEVEL_DISPLAY_LABEL, levelsTaught, subjectsWithLevel
 
 // Short level label -> level colour token in globals.css.
 const LEVEL_COLOR: Record<string, string> = {
-  Preschool: "--lvl-preschool",
   Primary: "--lvl-primary",
   Secondary: "--lvl-secondary",
   IP: "--lvl-ip",

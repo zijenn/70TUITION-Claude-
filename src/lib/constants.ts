@@ -10,7 +10,7 @@ export const REGIONS = [
   "South West",
 ];
 
-export const LEVELS = ["Preschool", "Primary", "Secondary", "JC", "Poly/Uni", "Adult"];
+export const LEVELS = ["Primary", "Secondary", "JC", "Poly/Uni", "Adult"];
 
 export const AVATAR_COLORS = ["#a9791f", "#2f6b62", "#7a5c8e", "#b5352f", "#3f6b9e", "#8a7346"];
 
@@ -50,19 +50,6 @@ export const PERSONALITY_TRAITS = [
 ];
 
 export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
-  {
-    group: "Preschool",
-    subjects: [
-      "Phonics & Pre-Reading",
-      "Numeracy & Pre-Math",
-      "Oral Communication / Show & Tell",
-      "Handwriting & Fine Motor Skills",
-      "Chinese Enrichment",
-      "Malay Enrichment",
-      "Tamil Enrichment",
-      "School Readiness",
-    ],
-  },
   {
     group: "Primary (PSLE)",
     subjects: [
@@ -196,7 +183,6 @@ export const SUBJECT_GROUPS: { group: string; subjects: string[] }[] = [
 // span secondary years; "JC" reveals all three H1/H2/H3 tiers plus IB, since
 // IB Diploma is JC-equivalent.
 export const LEVEL_TO_SUBJECT_GROUPS: Record<string, string[]> = {
-  Preschool: ["Preschool"],
   Primary: ["Primary (PSLE)"],
   Secondary: ["Secondary (O-Level / N-Level)", "Integrated Programme (IP)"],
   JC: ["JC - H1", "JC - H2", "JC - H3", "IB (Diploma Programme)"],
@@ -208,7 +194,6 @@ export const LEVEL_TO_SUBJECT_GROUPS: Record<string, string[]> = {
 // when subjects are displayed grouped. JC H1/H2/H3 share "JC" — their subject
 // names already carry the H-tier, so they stay unique.
 export const GROUP_SHORT_LABEL: Record<string, string> = {
-  Preschool: "Preschool",
   "Primary (PSLE)": "Primary",
   "Secondary (O-Level / N-Level)": "Secondary",
   "Integrated Programme (IP)": "IP",
@@ -266,7 +251,6 @@ export function groupSubjects(values: string[]): { label: string | null; subject
 
 // Tiny badge text used next to a subject ("English  Pri  Sec  IP").
 export const LEVEL_BADGE_LABEL: Record<string, string> = {
-  Preschool: "Pre",
   Primary: "Pri",
   Secondary: "Sec",
   IP: "IP",
@@ -347,5 +331,6 @@ export function canonicalSubject(value: string): string[] {
 
 /** Current, de-duplicated subject list for a stored one. */
 export function canonicalSubjects(values: string[]): string[] {
-  return [...new Set(values.flatMap(canonicalSubject))];
+  // Preschool was removed as a level: drop any saved Preschool subjects.
+  return [...new Set(values.filter((v) => !v.startsWith("Preschool" + SUBJECT_KEY_SEP)).flatMap(canonicalSubject))];
 }

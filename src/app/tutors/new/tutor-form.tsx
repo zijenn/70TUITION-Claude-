@@ -9,6 +9,7 @@ import { VideoUploadSlot } from "@/components/video-upload-slot";
 import { AvailabilityGrid } from "@/components/availability-grid";
 import { PortfolioItemsEditor, type PortfolioItem } from "@/components/portfolio-items-editor";
 import { PostalCodePreview } from "@/components/postal-code-preview";
+import { CredentialsEditor, credentialsPayload, type CredentialsValue } from "@/components/credentials-editor";
 import { regionForPostal } from "@/lib/singapore-postal";
 import {
   EDUCATION_LEVELS,
@@ -58,6 +59,7 @@ type FormState = {
   availabilitySlots: string[];
   personalityTraits: string[];
   portfolioItems: PortfolioItem[];
+  credentials: CredentialsValue;
 };
 
 const EMPTY: FormState = {
@@ -82,6 +84,7 @@ const EMPTY: FormState = {
   availabilitySlots: [],
   personalityTraits: [],
   portfolioItems: [],
+  credentials: { results: [], yearsExperience: "", studentsTaught: "", trackRecord: [] },
 };
 
 export function TutorForm() {
@@ -123,6 +126,12 @@ export function TutorForm() {
             availabilitySlots: p.availabilitySlots ?? [],
             personalityTraits: p.personalityTraits ?? [],
             portfolioItems: Array.isArray(p.portfolioItems) ? p.portfolioItems : [],
+            credentials: {
+              results: Array.isArray(p.results) ? p.results : [],
+              yearsExperience: p.yearsExperience != null ? String(p.yearsExperience) : "",
+              studentsTaught: p.studentsTaught != null ? String(p.studentsTaught) : "",
+              trackRecord: p.trackRecord ?? [],
+            },
           });
           setIsEdit(true);
         }
@@ -217,6 +226,7 @@ export function TutorForm() {
           availabilitySlots: form.availabilitySlots,
           personalityTraits: form.personalityTraits,
           portfolioItems: form.portfolioItems.filter((it) => it.url && it.title.trim()),
+          ...credentialsPayload(form.credentials),
         }),
       });
       if (!res.ok) {
@@ -295,8 +305,17 @@ export function TutorForm() {
         </div>
       </div>
 
+      <fieldset className="form-section">
+        <legend>Credentials</legend>
+        <p className="field-hint">What makes you a good tutor. All optional, but parents read this before messaging.</p>
+        <CredentialsEditor
+          value={form.credentials}
+          onChange={(credentials) => setForm((f) => ({ ...f, credentials }))}
+        />
+      </fieldset>
+
       <div className="field">
-        <label>Portfolio (optional) — certificates, awards, anything you want named</label>
+        <label>Certificates and awards (optional) — upload a photo of each and give it a name</label>
         <PortfolioItemsEditor
           items={form.portfolioItems}
           onChange={(items) => setForm((f) => ({ ...f, portfolioItems: items }))}

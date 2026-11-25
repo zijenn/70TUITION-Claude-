@@ -99,6 +99,12 @@ model TutorProfile {
   personalityTraits String[] @default([])
   portfolioItems    Json     @default("[]")
 
+  // Credentials
+  results         Json     @default("[]")
+  yearsExperience Int?
+  studentsTaught  Int?
+  trackRecord     String[] @default([])
+
   baseLikes Int @default(0)
 
   createdAt DateTime @default(now())

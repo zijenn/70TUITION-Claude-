@@ -47,6 +47,19 @@ export const tutorProfileSchema = z.object({
     .or(z.literal("")),
   availabilitySlots: z.array(z.string().regex(slotRegex)).max(50).optional(),
   personalityTraits: z.array(z.enum(PERSONALITY_TRAITS as [string, ...string[]])).max(14).optional(),
+  results: z
+    .array(
+      z.object({
+        exam: z.string().trim().min(1).max(40),
+        subject: z.string().trim().min(1).max(80),
+        grade: z.string().trim().min(1).max(20),
+      })
+    )
+    .max(8)
+    .optional(),
+  yearsExperience: z.number().int().min(0).max(60).nullable().optional(),
+  studentsTaught: z.number().int().min(0).max(10000).nullable().optional(),
+  trackRecord: z.array(z.string().trim().min(1).max(140).transform(sentenceCase)).max(5).optional(),
   portfolioItems: z
     .array(
       z.object({

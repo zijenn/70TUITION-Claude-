@@ -1,6 +1,7 @@
 "use client";
 
 import { TeachMatrix } from "@/components/teach-matrix";
+import { Credentials } from "@/components/credentials";
 import { AvailabilityWeek } from "@/components/availability-week";
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
@@ -130,6 +131,8 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
             <TeachMatrix subjects={tutor.subjects} fallbackLevels={tutor.levels} />
           </section>
 
+          <Credentials tutor={tutor} />
+
           {(tutor.availabilitySlots.length > 0 || tutor.avail) && (
             <section className="tp-card">
               <div className="tp-card-head">
@@ -158,22 +161,6 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
             )}
           </section>
 
-          {tutor.portfolioItems.length > 0 && (
-            <section className="tp-card">
-              <div className="tp-card-head">
-                <h2>Portfolio</h2>
-              </div>
-              <div className="tp-portfolio">
-                {tutor.portfolioItems.map((item, i) => (
-                  <figure key={i}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={item.url} alt={item.title} />
-                    <figcaption>{item.title}</figcaption>
-                  </figure>
-                ))}
-              </div>
-            </section>
-          )}
         </div>
 
         <aside className="tp-side">

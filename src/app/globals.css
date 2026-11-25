@@ -2710,3 +2710,19 @@ html.modal-open body {
     font-size: 16px !important;
   }
 }
+
+/* ---------- TUTOR FORM ON PHONES (laptop unchanged) ---------- */
+@media (max-width: 640px) {
+  .profile-form {
+    padding: 20px 16px;
+  }
+  /* Side-by-side fields (rate + gender, name + education, ...) stack. */
+  .profile-form .field-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  .rate-range select {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

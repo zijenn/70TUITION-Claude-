@@ -22,7 +22,7 @@ export function CredentialsEditor({
         <input
           id="years"
           inputMode="numeric"
-          placeholder="3"
+          placeholder="e.g. 3"
           value={value.yearsExperience}
           onChange={(e) => set({ yearsExperience: e.target.value.replace(/\D/g, "").slice(0, 2) })}
         />
@@ -32,7 +32,7 @@ export function CredentialsEditor({
         <input
           id="taught"
           inputMode="numeric"
-          placeholder="25"
+          placeholder="e.g. 25"
           value={value.studentsTaught}
           onChange={(e) => set({ studentsTaught: e.target.value.replace(/\D/g, "").slice(0, 4) })}
         />

@@ -3014,3 +3014,10 @@ html.modal-open body {
     display: block;
   }
 }
+
+/* ---------- FORM EXAMPLE TEXT: clearly a hint, not an answer ---------- */
+.profile-form ::placeholder {
+  color: var(--ink-soft);
+  opacity: 0.55;
+  font-style: italic;
+}

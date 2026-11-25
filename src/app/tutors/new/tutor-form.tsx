@@ -383,7 +383,7 @@ export function TutorForm() {
           id="institution"
           value={form.institution}
           maxLength={120}
-          placeholder={institutionPlaceholder(form.edu)}
+          placeholder={`e.g. ${institutionPlaceholder(form.edu)}`}
           onChange={(e) => setForm({ ...form, institution: e.target.value })}
         />
         <small className="field-hint">
@@ -442,7 +442,7 @@ export function TutorForm() {
           <input
             value={form.otherSubjects}
             onChange={(e) => setForm({ ...form, otherSubjects: e.target.value })}
-            placeholder="French, Guitar, Art portfolio prep…"
+            placeholder="e.g. French, Guitar, Art portfolio prep"
           />
         </div>
       </div>
@@ -514,7 +514,7 @@ export function TutorForm() {
           id="line"
           value={form.line}
           onChange={(e) => setForm({ ...form, line: e.target.value })}
-          placeholder="Patient O-Level Chemistry tutor who makes reactions easy to remember."
+          placeholder="e.g. Patient O-Level Chemistry tutor who makes reactions easy to remember."
           maxLength={140}
           required
         />

@@ -635,6 +635,10 @@ html:has(.intro-scroller) {
   border-radius: 20px;
   color: var(--ink-soft);
 }
+.chip.chip-all {
+  font-weight: 700;
+  color: var(--ink);
+}
 .chip.region {
   background: var(--teal-soft);
   border-color: var(--teal);

@@ -41,6 +41,12 @@ function snapRate(n: number): number {
 
 const ALL_SUBJECTS = new Set(SUBJECT_GROUPS.flatMap((g) => g.subjects));
 
+// Every subject checkbox shown for the levels picked.
+function visibleSubjectKeys(levels: string[]): string[] {
+  const groups = new Set(levels.flatMap((l) => LEVEL_TO_SUBJECT_GROUPS[l] ?? []));
+  return SUBJECT_GROUPS.filter((g) => groups.has(g.group)).flatMap((g) => g.subjects.map((s) => subjectKey(g.group, s)));
+}
+
 // Older profiles stored bare names ("English Language"). Expand each to a
 // level-scoped key for every selected level whose groups offer it.
 function toSubjectKeys(stored: string[], levels: string[]): string[] {
@@ -163,19 +169,31 @@ export function TutorForm() {
       .finally(() => setLoading(false));
   }, []);
 
-  function toggleLevel(level: string) {
+  const allLevelsPicked = LEVELS.every((l) => form.levels.includes(l));
+  const shownSubjectKeys = visibleSubjectKeys(form.levels);
+  const allSubjectsPicked = shownSubjectKeys.length > 0 && shownSubjectKeys.every((k) => form.subjects.includes(k));
+
+  function setLevels(levels: string[]) {
     setForm((f) => {
-      const levels = f.levels.includes(level) ? f.levels.filter((l) => l !== level) : [...f.levels, level];
-      const visibleGroups = new Set(levels.flatMap((l) => LEVEL_TO_SUBJECT_GROUPS[l] ?? []));
-      const visibleSubjects = new Set(
-        SUBJECT_GROUPS.filter((g) => visibleGroups.has(g.group)).flatMap((g) => g.subjects.map((s) => subjectKey(g.group, s)))
-      );
+      const visibleSubjects = new Set(visibleSubjectKeys(levels));
       return {
         ...f,
         levels,
         subjects: f.subjects.filter((s) => visibleSubjects.has(s)),
       };
     });
+  }
+
+  function toggleLevel(level: string) {
+    setLevels(form.levels.includes(level) ? form.levels.filter((l) => l !== level) : [...form.levels, level]);
+  }
+
+  function toggleAllLevels() {
+    setLevels(allLevelsPicked ? [] : [...LEVELS]);
+  }
+
+  function toggleAllSubjects() {
+    setForm((f) => ({ ...f, subjects: allSubjectsPicked ? [] : visibleSubjectKeys(f.levels) }));
   }
 
   function toggleSubject(subject: string) {
@@ -395,6 +413,15 @@ export function TutorForm() {
       <div className="field">
         <label>Levels you teach</label>
         <div className="chip-row">
+          <label className="chip chip-all" style={{ cursor: "pointer" }}>
+            <input
+              type="checkbox"
+              style={{ width: "auto", marginRight: 6 }}
+              checked={allLevelsPicked}
+              onChange={toggleAllLevels}
+            />
+            All levels
+          </label>
           {LEVELS.map((level) => (
             <label key={level} className="chip" style={{ cursor: "pointer" }}>
               <input
@@ -416,7 +443,19 @@ export function TutorForm() {
             Pick a level above to see subjects.
           </p>
         ) : (
-          SUBJECT_GROUPS.filter((g) =>
+          <>
+          <div className="chip-row" style={{ marginBottom: 10 }}>
+            <label className="chip chip-all" style={{ cursor: "pointer" }}>
+              <input
+                type="checkbox"
+                style={{ width: "auto", marginRight: 6 }}
+                checked={allSubjectsPicked}
+                onChange={toggleAllSubjects}
+              />
+              All subjects
+            </label>
+          </div>
+          {SUBJECT_GROUPS.filter((g) =>
             form.levels.some((l) => (LEVEL_TO_SUBJECT_GROUPS[l] ?? []).includes(g.group))
           ).map((g) => (
             <div key={g.group} className="subject-group">
@@ -435,7 +474,8 @@ export function TutorForm() {
                 ))}
               </div>
             </div>
-          ))
+          ))}
+          </>
         )}
         <div className="field" style={{ marginTop: 10, marginBottom: 0 }}>
           <label>Other subjects (comma separated, optional)</label>

@@ -48,9 +48,10 @@ export function Header() {
   return (
     <header>
       <div className="nav-inner">
-        <Link href="/" className="logo-btn">
-          <span className="logo-mark">70</span>
-          <span className="logo-word">Tuition</span>
+        <Link href="/" className="logo-btn" aria-label="70 Tuition home">
+          <span className="logo-wordmark" aria-hidden="true">
+            <span className="logo-num">70</span>tuition
+          </span>
         </Link>
         <nav className="tabs">
           {TABS.map((tab) => (

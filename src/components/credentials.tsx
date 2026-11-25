@@ -17,7 +17,7 @@ export function Credentials({ tutor }: { tutor: Tutor }) {
           {yearsExperience != null && (
             <div>
               <strong>{yearsExperience === 0 ? "<1" : yearsExperience}</strong>
-              <span>{yearsExperience === 1 ? "year tutoring" : "years tutoring"}</span>
+              <span>{yearsExperience === 1 ? "year of tutoring" : "years of tutoring"}</span>
             </div>
           )}
           {studentsTaught != null && (

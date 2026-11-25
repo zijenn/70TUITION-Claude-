@@ -48,12 +48,12 @@ export async function PATCH(req: Request) {
   const existing = await prisma.tutorProfile.findUnique({ where: { userId: session.user.id } });
   if (!existing) return NextResponse.json({ error: "No profile to update" }, { status: 404 });
 
-  const resolvedArea =
-    parsed.data.postalCode && parsed.data.postalCode !== existing.postalCode
-      ? await lookupPostalCode(parsed.data.postalCode)
-      : parsed.data.postalCode
-        ? existing.resolvedArea
-        : null;
+  // Look up again if the code changed, or if an earlier lookup failed (no street name saved).
+  const resolvedArea = !parsed.data.postalCode
+    ? null
+    : parsed.data.postalCode !== existing.postalCode || !existing.resolvedArea
+      ? ((await lookupPostalCode(parsed.data.postalCode)) ?? existing.resolvedArea)
+      : existing.resolvedArea;
 
   const profile = await prisma.tutorProfile.update({
     where: { userId: session.user.id },

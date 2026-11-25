@@ -1,9 +1,9 @@
 const DISTRICTS: { prefixes: string[]; district: number; areas: string; region: string }[] = [
   { prefixes: ["01", "02", "03", "04", "05", "06"], district: 1, areas: "Raffles Place, Marina, Cecil", region: "Central" },
   { prefixes: ["07", "08"], district: 2, areas: "Anson, Tanjong Pagar", region: "Central" },
-  { prefixes: ["09", "10"], district: 3, areas: "Queenstown, Tiong Bahru", region: "Central" },
-  { prefixes: ["11", "12", "13"], district: 4, areas: "Telok Blangah, Harbourfront", region: "South" },
-  { prefixes: ["14", "15", "16"], district: 5, areas: "Pasir Panjang, Clementi", region: "South West" },
+  { prefixes: ["14", "15", "16"], district: 3, areas: "Queenstown, Tiong Bahru", region: "Central" },
+  { prefixes: ["09", "10"], district: 4, areas: "Telok Blangah, Harbourfront", region: "South" },
+  { prefixes: ["11", "12", "13"], district: 5, areas: "Pasir Panjang, Clementi", region: "South West" },
   { prefixes: ["17"], district: 6, areas: "City Hall, Beach Road", region: "Central" },
   { prefixes: ["18", "19"], district: 7, areas: "Middle Road, Golden Mile", region: "Central" },
   { prefixes: ["20", "21"], district: 8, areas: "Little India", region: "Central" },
@@ -64,5 +64,7 @@ export function locationLabelFor(item: {
 
 /** Just the specific place ("Tampines"), or null when only a region is known. */
 export function areaLabelFor(item: { postalCode: string | null; resolvedArea?: string | null }): string | null {
-  return item.resolvedArea || postalDistrictLabel(item.postalCode);
+  // Fallback reads "Tampines, Pasir Ris area" rather than "District 18 · Tampines, Pasir Ris".
+  const district = postalDistrictLabel(item.postalCode);
+  return item.resolvedArea || (district ? district.replace(/^District \d+ · /, "") + " area" : null);
 }

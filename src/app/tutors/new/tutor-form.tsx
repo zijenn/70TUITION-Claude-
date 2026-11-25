@@ -439,13 +439,18 @@ export function TutorForm() {
       </div>
 
       <div className="field">
-        <label>One-line pitch</label>
+        <label htmlFor="line">Headline</label>
         <input
+          id="line"
           value={form.line}
           onChange={(e) => setForm({ ...form, line: e.target.value })}
-          placeholder="Turns economics graphs from confusing to click."
+          placeholder="Patient O-Level Chemistry tutor who makes reactions easy to remember."
+          maxLength={140}
           required
         />
+        <small className="field-hint">
+          One sentence shown under your name on your card. {form.line.length}/140
+        </small>
       </div>
 
       <div className="field-row">

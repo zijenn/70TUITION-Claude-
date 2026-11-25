@@ -1,9 +1,14 @@
+"use client";
+
+import { useState } from "react";
+import { ImageLightbox } from "@/components/image-lightbox";
 import type { Tutor } from "@/types";
 
 /** Profile page: education, experience and certificates. */
 export function Credentials({ tutor }: { tutor: Tutor }) {
   const { yearsExperience, studentsTaught, portfolioItems } = tutor;
   const hasStats = yearsExperience != null || studentsTaught != null;
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
     <section className="tp-card">
@@ -45,14 +50,17 @@ export function Credentials({ tutor }: { tutor: Tutor }) {
           <div className="tp-portfolio">
             {portfolioItems.map((item, i) => (
               <figure key={i}>
-                <a href={item.url} target="_blank" rel="noopener noreferrer">
+                <button type="button" className="cr-thumb" onClick={() => setOpen(i)} aria-label={`View ${item.title}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={item.url} alt={item.title} />
-                </a>
+                  <img src={item.url} alt="" />
+                </button>
                 <figcaption>{item.title}</figcaption>
               </figure>
             ))}
           </div>
+          {open !== null && (
+            <ImageLightbox items={portfolioItems} index={open} onIndex={setOpen} onClose={() => setOpen(null)} />
+          )}
         </div>
       )}
     </section>

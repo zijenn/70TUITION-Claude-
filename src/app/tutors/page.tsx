@@ -8,7 +8,7 @@ import { TutorSwipeCard } from "@/components/cards/tutor-swipe-card";
 import { SwipeDeck } from "@/components/swipe-deck";
 import { useUI } from "@/components/providers/ui-provider";
 import { SubjectFilterRow, subjectMatchesCategory } from "@/components/subject-filter-row";
-import { REGIONS } from "@/lib/constants";
+import { LEVEL_DISPLAY_LABEL, REGIONS, levelsTaught, subjectsWithLevels } from "@/lib/constants";
 import { sortItems, type SortBy } from "@/lib/match";
 import type { Tutor } from "@/types";
 
@@ -22,17 +22,11 @@ export default function TutorsPage() {
   const [sortBy, setSortBy] = useState<SortBy>("likes");
   const [region, setRegion] = useState("");
   const [subject, setSubject] = useState("");
+  const [level, setLevel] = useState("");
   const [nameInput, setNameInput] = useState("");
   const [name, setName] = useState("");
-  const [allSubjects, setAllSubjects] = useState<string[]>([]);
   const [view, setView] = useState<"grid" | "swipe">("grid");
   const [category, setCategory] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetch("/api/tutors")
-      .then((r) => r.json())
-      .then((data: Tutor[]) => setAllSubjects([...new Set(data.flatMap((t) => t.subjects))].sort()));
-  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => setName(nameInput.trim()), 300);
@@ -41,19 +35,35 @@ export default function TutorsPage() {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (region) params.set("region", region);
-    if (subject) params.set("subject", subject);
     if (name) params.set("name", name);
     setLoading(true);
     fetch(`/api/tutors?${params.toString()}`)
       .then((r) => r.json())
       .then((data: Tutor[]) => setTutors(data))
       .finally(() => setLoading(false));
-  }, [region, subject, name]);
+  }, [name]);
 
+  // Dropdown options come from the tutors listed, by subject name (each once) and level.
+  const allSubjects = useMemo(
+    () => [...new Set(tutors.flatMap((t) => subjectsWithLevels(t.subjects).map((s) => s.subject)))].sort(),
+    [tutors]
+  );
+  const allLevels = useMemo(() => levelsTaught(tutors.flatMap((t) => t.subjects)), [tutors]);
+
+  // Filtering runs on the cleaned-up subjects/regions the API returns, so older
+  // profiles saved under previous names still match.
   const categoryFiltered = useMemo(
-    () => (category ? tutors.filter((t) => subjectMatchesCategory(t.subjects, category)) : tutors),
-    [tutors, category]
+    () =>
+      tutors.filter((t) => {
+        if (region && t.region !== region) return false;
+        if (category && !subjectMatchesCategory(t.subjects, category)) return false;
+        const rows = subjectsWithLevels(t.subjects);
+        if (subject && level) return rows.some((r) => r.subject === subject && r.levels.includes(level));
+        if (subject) return rows.some((r) => r.subject === subject);
+        if (level) return rows.some((r) => r.levels.includes(level));
+        return true;
+      }),
+    [tutors, category, region, subject, level]
   );
   const sorted = useMemo(() => sortItems(categoryFiltered, sortBy), [categoryFiltered, sortBy]);
   const hasOwnProfile = tutors.some((t) => t.userId === session?.user?.id);
@@ -94,6 +104,14 @@ export default function TutorsPage() {
           {REGIONS.map((r) => (
             <option key={r} value={r}>
               {r}
+            </option>
+          ))}
+        </select>
+        <select className="pill-select" value={level} onChange={(e) => setLevel(e.target.value)}>
+          <option value="">Level: All</option>
+          {allLevels.map((l) => (
+            <option key={l} value={l}>
+              {LEVEL_DISPLAY_LABEL[l] ?? l}
             </option>
           ))}
         </select>

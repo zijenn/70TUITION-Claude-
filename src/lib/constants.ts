@@ -21,12 +21,12 @@ export const AVAILABILITY_HOURS = Array.from({ length: 16 }, (_, i) => i + 7);
 
 export const SUBJECT_CATEGORIES = [
   { label: "Math", icon: "math", keywords: ["math"] },
-  { label: "Physics", icon: "physics", keywords: ["physics"] },
+  { label: "Physics", icon: "physics", keywords: ["physics", "science"] },
   { label: "Chemistry", icon: "chemistry", keywords: ["chemistry", "science"] },
   { label: "Biology", icon: "biology", keywords: ["biology", "science"] },
   { label: "English", icon: "language", keywords: ["english", "literature"] },
   { label: "Mother Tongue", icon: "language", keywords: ["mother tongue", "chinese", "malay", "tamil"] },
-  { label: "Economics", icon: "economics", keywords: ["economics", "accounts", "business"] },
+  { label: "Economics", icon: "economics", keywords: ["economics", "account", "business"] },
   { label: "Computing", icon: "computing", keywords: ["computing"] },
   { label: "Humanities", icon: "humanities", keywords: ["history", "geography", "social studies", "gp", "general paper"] },
   { label: "Others", icon: "more", keywords: [] },

@@ -66,5 +66,24 @@ export function locationLabelFor(item: {
 export function areaLabelFor(item: { postalCode: string | null; resolvedArea?: string | null }): string | null {
   // Fallback reads "Tampines, Pasir Ris area" rather than "District 18 · Tampines, Pasir Ris".
   const district = postalDistrictLabel(item.postalCode);
-  return item.resolvedArea || (district ? district.replace(/^District \d+ · /, "") + " area" : null);
+  return (item.resolvedArea && titleCaseAddress(item.resolvedArea)) || (district ? district.replace(/^District \d+ · /, "") + " area" : null);
+}
+
+// OneMap returns addresses in capitals ("PARC LIFE, SEMBAWANG CRESCENT"); show "Parc Life, Sembawang Crescent".
+const KEEP_UPPER = new Set(["NUS", "NTU", "SMU", "SUTD", "SIT", "SUSS", "HDB", "MRT", "LRT", "JC", "ITE", "SAFRA", "NTUC", "CHIJ", "ACS", "MOE"]);
+const KEEP_LOWER = new Set(["of", "and", "the", "at", "on", "in"]);
+export function titleCaseAddress(text: string): string {
+  if (text !== text.toUpperCase()) return text;
+  return text
+    .toLowerCase()
+    .split(/(\s+|,|\/|-|\()/)
+    .map((w, i) => {
+      if (!w || /^[\s,\/\-(]+$/.test(w)) return w;
+      if (KEEP_UPPER.has(w.toUpperCase())) return w.toUpperCase();
+      if (i > 0 && KEEP_LOWER.has(w)) return w;
+      // Block numbers like "123a" -> "123A"
+      if (/^\d+[a-z]$/.test(w)) return w.toUpperCase();
+      return w.charAt(0).toUpperCase() + w.slice(1);
+    })
+    .join("");
 }

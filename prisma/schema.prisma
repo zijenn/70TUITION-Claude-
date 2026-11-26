@@ -25,6 +25,7 @@ model User {
   tutorProfile   TutorProfile?
   studentProfile StudentProfile?
   likes          Like[]
+  shortlist      Shortlist[]
 
   sentMessages     Message[] @relation("MessageSender")
   receivedMessages Message[] @relation("MessageRecipient")
@@ -154,6 +155,17 @@ model Like {
 
   @@unique([userId, targetType, targetId])
   @@index([targetType, targetId])
+}
+
+// The bucket: tutors a user has saved to compare. Private, unlike likes.
+model Shortlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tutorId   String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, tutorId])
 }
 
 model Message {

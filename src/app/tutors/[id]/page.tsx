@@ -12,7 +12,7 @@ import { useSession } from "next-auth/react";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { PortfolioCarousel } from "@/components/portfolio-carousel";
-import { WhatsAppIcon } from "@/components/icons";
+import { BasketIcon, WhatsAppIcon } from "@/components/icons";
 import { areaLabelFor } from "@/lib/singapore-postal";
 import { summarizeAvailability } from "@/lib/availability";
 import { whatsAppLink } from "@/lib/phone";
@@ -22,7 +22,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   const { id } = use(params);
   const { data: session } = useSession();
   const router = useRouter();
-  const { requireAuth, toggleLike, getLikeState, showToast } = useUI();
+  const { requireAuth, toggleLike, getLikeState, showToast, isShortlisted, setShortlisted } = useUI();
   const [tutor, setTutor] = useState<Tutor | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -66,6 +66,21 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
   }
 
   const likeState = getLikeState("TUTOR", tutor.id, tutor.likes);
+  const saved = isShortlisted(tutor.id);
+  const heartPath = "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z";
+  const likeButton = (extra = "") => (
+    <button
+      className={`tp-btn tp-btn-ghost tp-like${extra}`}
+      onClick={handleLike}
+      aria-label={likeState.liked ? "Unlike" : "Like"}
+      aria-pressed={likeState.liked}
+    >
+      <svg aria-hidden="true" viewBox="0 0 24 24" className={likeState.liked ? "liked" : ""}>
+        <path d={heartPath} />
+      </svg>
+      {likeState.count > 0 && <span>{likeState.count}</span>}
+    </button>
+  );
   const isOwnProfile = session?.user?.id === tutor.userId;
   const availabilitySummary = summarizeAvailability(tutor.availabilitySlots);
   const subjectNames = subjectsWithLevels(tutor.subjects).map((s) => s.subject);
@@ -92,10 +107,14 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
     requireAuth(() => router.push(`/messages/${tutor!.userId}`));
   }
 
+  function handleLike() {
+    requireAuth(() => toggleLike("TUTOR", tutor!.id, tutor!.likes));
+  }
+
   function handleShortlist() {
     requireAuth(async () => {
-      await toggleLike("TUTOR", tutor!.id, tutor!.likes);
-      showToast(likeState.liked ? "Removed from shortlist." : "Added to shortlist.");
+      await setShortlisted(tutor!.id, !saved);
+      showToast(saved ? "Removed from shortlist." : "Added to shortlist.");
     });
   }
 
@@ -118,6 +137,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                 <span>{tutor.gender}</span>
                 <span>Joined {tutor.joined}</span>
               </div>
+              {!isOwnProfile && likeButton(" tp-like-mobile")}
             </div>
           </div>
 
@@ -239,12 +259,17 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                     WhatsApp
                   </a>
                 )}
-                <button className="tp-btn tp-btn-ghost" onClick={handleShortlist}>
-                  <svg aria-hidden="true" viewBox="0 0 24 24" className={likeState.liked ? "liked" : ""}>
-                    <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
-                  </svg>
-                  {likeState.liked ? "Shortlisted" : "Shortlist"}
-                </button>
+                <div className="tp-actions-row">
+                  {likeButton()}
+                  <button
+                    className={`tp-btn tp-btn-ghost tp-save${saved ? " saved" : ""}`}
+                    onClick={handleShortlist}
+                    aria-pressed={saved}
+                  >
+                    <BasketIcon />
+                    {saved ? "Shortlisted" : "Shortlist"}
+                  </button>
+                </div>
               </div>
             )}
             <p className="tp-fine">Free to contact. 70 Tuition never takes commission.</p>
@@ -264,14 +289,12 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
           ) : (
             <>
               <button
-                className="tp-btn tp-btn-ghost tp-icon-btn"
+                className={`tp-btn tp-btn-ghost tp-icon-btn tp-save${saved ? " saved" : ""}`}
                 onClick={handleShortlist}
-                aria-label={likeState.liked ? "Remove from shortlist" : "Add to shortlist"}
-                aria-pressed={likeState.liked}
+                aria-label={saved ? "Remove from shortlist" : "Add to shortlist"}
+                aria-pressed={saved}
               >
-                <svg aria-hidden="true" viewBox="0 0 24 24" className={likeState.liked ? "liked" : ""}>
-                  <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
-                </svg>
+                <BasketIcon />
               </button>
               {tutor.phoneNumber && (
                 <a

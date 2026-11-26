@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import type { QuickMatchCriteria, TargetType } from "@/types";
@@ -31,6 +31,9 @@ type UIContextValue = {
   getLikeState: (targetType: TargetType, targetId: string, baseCount: number) => LikeState;
   toggleLike: (targetType: TargetType, targetId: string, baseCount: number) => Promise<void>;
   shortlistCount: number;
+  isShortlisted: (tutorId: string) => boolean;
+  setShortlisted: (tutorId: string, saved: boolean) => Promise<void>;
+  shortlistVersion: number;
 
   basketOpen: boolean;
   openBasket: () => void;
@@ -137,14 +140,60 @@ export function UIProvider({ children }: { children: ReactNode }) {
     [status, getLikeState, showToast]
   );
 
-  const shortlistCount = useMemo(() => {
-    const keys = new Set(initialLikedKeys);
-    for (const [key, state] of Object.entries(likeOverrides)) {
-      if (state.liked) keys.add(key);
-      else keys.delete(key);
+  // Shortlist (the bucket) is separate from likes (the heart).
+  const [shortlistIds, setShortlistIds] = useState<Set<string>>(new Set());
+  const [shortlistVersion, setShortlistVersion] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    if (status === "authenticated") {
+      fetch("/api/shortlist/mine")
+        .then((r) => (r.ok ? r.json() : { tutorIds: [] }))
+        .then((data) => {
+          if (!cancelled) setShortlistIds(new Set<string>(data.tutorIds ?? []));
+        })
+        .catch(() => {});
+    } else {
+      setShortlistIds(new Set());
     }
-    return keys.size;
-  }, [initialLikedKeys, likeOverrides]);
+    return () => {
+      cancelled = true;
+    };
+  }, [status]);
+
+  const isShortlisted = useCallback((tutorId: string) => shortlistIds.has(tutorId), [shortlistIds]);
+
+  const setShortlisted = useCallback(
+    async (tutorId: string, saved: boolean) => {
+      if (status !== "authenticated") {
+        setModal({ type: "login" });
+        return;
+      }
+      const apply = (on: boolean) =>
+        setShortlistIds((prev) => {
+          const next = new Set(prev);
+          if (on) next.add(tutorId);
+          else next.delete(tutorId);
+          return next;
+        });
+      apply(saved);
+      try {
+        const res = await fetch("/api/shortlist", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tutorId, saved }),
+        });
+        if (!res.ok) throw new Error("shortlist failed");
+        setShortlistVersion((v) => v + 1);
+      } catch {
+        apply(!saved);
+        showToast("Something went wrong — try again.");
+      }
+    },
+    [status, showToast]
+  );
+
+  const shortlistCount = shortlistIds.size;
 
   const [basketOpen, setBasketOpen] = useState(false);
   const openBasket = useCallback(() => setBasketOpen(true), []);
@@ -166,6 +215,9 @@ export function UIProvider({ children }: { children: ReactNode }) {
         getLikeState,
         toggleLike,
         shortlistCount,
+        isShortlisted,
+        setShortlisted,
+        shortlistVersion,
         basketOpen,
         openBasket,
         closeBasket,

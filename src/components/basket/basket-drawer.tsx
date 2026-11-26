@@ -8,7 +8,7 @@ import type { ShortlistItem } from "@/types";
 
 export function BasketDrawer() {
   const router = useRouter();
-  const { basketOpen, closeBasket, openModal } = useUI();
+  const { basketOpen, closeBasket, setShortlisted, showToast } = useUI();
   const [items, setItems] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,6 +20,12 @@ export function BasketDrawer() {
       .then((data) => setItems(data.items ?? []))
       .finally(() => setLoading(false));
   }, [basketOpen]);
+
+  function remove(item: ShortlistItem) {
+    setItems((prev) => prev.filter((i) => i.id !== item.id));
+    setShortlisted(item.id, false);
+    showToast(`Removed ${item.title} from your shortlist.`);
+  }
 
   return (
     <>
@@ -37,25 +43,34 @@ export function BasketDrawer() {
           </p>
         ) : items.length === 0 ? (
           <p className="mono" style={{ color: "var(--ink-soft)" }}>
-            Nothing shortlisted yet — tap the heart on a profile to add it here.
+            Nothing shortlisted yet. Tap Shortlist on a tutor to save them here.
           </p>
         ) : (
           <div className="basket-list">
             {items.map((item) => (
-              <button
-                key={`${item.kind}:${item.id}`}
-                className="basket-item"
-                onClick={() => {
-                  closeBasket();
-                  router.push(`/tutors/${item.id}`);
-                }}
-              >
-                <Avatar seed={item.avatarSeed} photoUrl={item.photoUrl} size={44} />
-                <div className="basket-item-meta">
-                  <div className="basket-item-title">{item.title}</div>
-                  <div className="basket-item-sub">{item.subline}</div>
-                </div>
-              </button>
+              <div key={`${item.kind}:${item.id}`} className="basket-row">
+                <button
+                  className="basket-item"
+                  onClick={() => {
+                    closeBasket();
+                    router.push(`/tutors/${item.id}`);
+                  }}
+                >
+                  <Avatar seed={item.avatarSeed} photoUrl={item.photoUrl} size={44} />
+                  <div className="basket-item-meta">
+                    <div className="basket-item-title">{item.title}</div>
+                    <div className="basket-item-sub">{item.subline}</div>
+                  </div>
+                </button>
+                <button
+                  className="basket-remove"
+                  onClick={() => remove(item)}
+                  aria-label={`Remove ${item.title} from shortlist`}
+                  title="Remove"
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
         )}

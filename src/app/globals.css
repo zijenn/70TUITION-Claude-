@@ -693,6 +693,18 @@ html:has(.intro-scroller) {
 .like-btn.liked:hover {
   color: #b5352f;
 }
+/* Heart (like) and bucket (shortlist) sit side by side on cards. */
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.like-btn.save-btn.saved {
+  color: var(--teal);
+}
+.like-btn.save-btn.saved svg {
+  fill: color-mix(in srgb, var(--teal) 22%, transparent);
+}
 .rate-tag {
   font-family: var(--font-sans), sans-serif;
   font-weight: 600;
@@ -1207,6 +1219,31 @@ footer {
   font-size: 11px;
   color: var(--ink-soft);
   margin-top: 2px;
+}
+.basket-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.basket-row .basket-item {
+  flex: 1;
+  min-width: 0;
+}
+.basket-remove {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: none;
+  color: var(--ink-soft);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.basket-remove:hover {
+  background: var(--paper-dim);
+  color: #b5352f;
 }
 
 /* ---------- IMAGE UPLOAD SLOTS ---------- */
@@ -2344,6 +2381,34 @@ button.thread-counterpart:hover h2 {
 .tp-btn-ghost svg.liked {
   fill: #b5352f;
 }
+/* Laptop side card: like and shortlist share a row. */
+.tp-actions-row {
+  display: flex;
+  gap: 10px;
+}
+.tp-actions-row .tp-save {
+  flex: 1;
+}
+.tp-like {
+  gap: 6px;
+  padding: 0 16px;
+}
+.tp-like-mobile {
+  display: none;
+}
+.tp-btn-ghost.tp-save svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+}
+.tp-btn-ghost.tp-save.saved {
+  color: var(--teal);
+  border-color: var(--teal);
+}
+.tp-btn-ghost.tp-save.saved svg {
+  fill: color-mix(in srgb, var(--teal) 22%, transparent);
+}
 .tp-fine {
   margin: 0;
   font-size: 12px;
@@ -2987,6 +3052,12 @@ html.modal-open body {
     width: 44px;
     padding: 0;
     flex: none;
+  }
+  .tp-like-mobile {
+    display: inline-flex;
+    height: 38px;
+    margin-top: 10px;
+    font-size: 14px;
   }
   /* Room so the bar never covers the end of the page or the footer. */
   .tp {

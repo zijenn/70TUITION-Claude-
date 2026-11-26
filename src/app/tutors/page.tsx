@@ -15,7 +15,7 @@ import type { Tutor } from "@/types";
 export default function TutorsPage() {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const { openModal, requireAuth, toggleLike, showToast } = useUI();
+  const { openModal, requireAuth, isShortlisted, setShortlisted, showToast } = useUI();
 
   const [tutors, setTutors] = useState<Tutor[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,7 @@ export default function TutorsPage() {
 
   function handleSwipeRight(tutor: Tutor) {
     requireAuth(async () => {
-      await toggleLike("TUTOR", tutor.id, tutor.likes);
+      if (!isShortlisted(tutor.id)) await setShortlisted(tutor.id, true);
       showToast(`Added ${tutor.name} to your shortlist.`);
     });
   }

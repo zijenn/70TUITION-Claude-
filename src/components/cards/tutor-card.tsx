@@ -6,13 +6,14 @@ import { matchScore } from "@/lib/match";
 import { useUI } from "@/components/providers/ui-provider";
 import { Avatar } from "@/components/avatar";
 import { locationLabelFor } from "@/lib/singapore-postal";
-import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon } from "@/components/icons";
+import { GraduationCapIcon, LevelsIcon, BookIcon, PinIcon, BasketIcon } from "@/components/icons";
 import { LevelBadges, SubjectSummary } from "@/components/subject-list";
 import type { Tutor } from "@/types";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
   const router = useRouter();
-  const { getLikeState, toggleLike, quickMatchCriteria } = useUI();
+  const { getLikeState, toggleLike, quickMatchCriteria, isShortlisted, setShortlisted, showToast } = useUI();
+  const saved = isShortlisted(tutor.id);
   const like = getLikeState("TUTOR", tutor.id, tutor.likes);
   const score = matchScore(tutor, quickMatchCriteria);
 
@@ -56,19 +57,35 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
             </span>
           )}
         </span>
-        <button
-          className={`like-btn${like.liked ? " liked" : ""}`}
-          aria-pressed={like.liked}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleLike("TUTOR", tutor.id, tutor.likes);
-          }}
-        >
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
-          </svg>
-          {like.liked ? "Shortlisted" : "Shortlist"}
-        </button>
+        <div className="card-actions">
+          <button
+            className={`like-btn${like.liked ? " liked" : ""}`}
+            aria-pressed={like.liked}
+            aria-label={like.liked ? "Unlike" : "Like"}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleLike("TUTOR", tutor.id, tutor.likes);
+            }}
+          >
+            <svg aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" />
+            </svg>
+            {like.count > 0 && like.count}
+          </button>
+          <button
+            className={`like-btn save-btn${saved ? " saved" : ""}`}
+            aria-pressed={saved}
+            aria-label={saved ? "Remove from shortlist" : "Add to shortlist"}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShortlisted(tutor.id, !saved);
+              showToast(saved ? "Removed from shortlist." : `Added ${tutor.name} to your shortlist.`);
+            }}
+          >
+            <BasketIcon />
+            {saved ? "Shortlisted" : "Shortlist"}
+          </button>
+        </div>
       </div>
     </div>
   );

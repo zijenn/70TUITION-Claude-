@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     .catch(() => null);
   if (!t) return { title: "Tutor", robots: { index: false } };
   const name = formatName(t.name);
-  const subjects = [...new Set(subjectsWithLevels(t.subjects).map((s) => s.subject))].slice(0, 4).join(", ");
+  const subjects = [...new Set(subjectsWithLevels(t.subjects).map((s) => s.subject))].filter((s) => s.length <= 24).slice(0, 3).join(", ");
   const title = subjects ? `${name} — ${subjects} tutor` : `${name} — tutor`;
   const description = `${t.line ? t.line.replace(/\.?$/, ". ") : ""}${formatRate(t)}/hr. Message ${name} directly on 70tuition, free.`;
   return {

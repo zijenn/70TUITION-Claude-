@@ -37,17 +37,27 @@ export const metadata: Metadata = {
   applicationName: SITE_NAME,
   keywords: ["70tuition", "70 tuition", "tuition Singapore", "private tutor Singapore", "find a tutor", "home tuition"],
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: SITE_NAME, url: SITE_URL, title: "70tuition — Free tutor board for Singapore", description: SITE_DESCRIPTION, locale: "en_SG" },
+  openGraph: { images: ["/logo.png"], type: "website", siteName: SITE_NAME, url: SITE_URL, title: "70tuition — Free tutor board for Singapore", description: SITE_DESCRIPTION, locale: "en_SG" },
   ...(process.env.GOOGLE_SITE_VERIFICATION ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } } : {}),
 };
 
 // Tells Google the site's name ("70tuition") so it shows in search results.
 const siteJsonLd = JSON.stringify({
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: SITE_NAME,
-  alternateName: ["70 Tuition", "70tuition.com"],
-  url: SITE_URL,
+  "@graph": [
+    {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      alternateName: ["70 Tuition", "70tuition.com"],
+      url: SITE_URL,
+    },
+    {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: `${SITE_URL}/logo.png`,
+    },
+  ],
 });
 
 export default function RootLayout({ children }: { children: ReactNode }) {

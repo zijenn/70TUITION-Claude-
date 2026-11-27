@@ -5,7 +5,8 @@ import type { TutorProfile } from "@prisma/client";
 import { formatJoined } from "./format";
 import type { Tutor } from "@/types";
 
-export function toTutorDto(p: TutorProfile, likes: number): Tutor {
+// The WhatsApp number is only sent to signed-in visitors; others just learn that one exists.
+export function toTutorDto(p: TutorProfile, likes: number, opts: { showPhone?: boolean } = {}): Tutor {
   const portfolioItems = Array.isArray(p.portfolioItems)
     ? (p.portfolioItems as unknown as { url: string; title: string }[])
     : [];
@@ -32,7 +33,8 @@ export function toTutorDto(p: TutorProfile, likes: number): Tutor {
     photoUrl: p.photoUrl,
     galleryUrls: p.galleryUrls,
     videoUrl: p.videoUrl,
-    phoneNumber: p.phoneNumber,
+    phoneNumber: opts.showPhone ? p.phoneNumber : null,
+    hasWhatsApp: !!p.phoneNumber,
     availabilitySlots: p.availabilitySlots,
     personalityTraits: p.personalityTraits,
     portfolioItems,

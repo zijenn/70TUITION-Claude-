@@ -21,6 +21,7 @@ export type Tutor = {
   galleryUrls: string[];
   videoUrl: string | null;
   phoneNumber: string | null;
+  hasWhatsApp: boolean;
   availabilitySlots: string[];
   personalityTraits: string[];
   portfolioItems: { url: string; title: string }[];

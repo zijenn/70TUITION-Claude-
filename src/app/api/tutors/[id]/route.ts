@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { likeCountFor } from "@/lib/likes";
 import { toTutorDto } from "@/lib/tutor-dto";
+import { auth } from "@/lib/auth";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -10,5 +11,6 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const likes = p.baseLikes + (await likeCountFor("TUTOR", p.id));
 
-  return NextResponse.json(toTutorDto(p, likes));
+  const session = await auth();
+  return NextResponse.json(toTutorDto(p, likes, { showPhone: !!session?.user?.id }));
 }

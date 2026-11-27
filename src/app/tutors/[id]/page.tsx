@@ -20,7 +20,7 @@ import type { Tutor } from "@/types";
 
 export default function TutorProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const { requireAuth, toggleLike, getLikeState, showToast, isShortlisted, setShortlisted } = useUI();
   const [tutor, setTutor] = useState<Tutor | null>(null);
@@ -28,7 +28,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
+    if (status === "loading") return;
     fetch(`/api/tutors/${id}`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
@@ -40,7 +40,7 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, status]);
 
   if (loading) {
     return (
@@ -105,6 +105,11 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
 
   function handleChat() {
     requireAuth(() => router.push(`/messages/${tutor!.userId}`));
+  }
+
+  // Signed-out visitors see the WhatsApp button, but it asks them to log in first.
+  function handleWhatsAppLocked() {
+    requireAuth(() => {});
   }
 
   function handleLike() {
@@ -248,17 +253,23 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
                 <button className="tp-btn tp-btn-main" onClick={handleChat}>
                   Message {firstName}
                 </button>
-                {tutor.phoneNumber && (
-                  <a
-                    className="tp-btn tp-btn-wa"
-                    href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <WhatsAppIcon />
-                    WhatsApp
-                  </a>
-                )}
+                {tutor.hasWhatsApp &&
+                  (tutor.phoneNumber ? (
+                    <a
+                      className="tp-btn tp-btn-wa"
+                      href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <WhatsAppIcon />
+                      WhatsApp
+                    </a>
+                  ) : (
+                    <button className="tp-btn tp-btn-wa" onClick={handleWhatsAppLocked}>
+                      <WhatsAppIcon />
+                      Log in to WhatsApp
+                    </button>
+                  ))}
                 <div className="tp-actions-row">
                   {likeButton()}
                   <button
@@ -296,17 +307,26 @@ export default function TutorProfilePage({ params }: { params: Promise<{ id: str
               >
                 <BasketIcon />
               </button>
-              {tutor.phoneNumber && (
-                <a
-                  className="tp-btn tp-btn-wa tp-icon-btn"
-                  href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="WhatsApp"
-                >
-                  <WhatsAppIcon />
-                </a>
-              )}
+              {tutor.hasWhatsApp &&
+                (tutor.phoneNumber ? (
+                  <a
+                    className="tp-btn tp-btn-wa tp-icon-btn"
+                    href={whatsAppLink(tutor.phoneNumber, `Hi ${tutor.name}, I found you on 70 Tuition!`)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="WhatsApp"
+                  >
+                    <WhatsAppIcon />
+                  </a>
+                ) : (
+                  <button
+                    className="tp-btn tp-btn-wa tp-icon-btn"
+                    onClick={handleWhatsAppLocked}
+                    aria-label="Log in to WhatsApp this tutor"
+                  >
+                    <WhatsAppIcon />
+                  </button>
+                ))}
               <button className="tp-btn tp-btn-main" onClick={handleChat}>
                 Message
               </button>
